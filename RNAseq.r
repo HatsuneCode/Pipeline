@@ -52,7 +52,7 @@ setwd(outdir)
 wdir = getwd()
 dir.create('log', F)
 
-## 2. choose cu ##
+## choose cu ##
 pe    = system('pestat', intern = T)
 pe    = grep('fat', grep('free', pe, value = T), invert = T, value = T)
 gpu   = paste0('cu', 26:35)
@@ -122,4 +122,4 @@ while(idx < length(samples)) {
 message(Sa('-->', timer(), 'all samples done <--'))
 
 ## done ##
-source('~/Rsc/utils/done.r')
+message(Wa('-->', timer(), 'Done:', me, '<--'))
