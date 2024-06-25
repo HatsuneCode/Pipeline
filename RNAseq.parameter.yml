@@ -1,0 +1,43 @@
+---
+## Project
+project: Name
+thread: 10
+detect: 30 ## unit: minutes
+mem: 10    ## each sample memory, unit: GB
+
+## Software
+softwares:
+  fastp:   /home/songlianhao/conda/envs/lhsong/bin/fastp
+  bowtie2: /opt/software/bowtie2-2.3.5.1/bin/bowtie2
+  STAR:    /home/songlianhao/conda/envs/lhsong/bin/STAR
+  RSEM:    /home/songlianhao/conda/envs/lhsong/bin/rsem-calculate-expression
+  Rscript: /home/songlianhao/conda/envs/lhsong/bin/Rscript
+
+## Reference
+references:
+  rRNAref: /home/songlianhao/reference/Mus/rRNA/rRNA
+  STARref: /home/songlianhao/reference/Mus/starRef
+  RSEMref: /home/songlianhao/reference/Mus/rsemRef/rsemRef
+
+## Samples info
+samples:
+  Ctrl.1:   [/home/songlianhao/Fastq/RNAseq/HiMAP/ctr-1/ctr-1_R1.fq.gz,        /home/songlianhao/Fastq/RNAseq/HiMAP/ctr-1/ctr-1_R2.fq.gz]
+  Ctrl.2:   [/home/songlianhao/Fastq/RNAseq/HiMAP/ctr-2/ctr-2_R1.fq.gz,        /home/songlianhao/Fastq/RNAseq/HiMAP/ctr-2/ctr-2_R2.fq.gz]
+  ##
+  RA.1:     [/home/songlianhao/Fastq/RNAseq/HiMAP/RA-1/RA-1_R1.fq.gz,          /home/songlianhao/Fastq/RNAseq/HiMAP/RA-1/RA-1_R2.fq.gz]
+  RA.2:     [/home/songlianhao/Fastq/RNAseq/HiMAP/RA-2/RA-2_R1.fq.gz,          /home/songlianhao/Fastq/RNAseq/HiMAP/RA-2/RA-2_R2.fq.gz]
+  ##
+  VGVAPG.1: [/home/songlianhao/Fastq/RNAseq/HiMAP/VGVAPG-1/VGVAPG-1_R1.fq.gz,  /home/songlianhao/Fastq/RNAseq/HiMAP/VGVAPG-1/VGVAPG-1_R2.fq.gz]
+  VGVAPG.2: [/home/songlianhao/Fastq/RNAseq/HiMAP/VGVAPG-2/VGVAPG-2_R1.fq.gz,  /home/songlianhao/Fastq/RNAseq/HiMAP/VGVAPG-2/VGVAPG-2_R2.fq.gz]
+  ##
+  GHK.1:    [/home/songlianhao/Fastq/RNAseq/HiMAP/GHK-1/GHK-1_R1.fq.gz,        /home/songlianhao/Fastq/RNAseq/HiMAP/GHK-1/GHK-1_R2.fq.gz]
+  GHK.2:    [/home/songlianhao/Fastq/RNAseq/HiMAP/GHK-2/GHK-2_R1.fq.gz,        /home/songlianhao/Fastq/RNAseq/HiMAP/GHK-2/GHK-2_R2.fq.gz]
+  ##
+  KVK.1:    [/home/songlianhao/Fastq/RNAseq/HiMAP/kvk-1/kvk-1_R1.fq.gz,        /home/songlianhao/Fastq/RNAseq/HiMAP/kvk-1/kvk-1_R2.fq.gz]
+  KVK.2:    [/home/songlianhao/Fastq/RNAseq/HiMAP/kvk-2/kvk-2_R1.fq.gz,        /home/songlianhao/Fastq/RNAseq/HiMAP/kvk-2/kvk-2_R2.fq.gz]
+  ##
+  NAD.1:    [/home/songlianhao/Fastq/RNAseq/HiMAP/NAD-1/NAD-1_R1.fq.gz,        /home/songlianhao/Fastq/RNAseq/HiMAP/NAD-1/NAD-1_R2.fq.gz]
+  NAD.2:    [/home/songlianhao/Fastq/RNAseq/HiMAP/NAD-2/NAD-2_R1.fq.gz,        /home/songlianhao/Fastq/RNAseq/HiMAP/NAD-2/NAD-2_R2.fq.gz]
+
+## Output dir
+outdir: /home/songlianhao/Project/HiMAP/Batch1
