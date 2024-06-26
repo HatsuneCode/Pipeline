@@ -73,7 +73,8 @@ run = future_lapply(seq(samples), function(i) {
   node = nodes[i %% length(nodes) +1]
   sh = c(
    # s0.pbs
-   pbs  = paste0('#PBS -N ', n, '\n#PBS -o ', wdir, '/', n, '.out\n#PBS -e ', wdir, '/', n, '.err\n#PBS -l nodes=', node, ':ppn=1\n#PBS -l mem=', mem, 'GB'),
+   pbs = paste0('#PBS -N ', n, '\n#PBS -o ', wdir, '/', n, '.out\n#PBS -e ', wdir, '/', n, '.err\n#PBS -l nodes=', node, ':ppn=1\n#PBS -l mem=', mem, 'GB'),
+   rn  = paste0('echo This work is running... > ../log/', n, '.log'),
    # s0.cd
    cd = paste0('cd ', wdir, '/', n),
    # s1.fastp
@@ -85,22 +86,22 @@ run = future_lapply(seq(samples), function(i) {
    # s4.RSEM
    s4 = paste0(softwares$RSEM, ' --alignments --paired-end -p 8 --append-names --no-bam-output ', n, '.Aligned.toTranscriptome.out.bam ', references$RSEM, ' ', n),
    # index
-   dn = paste0('echo This work is done. > ../log/', n, '.log')
+   dn = paste0('echo This work is done. >> ../log/', n, '.log')
   )
   writeLines(sh, paste0(n, '/', n, '.RNAseq.sh'))
   ## qsub
-  #system(paste0('qsub ', n, '/', n, '.RNAseq.sh'))
+  system(paste0('qsub ', n, '/', n, '.RNAseq.sh'))
 })
 
 ## 3. check logs
 message(Sa('-->', timer(), '3. Run log checking... <--'))
-logs = list.files('log', '.log$', full.names = T)
 idx  = 0
 while(idx < length(samples)) {
   Sys.sleep(10)
   idx = sapply(names(samples), function(n) {
     log = paste0('log/', n, '.log')
     message(Sa('-->', timer(), 'Detect:', Pa(n), Pa(log), '<--'))
+    logs = list.files('log', '.log$', full.names = T)
     log = intersect(log, logs)
     if (!length(log)) {
       message(Er('!!!', timer(), 'Detect:', Pa(n), 'no log file detected !!!'))
