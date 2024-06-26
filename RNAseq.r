@@ -74,9 +74,9 @@ run = future_lapply(seq(samples), function(i) {
   sh = c(
    # s0.pbs
    pbs = paste0('#PBS -N ', n, '\n#PBS -o ', wdir, '/', n, '.out\n#PBS -e ', wdir, '/', n, '.err\n#PBS -l nodes=', node, ':ppn=1\n#PBS -l mem=', mem, 'GB'),
-   rn  = paste0('echo This work is running... > ../log/', n, '.log'),
    # s0.cd
    cd = paste0('cd ', wdir, '/', n),
+   rn = paste0('echo This work is running... > ../log/', n, '.log'),
    # s1.fastp
    s1 = paste0(softwares$fastp, ' -q 20 -u 10 -l 50 -w 8 -i ', samples[[i]][1], ' -I ', samples[[i]][2], ' -o ', n, '.r1.fq.gz -O ', n, '.r2.fq.gz -j ', n, '.fastp.json -h ', n, '.fastp.html'),
    # s2.bowtie2
