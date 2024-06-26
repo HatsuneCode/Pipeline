@@ -97,7 +97,7 @@ run = future_lapply(seq(samples), function(i) {
 message(Sa('-->', timer(), '3. Run log checking... <--'))
 idx  = 0
 while(idx < length(samples)) {
-  Sys.sleep(10)
+  Sys.sleep(60)
   idx = sapply(names(samples), function(n) {
     log = paste0('log/', n, '.log')
     message(Sa('-->', timer(), 'Detect:', Pa(n), Pa(log), '<--'))
