@@ -74,17 +74,20 @@ run = future_lapply(seq(samples), function(i) {
   sh = c(
    # s0.pbs
    pbs = paste0('#PBS -N ', n, '\n#PBS -o ', wdir, '/', n, '.out\n#PBS -e ', wdir, '/', n, '.err\n#PBS -l nodes=', node, ':ppn=1\n#PBS -l mem=', mem, 'GB'),
+   err = 'set -e',
    # s0.cd
    cd = paste0('cd ', wdir, '/', n),
    rn = paste0('echo This work is running... > ../log/', n, '.log'),
    # s1.fastp
-   s1 = paste0(softwares$fastp, ' -q 20 -u 10 -l 50 -w 8 -i ', samples[[i]][1], ' -I ', samples[[i]][2], ' -o ', n, '.r1.fq.gz -O ', n, '.r2.fq.gz -j ', n, '.fastp.json -h ', n, '.fastp.html'),
+   s1 = paste0(softwares$fastp, ' -q 20 -u 10 -l 50 -w 8 -i ', samples[[i]][1], ' -I ', samples[[i]][2], ' -o ', n, '.r1.fq.gz -O ', n, '.r2.fq.gz -j ', n, '.fastp.json -h ', n, '.fastp.html >> ../log/', n, '.log 2>&1'),
    # s2.bowtie2
    s2 = paste0(softwares$bowtie2, ' -p 8 -x ', references$rRNAref, ' --local -1 ', n, '.r1.fq.gz -2 ', n, '.r2.fq.gz --un-conc-gz ', n, '.filter.fq.gz -S rRNA.sam > ', n, '.rRNA.log 2>&1; rm rRNA.sam'),
    # s3.STAR
-   s3 = paste0(softwares$STAR, ' --runThreadN 8 --genomeDir ', references$STARref, ' --readFilesIn ', n, '.filter.fq.1.gz ', n, '.filter.fq.2.gz --readFilesCommand zcat --outBAMsortingThreadN 6 --outSAMattributes All --outSAMtype BAM SortedByCoordinate --quantMode TranscriptomeSAM GeneCounts --outFileNamePrefix ', n, '.'),
+   s3 = paste0(softwares$STAR, ' --runThreadN 6 --genomeDir ', references$STARref, ' --readFilesIn ', n, '.filter.fq.1.gz ', n, '.filter.fq.2.gz --readFilesCommand zcat --outBAMsortingThreadN 6 --outSAMattributes All --outSAMtype BAM SortedByCoordinate --quantMode TranscriptomeSAM GeneCounts --outFileNamePrefix ', n, '. >> ../log/', n, '.log 2>&1'),
    # s4.RSEM
-   s4 = paste0(softwares$RSEM, ' --alignments --paired-end -p 8 --append-names --no-bam-output ', n, '.Aligned.toTranscriptome.out.bam ', references$RSEM, ' ', n),
+   s4 = paste0(softwares$RSEM, ' --alignments --paired-end -p 8 --append-names --no-bam-output ', n, '.Aligned.toTranscriptome.out.bam ', references$RSEM, ' ', n, ' >> ../log/', n, '.log 2>&1'),
+   # s5.clean
+   cl = paste0('rm ', n, '.*.fq*gz'),
    # index
    dn = paste0('echo This work is done. >> ../log/', n, '.log')
   )
@@ -102,7 +105,7 @@ while(idx < length(samples)) {
     log = paste0('log/', n, '.log')
     message(Sa('-->', timer(), 'Detect:', Pa(n), Pa(log), '<--'))
     logs = list.files('log', '.log$', full.names = T)
-    log = intersect(log, logs)
+    log  = intersect(log, logs)
     if (!length(log)) {
       message(Er('!!!', timer(), 'Detect:', Pa(n), 'no log file detected !!!'))
       return(0)
