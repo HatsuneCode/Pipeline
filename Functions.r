@@ -59,16 +59,16 @@ DESeq2 = function(expr, pos = NULL, neg = NULL, name = NULL) {
   ## meta
   meta = data.frame(row.names = colnames(expr), condition)
   ## DESeq2
-  dds = DESeqDataSetFromMatrix(countData = counts, colData = meta, design = ~ condition)
+  dds = DESeqDataSetFromMatrix(countData = expr, colData = meta, design = ~ condition)
   dds = DESeq(dds)
   dds = data.frame(results(dds), check.names = F)
   ## output
   data.frame(p_val = dds$pvalue, avg_log2FC = dds$log2FoldChange, 
-             pct.1 = apply(expP, 1, function(i) sum(i > 0)/ncol(expP) ),
-             pct.2 = apply(expN, 1, function(i) sum(i > 0)/ncol(expN) ),
-             p_val_adj = dds$padj, gene = rownames(dds), average = rowMeans(counts), 
-             median = apply(counts, 1, median), 
-             posAvg = rowMeans(expP), posMed = apply(expP, 1, median),
-             negAvg = rowMeans(expN), negMed = apply(expN, 1, median),
+             pct.1 = apply(exprP, 1, function(i) sum(i > 0)/ncol(exprP) ),
+             pct.2 = apply(exprN, 1, function(i) sum(i > 0)/ncol(exprN) ),
+             p_val_adj = dds$padj, gene = rownames(dds), average = rowMeans(expr), 
+             median = apply(expr, 1, median), 
+             posAvg = rowMeans(exprP), posMed = apply(exprP, 1, median),
+             negAvg = rowMeans(exprN), negMed = apply(exprN, 1, median),
              type = name, row.names = NULL)
 }
