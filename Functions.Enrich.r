@@ -10,6 +10,7 @@ keggn = setNames(lapply(unique(kegg$gs_name), function(i)
   unique(as.character(kegg$gene_symbol)[kegg$gs_name == i])), unique(kegg$gs_name))
 ##
 fGSEA = function(gene, sig, minSize = 4, maxSize = 500) {
+  suppressMessages(library(fgsea))
   set.seed(1)
   gsea = fgsea(sig, gene, minSize = minSize, maxSize = maxSize)
   gsea$gene = unlist(lapply(gsea$leadingEdge, function(i) paste(i, collapse = ', ') ))
