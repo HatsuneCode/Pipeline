@@ -13,6 +13,8 @@ fGSEA = function(gene, sig, minSize = 4, maxSize = 500) {
   suppressMessages(library(fgsea))
   set.seed(1)
   gsea = fgsea(sig, gene, minSize = minSize, maxSize = maxSize)
-  gsea$gene = unlist(lapply(gsea$leadingEdge, function(i) paste(i, collapse = ', ') ))
-  data.frame(gsea[, c('pathway', 'NES', 'ES', 'pval', 'padj', 'gene')])
+  if (nrow(gsea)) {
+    gsea$gene = unlist(lapply(gsea$leadingEdge, function(i) paste(i, collapse = ', ') ))
+    data.frame(gsea[, c('pathway', 'NES', 'ES', 'pval', 'padj', 'gene')])
+  }
 }
