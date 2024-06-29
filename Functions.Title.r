@@ -1,6 +1,12 @@
-## process enrichment pathway title ##
+## process enrichment pathway title
 Title = function(x) {
+  suppressMessages(library(stringr))
   subT = list(
+    'Abc '   = 'ABC ',
+    ' Dna '  = ' DNA ',
+    ' Tca '  = ' TCA ',
+    'Ecm '   = 'ECM ',
+    ' Hcm'   = ' HCM',
     'Nad '   = 'NAD ',
     'Gnrh '  = 'GNRH ',
     'Jak '   = 'JAK ',
@@ -20,7 +26,7 @@ Title = function(x) {
     ' Atp '  = ' ATP '
   )
   x = gsub('_', ' ', sub('^WP_', '', sub('^KEGG_', '', sub('^GOBP_', '', x))))
-  x = stringr::str_to_title(x)
+  x = str_to_title(x)
   for (i in seq(subT)) x = gsub(names(subT)[i], subT[[i]], x)
   x
 }
