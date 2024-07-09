@@ -1,6 +1,6 @@
 ## df: Description, genes: C1qa/C1qb/C1qc
 ##
-plot.enrich.circ = function(df) {
+plot.Enrich.circ = function(df) {
   terms = df$Description
   genes = strsplit(df$geneID, '/')
   gene  = unique(unlist(genes))
