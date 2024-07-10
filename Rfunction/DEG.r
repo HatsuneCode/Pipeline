@@ -16,7 +16,7 @@ Limma = function(expr, pos = NULL, neg = NULL, name = NULL) {
   exprP = exp[, condition == pos, drop = F]
   exprN = exp[, condition == neg, drop = F]
   ## make coldata
-  coldata = data.frame(group = factor( c(rep('Neg', ncol(exprN)), rep('Pos', ncol(exprP))), c('Neg', 'Pos') ))
+  coldata = data.frame(group = factor( condition ), c('Neg', 'Pos') ))
   ## design
   design = model.matrix(~ 0 + group, data = coldata)
   colnames(design) = levels(coldata$group)
