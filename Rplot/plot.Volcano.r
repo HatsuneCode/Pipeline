@@ -52,6 +52,6 @@ plot_EF = function(df, logFC = 1, padj = .01, label.logFC = 1.5, exprAvg = .1, t
     geom_vline(xintercept = .1, linetype = 2) +
     geom_text_repel(label = ifelse(df$lable, df$gene, NA), family = 'serif') +
     scale_color_manual(values = color) + 
-    labs(x = 'Average Expression', y = if (adj) expression(-log[10](Padj)) else expression(-log[10](Pvalue)), color = NULL, title = title) + 
+    labs(x = 'Average Expression', y = 'Log2 Fold Change', color = NULL, title = title) + 
     theme(text = element_text(family = 'serif', size = 14), plot.title = element_text(hjust = .5))
 }
