@@ -3,13 +3,14 @@ reCluster.ST = function(obj, group.by = 'orig.ident', assay = 'ST', ctrl = NULL)
   suppressMessages(library(Seurat))
   suppressMessages(library(harmony))
   #### SCT
+  idx = obj@meta.data[[group.by]]
   obj = lapply(unique(obj@meta.data[[group.by]]), function(m) {
     message('SCT: ', m)
-    st = obj[, obj@meta.data[[group.by]] == m ]
+    st = obj[, idx == m ]
     st@images = st@images[m]
     st@images[[m]]@coordinates = st@images[[m]]@coordinates[rownames(st@images[[m]]@coordinates) %in% Cells(st),]
-    st = SCTransform(st, 'ST', vst.flavor = 'v2', vars.to.regress = c('mt.pct', 'cc.diff', 'nCount_ST') )
-    list( obj = st, feature = VariableFeatures(st) )
+    st = SCTransform(st, assay, vst.flavor = 'v2', vars.to.regress = c('mt.pct', 'cc.diff', 'nCount_ST') )
+    list(obj = st, feature = VariableFeatures(st))
   })
   #### merge
   feature = lapply(obj, function(i) i[[2]] )
@@ -18,14 +19,14 @@ reCluster.ST = function(obj, group.by = 'orig.ident', assay = 'ST', ctrl = NULL)
     message('--> merge... <--')
     obj     = merge(obj[[1]], obj[-1])
   } else obj = obj[[1]]
-  names(obj@images) = unique( obj@meta.data[[group.by]] )
+  names(obj@images) = unique(idx)
   #### Cluster
   VariableFeatures(obj) = unique(if (length(ctrl)) 
     cleanGene( unlist(feature[grepl(ctrl, unique(obj$orig.ident))]) ) else 
       cleanGene( unlist(feature)) )
   message('--> nVarGene: ', length(VariableFeatures(obj)), ' <--')
   obj = RunPCA(obj, verbose = F)
-  if (length(unique(obj$orig.ident))-1) {
+  if (length(unique(idx))-1) {
     obj = RunHarmony(obj, group.by)
     obj = RunUMAP(obj, dims = 1:50, reduction = 'harmony')
     obj = FindNeighbors(obj, dims = 1:50, reduction = 'harmony')
