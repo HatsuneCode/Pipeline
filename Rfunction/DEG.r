@@ -12,12 +12,13 @@ Limma = function(expr, pos = NULL, neg = NULL, name = NULL) {
   ## counts
   exp   = cbind(exprN, exprP)
   exp   = exp[rowSums(exp) > 0,,drop = F]
+  condition = c(rep('Neg', ncol(exprN)), rep('Pos', ncol(exprP)))
   exprP = exp[, condition == pos, drop = F]
   exprN = exp[, condition == neg, drop = F]
   ## make coldata
   coldata = data.frame(group = factor( c(rep('Neg', ncol(exprN)), rep('Pos', ncol(exprP))), c('Neg', 'Pos') ))
   ## design
-  design = model.matrix(~group, data = coldata)
+  design = model.matrix(~ 0 + group, data = coldata)
   colnames(design) = levels(coldata$group)
   rownames(design) = colnames(exp)
   ## contrast
