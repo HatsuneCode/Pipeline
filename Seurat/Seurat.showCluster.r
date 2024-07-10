@@ -1,5 +1,5 @@
 ## Show each clusters ##
-showCluster = function(obj, name = 'clusters', dir = name) {
+showCluster.st = function(obj, name = 'clusters', dir = name) {
   dir.create(dir, F)
   for (i in sort(unique(Idents(obj)))) {
     message('show cluster: ', i)
