@@ -28,7 +28,8 @@ path = normalizePath(path, '/', T)
 suppressMessages(library(rjson))
 suppressMessages(library(reshape2))
 suppressMessages(library(ggplot2))
-
+suppressMessages(library(patchwork))
+                
 #### 1. stat Fastp
 message(Sa('-->', timer(), '1. stat Fastp <--'))
 fs   = list.files(path, '.fastp.json$', recursive = T, full.names = T)
@@ -149,6 +150,31 @@ data = lapply(ms, function(m) {
   df = cbind(Gene = rownames(df), df)
   write.table(df, paste0('4.', m, '.xls'), sep = '\t', quote = F, row.names = F)
 })
-
+## plot top100
+data = data$TPM
+rownames(data) = data[,1]
+data = data[, -1, drop = F]
+data = checkDupRow(data)
+ncol = 6
+p = wrap_plots(lapply(seq(ncol(data)), function(i) {
+  s = sort(setNames(data[, i, drop = T], rownames(data)), T)
+  s = setNames(data.frame(log2(s[1:100]+1), check.names = F, check.rows = F), 'TPM')
+  s$Gene = factor(rownames(s), rev(rownames(s)))
+  labels = setNames(ifelse(grepl('^MT-|^RP[L,S][0-9]', levels(s$Gene)), 'red', 'black'), s$Gene)
+  ggplot(s, aes(TPM, Gene)) +
+    geom_col(aes(fill = TPM)) +
+    geom_vline(xintercept = min(s$TPM), linetype = 2, color = 'white') +
+    scale_fill_gradient2(high = '#FF0000', mid = '#FF6900', low = '#FFBF00', midpoint = mean(s$TPM)) +
+    labs(x = 'Log2(TPM)', y = NULL, title = paste('Top100:', colnames(data)[i]), fill = 'Log2(TPM)') +
+    coord_cartesian(xlim = c(min(3, min(s$TPM)), max(s$TPM))) +
+    scale_x_continuous(expand = c(.01, .1)) +
+    theme_bw(base_family = 'serif') +
+    theme(text = element_text(size = 12),
+          axis.text.x = element_text(angle = 45, hjust = 1),
+          axis.text.y = element_text(color = labels),
+          plot.title = element_text(hjust = .5) )
+}), ncol = ncol)
+ggsave('4.Top100_Genes.png', p, w = 4*ncol, h = 12*ceiling(ncol(data)/ncol))
+      
 ## done ##
 message(Wa('-->', timer(), 'Done:', me, '<--'))
