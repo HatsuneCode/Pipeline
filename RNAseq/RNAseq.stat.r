@@ -145,11 +145,12 @@ data = lapply(seq(ns), function(i) {
     setNames(data.frame(df[[m]], row.names = df$gene_id, check.rows = F), n)
   }), ms)
 })
-data = lapply(ms, function(m) {
+data = setNames(lapply(ms, function(m) {
   df = do.call(cbind, lapply(data, function(i) i[[m]] ))
   df = cbind(Gene = rownames(df), df)
   write.table(df, paste0('4.', m, '.xls'), sep = '\t', quote = F, row.names = F)
-})
+  df
+}), ms)
 ## plot top100
 data = data$TPM
 rownames(data) = data[,1]
