@@ -1,9 +1,11 @@
 ## df need: avg_log2FC, p_val_adj, gene
 plot_FP = function(df, logFC = 1, padj = .01, label.logFC = 1.5, exprAvg = .1, title = 'DEG FC-Padj', adj = T, pmax = 1e-300) {
+  suppressMessages(library(ggplot2))
+  suppressMessages(library(ggrepel))
   if (!adj) df$p_val_adj = df$p_val
   ## annot
   df$annot = ifelse(df$avg_log2FC > logFC, 'Up', ifelse(df$avg_log2FC < -logFC, 'Down', 'NS'))
-  df$annot[df$p_val_adj > padj]  = 'NS'
+  df$annot[df$p_val_adj > padj | is.na(df$p_val_adj)] = 'NS'
   df$annot[df$average < exprAvg] = 'NS'
   df$annot[df$annot == 'Up']   = paste0('Up (', table(df$annot)['Up'], ')')
   df$annot[df$annot == 'Down'] = paste0('Down (', table(df$annot)['Down'], ')')
@@ -29,10 +31,12 @@ plot_FP = function(df, logFC = 1, padj = .01, label.logFC = 1.5, exprAvg = .1, t
 }
 ##########
 plot_EF = function(df, logFC = 1, padj = .01, label.logFC = 1.5, exprAvg = .1, title = 'DEG Expr-FC', adj = T) {
+  suppressMessages(library(ggplot2))
+  suppressMessages(library(ggrepel))
   if (!adj) df$p_val_adj = df$p_val
   ## annot
   df$annot = ifelse(df$avg_log2FC > logFC, 'Up', ifelse(df$avg_log2FC < -logFC, 'Down', 'NS'))
-  df$annot[df$p_val_adj > padj]  = 'NS'
+  df$annot[df$p_val_adj > padj | is.na(df$p_val_adj)]  = 'NS'
   df$annot[df$average < exprAvg] = 'NS'
   df$annot[df$annot == 'Up']   = paste0('Up (', table(df$annot)['Up'], ')')
   df$annot[df$annot == 'Down'] = paste0('Down (', table(df$annot)['Down'], ')')
