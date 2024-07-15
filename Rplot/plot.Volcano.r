@@ -46,7 +46,7 @@ plot_EF = function(df, logFC = 1, padj = .01, label.logFC = 1.5, exprAvg = .1, t
   ## color
   annot = levels(df$annot)
   idx   = sapply(c('Up', 'NS', 'Down'), function(i) sum(grepl(i, annot)) )
-  color = setNames(c('red', 'black', 'blue') , levels(df$annot))
+  color = setNames(c(if (idx[1]) 'red', if (idx[2]) 'black', if (idx[3]) 'blue') , annot)
   ## limit
   lim = max(abs(df$avg_log2FC))
   ## plot
