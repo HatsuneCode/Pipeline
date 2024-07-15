@@ -2,9 +2,9 @@
 #### DESeq2
 DESeq2 = function(expr, pos = NULL, neg = NULL, name = NULL) {
   suppressMessages(library(DESeq2))
-  if (!length(name)) 
-    name = paste(paste(pos, collapse = ','), 'vs', paste(neg, collapse = ',') )
-  message('DEG: ', name)
+  type = paste(paste(pos, collapse = ','), 'vs', paste(neg, collapse = ',') )
+  if (!length(name)) name = type
+  message('DEG: ', type)
   ## expr split
   exprP = if (length(pos)) expr[, colnames(expr) %in% pos, drop = F] else 
     expr[, !colnames(expr) %in% neg, drop = F]
@@ -14,7 +14,7 @@ DESeq2 = function(expr, pos = NULL, neg = NULL, name = NULL) {
   condition = factor( c(rep('Neg', ncol(exprN)), rep('Pos', ncol(exprP))), c('Neg', 'Pos') )
   ## counts
   expr  = cbind(exprN, exprP)
-  expr  = expr[rowSums(expr) > 0,,drop = F]
+  expr  = expr[rowSums(expr) > 0, , drop = F]
   exprP = expr[, condition == 'Pos', drop = F]
   exprN = expr[, condition == 'Neg', drop = F]
   ## meta
