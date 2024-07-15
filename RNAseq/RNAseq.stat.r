@@ -29,6 +29,7 @@ suppressMessages(library(rjson))
 suppressMessages(library(reshape2))
 suppressMessages(library(ggplot2))
 suppressMessages(library(patchwork))
+source('RNAseq.checkDupRow.r')
                 
 #### 1. stat Fastp
 message(Sa('-->', timer(), '1. stat Fastp <--'))
