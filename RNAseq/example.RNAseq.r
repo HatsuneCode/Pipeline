@@ -35,7 +35,6 @@ ggsave('1.Bulk.DEG.volcanoEF.png', p, w = 6*ncol, h = 4.5*ceiling(length(p)/ncol
 
 ## 4. Enrich ##
 ## Enrich: GSEA
-DEG  = read.table('1.Bulk.DEG.xls', sep = '\t', header = T)
 DEG  = DEG[DEG$p_val < .05,]
 DEG  = DEG[abs(DEG$avg_log2FC) > log2(1.5),]
 KEGG = do.call(rbind, lapply(unique(DEG$type), function(n) {
@@ -97,19 +96,13 @@ GOBP = do.call(rbind, lapply(unique(DEG$type), function(n) {
 write.table(GOBP, '2.Enrich.GOBP.xls', sep = '\t', row.names = F, quote = F)
 
 ## 5. PCA ##
-expr = read.table('4.expected_count.xls', sep = '\t', header = T, row.names = 1)
-expr = expr[rowSums(expr) > 0,]
-expr = checkDupRow(expr)
-expr = round(expr)
-## DESeq2 normalize ##
 dds  = DESeqDataSetFromMatrix(
   countData = expr,
   colData = data.frame(row.names = colnames(expr), samples = factor(colnames(expr))),
   design = ~ samples)
 dds  = estimateSizeFactors(dds)
 dds  = counts(dds, normalize = T)
-## PCA ##
-pca = PCA(log2(dds+1))
+pca  = PCA(log2(dds+1))
 pca$group = sub('\\..*', '', pca$sample)
 pca$type  = ifelse(grepl('Ctrl', pca$sample), 'Ctrl', 'Treat')
 p = ggplot(pca, aes(PC1, PC2, group = group)) +
