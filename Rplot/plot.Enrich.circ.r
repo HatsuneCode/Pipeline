@@ -11,7 +11,7 @@ plot.Enrich.circ = function(df) {
     matr[te, ge] = 1
   }
   name     = c(terms, gene)
-  grid.col = colorRampPalette(col20)(length(name))
+  grid.col = colorRampPalette(color20)(length(name))
   mar      = min(strwidth(name[which.max(nchar(name))], cex = .5, units = 'inches'), 1)
   # plot
   circos.par('canvas.xlim' = c(-1 - mar, 1 + mar), 'canvas.ylim' = c(-1 - mar, 1 + mar), points.overflow.warning = F)
