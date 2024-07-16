@@ -17,7 +17,7 @@ PCA = function(expr, n.varGene = 3e+3) {
     rm(obj)
     if (length(genes)) {
       comm = intersect(var, genes$Pro)
-      if (length(comm)) var[match(comm, genes$Pro)] = genes$Raw
+      if (length(comm)) var[match(comm, var)] = genes$Raw[match(comm, genes$Pro)]
     }
     expr = expr[var,]
   }
