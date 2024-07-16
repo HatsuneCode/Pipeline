@@ -23,7 +23,7 @@ message(Wa('-->', timer(), 'Run: ', me, '<--'))
 main = Er(me, '<RNAseq_path>')
 path = args[1]
 if (is.na(path)) { message(main); q('no') }
-path = normalizePath(path, '/', T)
+path = checkPath(path)
 
 suppressMessages(library(rjson))
 suppressMessages(library(reshape2))
@@ -146,14 +146,14 @@ data = lapply(seq(ns), function(i) {
     setNames(data.frame(df[[m]], row.names = df$gene_id, check.rows = F), n)
   }), ms)
 })
-data = setNames(lapply(ms, function(m) {
+cnts = setNames(lapply(ms, function(m) {
   df = do.call(cbind, lapply(data, function(i) i[[m]] ))
   df = cbind(Gene = rownames(df), df)
   write.table(df, paste0('4.', m, '.xls'), sep = '\t', quote = F, row.names = F)
   df
 }), ms)
 ## plot top100
-data = data$TPM
+data = cnts$TPM
 rownames(data) = data[,1]
 data = data[, -1, drop = F]
 data = checkDupRow(data)
@@ -177,6 +177,24 @@ p = wrap_plots(lapply(seq(ncol(data)), function(i) {
           plot.title = element_text(hjust = .5) )
 }), ncol = ncol)
 ggsave('4.Top100_Genes.png', p, w = 4*ncol, h = 12*ceiling(ncol(data)/ncol))
-      
+## plot gene numbers
+data = cnts$expected_count
+rownames(data) = data[,1]
+data = round(data[, -1, drop = F])
+data = checkDupRow(data)
+ncol = 6
+p = wrap_plots(lapply(seq(ncol(data)), function(i) {
+  s = sort(setNames(data[, i, drop = T], rownames(data)), T)
+  s = setNames(data.frame(s[s > 10 & s < quantile(s, .99)], check.names = F, check.rows = F), 'Counts')
+  p = ggplot(s, aes(Counts)) +
+    geom_histogram(binwidth = 200, boundary = 0, aes(fill = log2(after_stat(count)+1)), show.legend = F) +
+    scale_fill_gradientn(colors = c('#FFBF00', '#FF6900', '#FF0000') ) +
+    geom_text(aes(label = after_stat(count)), vjust = -.3, stat = 'bin', binwidth = 200, boundary = 0, size = 2, family = 'serif') +
+    labs(x = 'Counts', y = 'nGene', title = paste('Gene Counts:', colnames(data)[i]) ) +
+    theme_bw(base_family = 'serif') +
+    theme(text = element_text(size = 12), plot.title = element_text(hjust = .5) )
+}), ncol = ncol)
+ggsave('4.GeneCounts.png', p, w = 3.8*ncol, h = 3.5*ceiling(ncol(data)/ncol))
+  
 ## done ##
 message(Wa('-->', timer(), 'Done:', me, '<--'))
