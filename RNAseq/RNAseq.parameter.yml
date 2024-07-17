@@ -19,6 +19,10 @@ references:
   STARref: /home/songlianhao/reference/Mus/starRef
   RSEMref: /home/songlianhao/reference/Mus/rsemRef/rsemRef
 
+## Steps
+steps:
+  fastp: True
+
 ## Samples info
 samples:
   Ctrl.1:   [/home/songlianhao/Fastq/RNAseq/HiMAP/ctr-1/ctr-1_R1.fq.gz,        /home/songlianhao/Fastq/RNAseq/HiMAP/ctr-1/ctr-1_R2.fq.gz]
