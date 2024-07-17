@@ -67,28 +67,39 @@ DEG  = DEG[abs(DEG$avg_log2FC) > 1,]
 GOBP = do.call(rbind, lapply(unique(DEG$type), function(n) {
   message(n)
   deg = DEG[DEG$type == n,]
+  ## up
   up  = deg[deg$avg_log2FC > 0,]
-  goU = EnrichGO(up$gene, og = 'org.Hs.eg.db')
-  goU = data.frame(goU@result)
-  if (nrow(goU)) {
-    goU = goU[goU$pvalue < .05,]
-    goU = goU[order(goU$qvalue),]
-    png(paste0(n, '.up.goCirc.png'), w = 6, h = 6, units = 'in', res = 300)
-    plot.Enrich.circ(data.frame(goU[1:min(20, nrow(goU)),])); dev.off()
-    goU$type  = 'Up'
-    goU$Group = n
+  goU = data.frame()
+  if (nrow(up)) {
+    goU = EnrichGO(up$gene, og = 'org.Hs.eg.db')
+    goU = data.frame(goU@result)
+    if (nrow(goU)) {
+      goU = goU[goU$pvalue < .05,]
+      goU = goU[order(goU$qvalue),]
+      f   = gsub('/', '.', paste0(n, '.up.goCirc.png'))
+      png(f, w = 6, h = 6, units = 'in', res = 300)
+      plot.Enrich.circ(data.frame(goU[1:min(20, nrow(goU)),])); dev.off()
+      goU$type  = 'Up'
+      goU$Group = n
+    }
   }
+  ## down
   dn  = deg[deg$avg_log2FC < 0,]
-  goD = EnrichGO(dn$gene, og = 'org.Hs.eg.db')
-  goD = data.frame(goD@result)
-  if (nrow(goD)) {
-    goD = goD[goD$pvalue < .05,]
-    goD = goD[order(goD$qvalue),]
-    png(paste0(n, '.dn.goCirc.png'), w = 6, h = 6, units = 'in', res = 300)
-    plot.Enrich.circ(data.frame(goD[1:min(20, nrow(goD)),])); dev.off()
-    goD$type  = 'Down'
-    goD$Group = n
+  goD = data.frame()
+  if (nrow(dn)) {
+    goD = EnrichGO(dn$gene, og = 'org.Hs.eg.db')
+    goD = data.frame(goD@result)
+    if (nrow(goD)) {
+      goD = goD[goD$pvalue < .05,]
+      goD = goD[order(goD$qvalue),]
+      f   = gsub('/', '.', paste0(n, '.dn.goCirc.png'))
+      png(f, w = 6, h = 6, units = 'in', res = 300)
+      plot.Enrich.circ(data.frame(goD[1:min(20, nrow(goD)),])); dev.off()
+      goD$type  = 'Down'
+      goD$Group = n
+    }
   }
+  ## combine
   if (nrow(goU) & nrow(goD)) {
     rbind(goU, goD)
   } else if (nrow(goU)) goU else if (nrow(goD)) goD
