@@ -79,7 +79,9 @@ run = future_lapply(seq(samples), function(i) {
    cd = paste0('cd ', wdir, '/', n),
    rn = paste0('echo This work is running... > ../log/', n, '.log'),
    # s1.fastp
-   s1 = paste0(softwares$fastp, ' -q 20 -u 10 -l 50 -w 8 -i ', samples[[i]][1], ' -I ', samples[[i]][2], ' -o ', n, '.r1.fq.gz -O ', n, '.r2.fq.gz -j ', n, '.fastp.json -h ', n, '.fastp.html >> ../log/', n, '.log 2>&1'),
+   s1 = if (fastp)
+     paste0(softwares$fastp, ' -q 20 -u 10 -l 50 -w 8 -i ', samples[[i]][1], ' -I ', samples[[i]][2], ' -o ', n, '.r1.fq.gz -O ', n, '.r2.fq.gz -j ', n, '.fastp.json -h ', n, '.fastp.html >> ../log/', n, '.log 2>&1') else
+     paste0('cat ', samples[[i]][1], ' > ', n, '.r1.fq.gz; cat ', samples[[i]][2], ' > ', n, '.r2.fq.gz'),
    # s2.bowtie2
    s2 = paste0(softwares$bowtie2, ' -p 8 -x ', references$rRNAref, ' --local -1 ', n, '.r1.fq.gz -2 ', n, '.r2.fq.gz --un-conc-gz ', n, '.filter.fq.gz -S rRNA.sam > ', n, '.rRNA.log 2>&1; rm rRNA.sam'),
    # s3.STAR
