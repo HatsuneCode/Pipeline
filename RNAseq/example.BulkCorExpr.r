@@ -22,8 +22,7 @@ targ = c(
   ## Ctrl
   'NC_1',    'NC_2',
   ## Bulk
-  'NAD.1',   'RA.1',    'GHK.1',
-  'Ctrl.1',  'Ctrl.2')
+  'NAD.1', 'RA.1', 'GHK.1', 'Ctrl.1',  'Ctrl.2')
 expr = cnts[, targ]
 colnames(expr) = c(
   'NAD A1', 'NAD B1', 'RA A1', 'RA B1', 'GHK A1', 'GHK B1', 'Ctrl H1', 'Ctrl H2',
