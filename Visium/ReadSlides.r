@@ -1,5 +1,5 @@
 ## Read slides ##
-ReadSlides = function(names, dirs = names, name = 'ST', clean = F, force = F) {
+ReadSlides = function(names, dirs = names, name = 'ST', clean = F, force = T) {
   suppressMessages(library(Seurat))
   suppressMessages(library(stringr))
   ## check
@@ -46,7 +46,7 @@ ReadSlides = function(names, dirs = names, name = 'ST', clean = F, force = F) {
     # set image
     message('--> Set image <--')
     img = Read10X_Image(paste0(d, '/spatial'))[sub('.*_', '', Cells(obj))]
-    img@boundaries$centroids@cells = paste0(n, '_', img$centroids@cells)
+    img = RenameCells(img, paste0(n, '_', Cells(img)))
     DefaultAssay(img) = 'ST'
     obj[['img']] = img
     names(obj@images) = n
