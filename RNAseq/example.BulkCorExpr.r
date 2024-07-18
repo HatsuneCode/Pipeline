@@ -52,7 +52,8 @@ n   = expr[, neg]
 com = p != 0 & n != 0
 p   = scale(p[com])
 n   = scale(n[com])
-df  = setNames(data.frame(p, n, rownames(expr)[com]), c(pos, neg, 'Gene'))
+min = min(p, n)
+df  = setNames(data.frame(p - min, n - min, rownames(expr)[com]), c(pos, neg, 'Gene'))
 p   = plot.Cor(df, sample1 = pos, sample2 = neg, exp_cut = -Inf, label = F, title = paste(pos, 'vs', neg),
                up.markers = Reduce(union, deg.up)[seq(15)], down.markers = Reduce(union, deg.dn)[seq(15)] ) + 
   xlim(c(0, 2)) + ylim(c(0, 2));p
