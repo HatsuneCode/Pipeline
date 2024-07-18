@@ -4,7 +4,7 @@ plot.proportion = function(obj,cell_column,group_column,group_levels,col){
   colnames(meta.data) = c("cell","group")
   
   Ratio <- meta.data %>%
-    group_by(group, cell) %>% # 分组
+    group_by(group, cell) %>% 
     summarise(n=n()) %>%
     mutate(relative_freq = n/sum(n))
   
@@ -16,7 +16,7 @@ plot.proportion = function(obj,cell_column,group_column,group_levels,col){
     geom_flow(width=0.5,alpha=0.4, knot.pos=0.5)+
     theme_classic() +
     labs(x='Group',y = 'Proportion')+
-    scale_fill_manual(values = color20)
+    scale_fill_manual(values = col)
   
 }
 
