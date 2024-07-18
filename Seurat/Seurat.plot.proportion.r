@@ -21,4 +21,4 @@ plot.proportion = function(obj,cell_column,group_column,group_levels,col){
 }
 
 #Example
-plot.proportion(obj = OB,cell_column = "cell",group_column = "age",group_levels = c("Young","Old"),col=color20)
+#plot.proportion(obj = OB,cell_column = "cell",group_column = "age",group_levels = c("Young","Old"),col=color20)
