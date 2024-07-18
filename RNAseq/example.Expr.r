@@ -142,6 +142,7 @@ GOBP = do.call(rbind, lapply(unique(DEG$type), function(n) {
         plot.Enrich.circ(data.frame(go[1:min(20, nrow(go)),])); dev.off()
         go$type  = i
         go$Group = n
+        go
       }} }))
 }))
 write.table(GOBP, '2.Enrich.GOBP.xls', sep = '\t', row.names = F, quote = F)
