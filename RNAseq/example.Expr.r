@@ -111,8 +111,7 @@ KEGG = do.call(rbind, lapply(setdiff(unique(DEG$type), 'JQ1 5μm'), function(n) 
     if (length(gsea)) {
       gsea$type = n
       gsea
-    }
-  }
+    }}
 }))
 write.table(KEGG, '2.Enrich.KEGG.xls', sep = '\t', row.names = F, quote = F)
 #### heatmap
@@ -124,3 +123,25 @@ png('2.Enrich.KEGG.png',
     h = as.numeric(max_text_width(df$type)/25.4) + length(unique(df$pathway))*.2, 
     units = 'in', res = 300)
 draw(p); dev.off()
+## Enrich: GOBP
+DEG  = DEG[which(DEG$p_val_adj < .01),]
+DEG  = DEG[abs(DEG$avg_log2FC) > 1,]
+GOBP = do.call(rbind, lapply(unique(DEG$type), function(n) {
+  message(n)
+  deg = DEG[DEG$type == n,]
+  do.call(rbind, lapply(c('up', 'down'), function(i) {
+    df = if (i == 'up') deg[deg$avg_log2FC > 0,] else deg[deg$avg_log2FC < 0,]
+    if (nrow(df)) {
+      go = EnrichGO(df$gene, og = 'org.Hs.eg.db')
+      go = data.frame(go@result)
+      if (nrow(go)) {
+        go = go[go$pvalue < .05,]
+        go = go[order(go$qvalue),]
+        f  = gsub('/', '.', paste0(n, '.', i, '.goCirc.png'))
+        png(f, w = 6, h = 6, units = 'in', res = 300)
+        plot.Enrich.circ(data.frame(go[1:min(20, nrow(go)),])); dev.off()
+        go$type  = i
+        go$Group = n
+      }} }))
+}))
+write.table(GOBP, '2.Enrich.GOBP.xls', sep = '\t', row.names = F, quote = F)
