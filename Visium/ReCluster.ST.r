@@ -1,14 +1,15 @@
 ## reCluster
-reCluster.ST = function(obj, group.by = 'orig.ident', assay = 'ST', ctrl = NULL) {
+ReCluster.ST = function(obj, group.by = 'slides', assay = 'ST', ctrl = NULL) {
   suppressMessages(library(Seurat))
   suppressMessages(library(harmony))
   #### SCT
   idx = obj@meta.data[[group.by]]
-  obj = lapply(unique(obj@meta.data[[group.by]]), function(m) {
+  obj = lapply(unique(idx), function(m) {
+    m = as.character(m)
     message('SCT: ', m)
-    st = obj[, idx == m ]
+    st = obj[, idx == m]
     st@images = st@images[m]
-    st@images[[m]]@coordinates = st@images[[m]]@coordinates[rownames(st@images[[m]]@coordinates) %in% Cells(st),]
+    st@images[[m]] = st@images[[m]][Cells(st),]
     st = SCTransform(st, assay, vst.flavor = 'v2', vars.to.regress = c('mt.pct', 'cc.diff', 'nCount_ST') )
     list(obj = st, feature = VariableFeatures(st))
   })
