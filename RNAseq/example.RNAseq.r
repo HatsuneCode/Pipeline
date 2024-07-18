@@ -47,8 +47,7 @@ KEGG = do.call(rbind, lapply(unique(DEG$type), function(n) {
     if (length(gsea)) {
       gsea$type = n
       gsea
-    }
-  }
+    }}
 }))
 write.table(KEGG, '2.Enrich.KEGG.xls', sep = '\t', row.names = F, quote = F)
 #### heatmap
