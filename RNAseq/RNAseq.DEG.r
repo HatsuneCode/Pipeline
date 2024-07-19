@@ -1,6 +1,6 @@
 #### Differential expression analysis ####
 #### DESeq2
-DESeq2 = function(expr, pos = NULL, neg = NULL, name = NULL) {
+RNAseq.DESeq2 = function(expr, pos = NULL, neg = NULL, name = NULL) {
   suppressMessages(library(DESeq2))
   type = paste(paste(pos, collapse = ','), 'vs', paste(neg, collapse = ',') )
   if (!length(name)) name = type
@@ -34,7 +34,7 @@ DESeq2 = function(expr, pos = NULL, neg = NULL, name = NULL) {
              type = name, row.names = NULL)
 }
 #### Limma
-Limma = function(expr, pos = NULL, neg = NULL, name = NULL) {
+RNAseq.Limma = function(expr, pos = NULL, neg = NULL, name = NULL) {
   suppressMessages(library(limma))
   if (!length(name)) 
     name = paste(paste(pos, collapse = ','), 'vs', paste(neg, collapse = ',') )
