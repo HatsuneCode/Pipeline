@@ -1,5 +1,5 @@
 ## plot each clusters in ST ##
-plotST.clusters = function(obj, name = 'clusters', dir = name, ncol = 4) {
+Visium.PlotCluster = function(obj, name = 'clusters', dir = name, ncol = 4) {
   dir.create(dir, F)
   for (i in sort(unique(Idents(obj)))) {
     message('show cluster: ', i)
