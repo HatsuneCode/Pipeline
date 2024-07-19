@@ -1,5 +1,5 @@
 ## reCluster
-ReCluster.ST = function(obj, group.by = 'slides', assay = 'ST', ctrl = NULL) {
+Visium.ReCluster = function(obj, group.by = 'slides', assay = 'ST', ctrl = NULL) {
   suppressMessages(library(Seurat))
   suppressMessages(library(harmony))
   #### SCT
