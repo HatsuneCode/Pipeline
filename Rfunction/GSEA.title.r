@@ -1,5 +1,5 @@
 ## process enrichment pathway title
-Title = function(x) {
+GSEA.title = function(x) {
   suppressMessages(library(stringr))
   subT = list(
     'Abc '   = 'ABC ',
