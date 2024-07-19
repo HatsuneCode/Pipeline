@@ -1,5 +1,5 @@
 ## Read slides ##
-ReadSlides = function(names, dirs = names, name = 'ST', clean = F, force = T) {
+Visium.ReadSlides = function(names, dirs = names, name = 'ST', clean = F, force = T) {
   suppressMessages(library(Seurat))
   suppressMessages(library(stringr))
   ## check
