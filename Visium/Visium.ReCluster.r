@@ -19,7 +19,7 @@ Visium.ReCluster = function(obj, group.by = 'slides', assay = 'ST', ctrl = NULL)
     message('--> merge... <--')
     obj     = merge(obj[[1]], obj[-1])
   } else obj = obj[[1]]
-  names(obj@images) = intersect(unique(idx), names(obj@images))
+  if (checkImg) names(obj@images) = unique(idx)
   #### Cluster
   VariableFeatures(obj) = unique(if (length(ctrl)) 
     cleanGene( unlist(feature[grepl(ctrl, unique(obj$orig.ident))]) ) else 
