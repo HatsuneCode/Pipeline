@@ -1,5 +1,5 @@
 ## reCluster
-Visium.ReCluster = function(obj, group.by = 'slides', assay = 'ST', ctrl = NULL) {
+Visium.ReCluster = function(obj, group.by = 'slides', assay = 'ST', cluster = T, ctrl = NULL) {
   suppressMessages(library(Seurat))
   suppressMessages(library(harmony))
   #### SCT
@@ -23,21 +23,24 @@ Visium.ReCluster = function(obj, group.by = 'slides', assay = 'ST', ctrl = NULL)
   } else obj = obj[[1]]
   names(obj@images) = imgs
   obj = Visium.cleanImg(obj, imgs)
-  #### Cluster
+  #### restore
   VariableFeatures(obj) = unique(if (length(ctrl)) 
     cleanGene( unlist(feature[grepl(ctrl, unique(obj$orig.ident))]) ) else 
       cleanGene( unlist(feature)) )
   message('--> nVarGene: ', length(VariableFeatures(obj)), ' <--')
-  obj = RunPCA(obj, verbose = F)
-  if (length(unique(idx))-1) {
-    obj = RunHarmony(obj, group.by)
-    obj = RunUMAP(obj, dims = 1:50, reduction = 'harmony')
-    obj = FindNeighbors(obj, dims = 1:50, reduction = 'harmony')
-  } else {
-    obj = RunUMAP(obj, dims = 1:50)
-    obj = FindNeighbors(obj, dims = 1:50)
-  }
-  obj = FindClusters(obj)
   obj = PrepSCTFindMarkers(obj)
+  #### Cluster
+  if (cluster) {
+    obj = RunPCA(obj, verbose = F)
+    if (length(unique(idx))-1) {
+      obj = RunHarmony(obj, group.by)
+      obj = RunUMAP(obj, dims = 1:50, reduction = 'harmony')
+      obj = FindNeighbors(obj, dims = 1:50, reduction = 'harmony')
+    } else {
+      obj = RunUMAP(obj, dims = 1:50)
+      obj = FindNeighbors(obj, dims = 1:50)
+    }
+    obj = FindClusters(obj)
+  }
   obj
 }
