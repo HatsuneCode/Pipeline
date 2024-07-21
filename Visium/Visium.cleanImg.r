@@ -3,6 +3,6 @@ Visium.cleanImg = function(obj, images) {
   obj@images = obj@images[intersect(names(obj@images), images)]
   ## match cells
   for (m in names(obj@images))
-    obj@images[[m]] = st@images[[m]][intersect(Cells(obj), Cells(obj@images[[m]])),]
-  st
+    obj@images[[m]] = obj@images[[m]][intersect(Cells(obj), Cells(obj@images[[m]])),]
+  obj
 }
