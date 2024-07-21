@@ -15,11 +15,14 @@ Visium.ReCluster = function(obj, group.by = 'slides', assay = 'ST', ctrl = NULL)
   #### merge
   feature = lapply(obj, function(i) i[[2]] )
   obj     = lapply(obj, function(i) i[[1]] )
+  imgs    = make.unique(sapply(obj, function(i) names(i@images)))
+  obj     = lapply(obj, function(i) {
+    names(i@images) = paste0('New.', names(i@images)); i })
   if (length(obj)-1) {
-    message('--> merge... <--')
-    obj     = merge(obj[[1]], obj[-1])
+    message('--> merge... <--'); obj = merge(obj[[1]], obj[-1])
   } else obj = obj[[1]]
-  if (checkImg) names(obj@images) = unique(idx)
+  names(obj@images) = imgs
+  obj = Visium.cleanImg(obj, imgs)
   #### Cluster
   VariableFeatures(obj) = unique(if (length(ctrl)) 
     cleanGene( unlist(feature[grepl(ctrl, unique(obj$orig.ident))]) ) else 
