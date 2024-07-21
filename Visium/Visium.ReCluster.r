@@ -8,8 +8,7 @@ Visium.ReCluster = function(obj, group.by = 'slides', assay = 'ST', ctrl = NULL)
     m = as.character(m)
     message('SCT: ', m)
     st = obj[, idx == m]
-    st@images = st@images[m]
-    st@images[[m]] = st@images[[m]][Cells(st),]
+    st = Visium.cleanImg(st, names(obj@images))
     st = SCTransform(st, assay, vst.flavor = 'v2', vars.to.regress = c('mt.pct', 'cc.diff', 'nCount_ST') )
     list(obj = st, feature = VariableFeatures(st))
   })
