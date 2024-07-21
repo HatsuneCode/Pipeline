@@ -15,7 +15,7 @@ Visium.ReCluster = function(obj, group.by = 'slides', assay = 'ST', ctrl = NULL)
   #### merge
   feature = lapply(obj, function(i) i[[2]] )
   obj     = lapply(obj, function(i) i[[1]] )
-  imgs    = make.unique(sapply(obj, function(i) names(i@images)))
+  imgs    = make.unique(sapply(obj, function(i) names(i@images) ))
   obj     = lapply(obj, function(i) {
     names(i@images) = paste0('New.', names(i@images)); i })
   if (length(obj)-1) {
