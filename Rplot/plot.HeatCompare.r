@@ -1,3 +1,4 @@
+## p1: ComplexHeatmap plot; pvl1: pvalue matrix
 plot.HeatCompare = function(p1, p2, pvl1, pvl2, pval = .05) {
   mtr1 = p1@matrix
   row1 = rownames(mtr1)[row_order(draw(p1))]
