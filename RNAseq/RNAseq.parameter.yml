@@ -3,7 +3,8 @@
 project: Name
 thread: 10
 detect: 30 ## unit: minutes
-mem: 10    ## each sample memory, unit: GB
+mem: 20    ## each sample memory, unit: GB
+pairEnd: true
 
 ## Software
 softwares:
@@ -11,17 +12,24 @@ softwares:
   bowtie2: /opt/software/bowtie2-2.3.5.1/bin/bowtie2
   STAR:    /home/songlianhao/conda/envs/lhsong/bin/STAR
   RSEM:    /home/songlianhao/conda/envs/lhsong/bin/rsem-calculate-expression
+  RSeQC:   /home/songlianhao/conda/envs/lhsong/bin/RPKM_saturation.py
   Rscript: /home/songlianhao/conda/envs/lhsong/bin/Rscript
+
+## Step:
+steps:
+  fastp: True
+  rseqc: False
+
+## Parameter:
+fastp:
+  length_required: 15
 
 ## Reference
 references:
   rRNAref: /home/songlianhao/reference/Mus/rRNA/rRNA
   STARref: /home/songlianhao/reference/Mus/starRef
   RSEMref: /home/songlianhao/reference/Mus/rsemRef/rsemRef
-
-## Steps
-steps:
-  fastp: True
+  Bed:     /home/songlianhao/reference/Mus/Mus_musculus.GRCm39.111.bed
 
 ## Samples info
 samples:
