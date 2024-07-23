@@ -23,7 +23,7 @@ message(Wa('-->', timer(), 'Run: ', me, '<--'))
 main = Er(me, '<RNAseq.parameter.yml>')
 file = args[1]
 if (is.na(file)) { message(main); q('no') }
-file = checkPath(file)
+file = normalizePath(file, '/', T)
 
 ## 0. check parameters ##
 message(Sa('-->', timer(), '1. check parameters <--'))
@@ -31,11 +31,19 @@ parameter = yaml.load_file(file, handlers = handlers)
 # check project name
 project = as.character(parameter$project %||% 'RNAseq')
 thread  = as.numeric(parameter$thread %||% 1)
+pairEnd = parameter$pairEnd %||% T
 # check detect time interval
 timeIt  = as.numeric(parameter$detect %||% 30)
 if (timeIt < 1) stop(Er('!!! Detect time interval could not less than 1 minutes !!!'))
 # check softwre paths
 softwares  = lapply(parameter$softwares, checkPath)
+# check steps
+steps      = parameter$steps
+fastp      = steps$fastp %||% T
+rseqc      = steps$rseqc %||% F
+# check para
+fastpPara  = parameter$fastp
+fastp_LR   = fastpPara$length_required %||% 15
 # check reference
 references = parameter$references
 # check sample names and paths
@@ -79,16 +87,18 @@ run = future_lapply(seq(samples), function(i) {
    cd = paste0('cd ', wdir, '/', n),
    rn = paste0('echo This work is running... > ../log/', n, '.log'),
    # s1.fastp
-   s1 = if (fastp)
-     paste0(softwares$fastp, ' -q 20 -u 10 -l 50 -w 8 -i ', samples[[i]][1], ' -I ', samples[[i]][2], ' -o ', n, '.r1.fq.gz -O ', n, '.r2.fq.gz -j ', n, '.fastp.json -h ', n, '.fastp.html >> ../log/', n, '.log 2>&1') else
-     paste0('cat ', samples[[i]][1], ' > ', n, '.r1.fq.gz; cat ', samples[[i]][2], ' > ', n, '.r2.fq.gz'),
+   s1 = if (fastp) 
+     paste0(softwares$fastp, ' -q 20 -u 10 -l ', fastp_LR, ' -w 8 -i ', samples[[i]][1], if (pairEnd) paste0(' -I ', samples[[i]][2]), ' -o ', n, '.r1.fq.gz', if (pairEnd) paste0(' -O ', n, '.r2.fq.gz '), ' -j ', n, '.fastp.json -h ', n, '.fastp.html >> ../log/', n, '.log 2>&1') else
+     paste0('cat ', samples[[i]][1], ' > ', n, '.r1.fq.gz', if (pairEnd) paste0('; cat ', samples[[i]][2], ' > ', n, '.r2.fq.gz')),
    # s2.bowtie2
-   s2 = paste0(softwares$bowtie2, ' -p 8 -x ', references$rRNAref, ' --local -1 ', n, '.r1.fq.gz -2 ', n, '.r2.fq.gz --un-conc-gz ', n, '.filter.fq.gz -S rRNA.sam > ', n, '.rRNA.log 2>&1; rm rRNA.sam'),
+   s2 = paste0(softwares$bowtie2, ' -p 8 -x ', references$rRNAref, ' --local ', ifelse(pairEnd, '-1', '-U'), ' ', n, '.r1.fq.gz', if (pairEnd) paste0(' -2 ', n, '.r2.fq.gz'), ' --un-conc-gz ', n, '.filter.fq.gz -S rRNA.sam > ', n, '.rRNA.log 2>&1; rm rRNA.sam'),
    # s3.STAR
-   s3 = paste0(softwares$STAR, ' --runThreadN 6 --genomeDir ', references$STARref, ' --readFilesIn ', n, '.filter.fq.1.gz ', n, '.filter.fq.2.gz --readFilesCommand zcat --outBAMsortingThreadN 6 --outSAMattributes All --outSAMtype BAM SortedByCoordinate --quantMode TranscriptomeSAM GeneCounts --outFileNamePrefix ', n, '. >> ../log/', n, '.log 2>&1'),
+   s3 = paste0(softwares$STAR, ' --runThreadN 6 --genomeDir ', references$STARref, ' --readFilesIn ', n, '.filter.fq.1.gz ', if (pairEnd) paste0(n, '.filter.fq.2.gz '), '--readFilesCommand zcat --outBAMsortingThreadN 6 --outSAMattributes All --outSAMtype BAM SortedByCoordinate --quantMode TranscriptomeSAM GeneCounts --outFileNamePrefix ', n, '. >> ../log/', n, '.log 2>&1'),
    # s4.RSEM
    s4 = paste0(softwares$RSEM, ' --alignments --paired-end -p 8 --append-names --no-bam-output ', n, '.Aligned.toTranscriptome.out.bam ', references$RSEM, ' ', n, ' >> ../log/', n, '.log 2>&1'),
-   # s5.clean
+   # s5.RSeQC
+   s5 = if (rseqc) paste0(softwares$RSeQC, ' -i ', n, '.Aligned.toTranscriptome.out.bam -o ', n, ' -r ', references$Bed, ' > ', n, '.RSeQC.log 2>&1'),
+   # s6.clean
    cl = paste0('rm ', n, '.*.fq*gz'),
    # index
    dn = paste0('echo This work is done. >> ../log/', n, '.log')
