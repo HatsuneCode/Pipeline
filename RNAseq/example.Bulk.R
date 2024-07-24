@@ -1,7 +1,7 @@
 ## 1. read bulk ##
 expr = read.table('4.expected_count.xls', sep = '\t', header = T, row.names = 1)
 expr = expr[rowSums(expr) > 0,]
-expr = checkDupRow(expr)
+expr = RNAseq.checkDupRow(expr)
 expr = round(expr)
 
 ## 2. DEG (counts) ##
