@@ -2,7 +2,7 @@ plot.Saturation = function(expr, reads, sn = 100) {
   suppressMessages(library(ggplot2))
   ## prob
   prob  = c(expr, reads - sum(expr))
-  steps = floor(reads/sn)
+  steps = floor( reads / sn )
   sizes = rates = rep(0, sn +1)
   M     = 1e+6
   ## stat
