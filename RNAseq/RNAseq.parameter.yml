@@ -12,7 +12,6 @@ softwares:
   bowtie2: /opt/software/bowtie2-2.3.5.1/bin/bowtie2
   STAR:    /home/songlianhao/conda/envs/lhsong/bin/STAR
   RSEM:    /home/songlianhao/conda/envs/lhsong/bin/rsem-calculate-expression
-  RSeQC:   /home/songlianhao/conda/envs/lhsong/bin/RPKM_saturation.py
   Rscript: /home/songlianhao/conda/envs/lhsong/bin/Rscript
 
 ## Step:
