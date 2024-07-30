@@ -1,5 +1,6 @@
 ## group: findInList(colnames(expr), pair)
-plot.boxplot = function(expr, gene, group = NULL, cols = NULL) {
+## compare: list( c('pos1', 'neg1'), c('pos2', 'neg2') )
+plot.boxplot = function(expr, gene, group = NULL, compare = NULL, cols = NULL) {
   if (!length(group)) group = colnames(expr)
   exp = data.frame(Expr = expr[gene,], Group = group)
   p   = ggplot(exp, aes(Group, Expr)) + 
