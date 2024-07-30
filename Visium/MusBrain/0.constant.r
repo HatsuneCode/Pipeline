@@ -14,4 +14,4 @@ modColor = c('5XFAD'    = '#B92166',
              'WT9M'     = '#00468B',
              'WT2MWC'   = '#759EDD',
              'WT28MWC'  = '#FF7777' )
-slidesColor = setNames(modColor[sub('\\..*', '', c(slides, slides.WC))], c(slides, slides.WC))
+slidesColor = stats::setNames(modColor[sub('\\..*', '', c(slides, slides.WC))], c(slides, slides.WC))
