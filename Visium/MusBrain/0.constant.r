@@ -21,3 +21,6 @@ modColor = c('5XFAD'    = '#B92166',
              'WT2MWC'   = '#759EDD',
              'WT28MWC'  = '#FF7777' )
 slidesColor = stats::setNames(modColor[sub('\\..*', '', c(slides, slides.WC))], c(slides, slides.WC))
+
+#### fontfamily ####
+ff = gpar(fontfamily = 'serif')
