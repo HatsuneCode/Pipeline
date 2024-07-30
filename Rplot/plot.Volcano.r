@@ -52,7 +52,7 @@ plot_EF = function(df, logFC = 1, padj = .01, label.logFC = 1.5, exprAvg = .1, t
   ## plot
   ggplot(df, aes(average, avg_log2FC)) + 
     geom_point(aes(color = annot)) + ylim(c(-lim, lim)) + theme_bw() +
-    geom_hline(yintercept = c(-logFC,logFC), linetype = 2) +
+    geom_hline(yintercept = c(-logFC, logFC), linetype = 2) +
     geom_vline(xintercept = .1, linetype = 2) +
     geom_text_repel(label = ifelse(df$lable, df$gene, NA), family = 'serif') +
     scale_color_manual(values = color) + 
