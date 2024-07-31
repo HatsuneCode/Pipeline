@@ -24,3 +24,9 @@ slidesColor = stats::setNames(modColor[sub('\\..*', '', c(slides, slides.WC))], 
 
 #### fontfamily ####
 ff = grid::gpar(fontfamily = 'serif')
+
+#### kegg ####
+kegg  = msigdbr::msigdbr('Homo sapiens', 'C2', 'KEGG')
+keggn = stats::setNames(lapply(unique(kegg$gs_name), function(i)
+  unique(as.character(kegg$gene_symbol)[kegg$gs_name == i])), unique(kegg$gs_name))
+rm(kegg)
