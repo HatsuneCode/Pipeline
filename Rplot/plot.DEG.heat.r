@@ -3,6 +3,7 @@ plot.DEG.heat = function(df, log2FC = 1, pval = .05, adj = T, label = T, grid = 
   suppressMessages(library(reshape2))
   suppressMessages(library(ComplexHeatmap))
   suppressMessages(library(circlize))
+  ff = gpar(fontfamily = 'serif')
   fc = acast(df, gene ~ type, value.var = 'avg_log2FC', fill = 0)
   pv = acast(df, gene ~ type, value.var = if (adj) 'p_val_adj' else 'p_val', fill = 1)
   p  = Heatmap(fc, name = 'Log2FC',
