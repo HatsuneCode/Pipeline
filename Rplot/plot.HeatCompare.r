@@ -1,5 +1,5 @@
 ## p1: ComplexHeatmap plot; pvl1: pvalue matrix
-plot.HeatCompare = function(p1, p2, pvl1, pvl2, pval = .05) {
+plot.HeatCompare = function(p1, p2, pvl1, pvl2, fc = 1, pval = .01) {
   mtr1 = p1@matrix
   row1 = rownames(mtr1)[row_order(draw(p1))]
   mtr2 = p2@matrix
@@ -22,7 +22,7 @@ plot.HeatCompare = function(p1, p2, pvl1, pvl2, pval = .05) {
   p1@row_order = seq(all)
   p1@matrix_param$cell_fun = function(j, i, x, y, w, h, col) {
     f = mtr1[i, j]; p = pvl1[i, j]
-    if (p < pval) 
+    if (abs(f) > fc & p < pval) 
       grid.rect(x, y, w, h, gp = gpar(fill = 'transparent', lwd = 1.5, col = ifelse(f > 0, 'red', 'blue')))
   }
   p1@row_names_param$anno@var_env$value = rownames(mtr1)
@@ -33,7 +33,7 @@ plot.HeatCompare = function(p1, p2, pvl1, pvl2, pval = .05) {
   p2@row_order = seq(all)
   p2@matrix_param$cell_fun = function(j, i, x, y, w, h, col) {
     f = mtr2[i, j]; p = pvl2[i, j]
-    if (p < pval) 
+    if (abs(f) > fc & p < pval) 
       grid.rect(x, y, w, h, gp = gpar(fill = 'transparent', lwd = 1.5, col = ifelse(f > 0, 'red', 'blue')))
   }
   p2@row_names_param$anno@var_env$value = rownames(mtr2)
