@@ -1,5 +1,6 @@
 RNAseq.varGene = function(expr, n.varGene = 3000, outFig = 'RNAseq.nVar.png') {
   suppressMessages(library(Seurat))
+  suppressMessages(library(ggplot2))
   genes = grep('_', rownames(expr), value = T)
   if (length(genes))
     genes = data.frame(Raw = genes, Pro = gsub('_', '-', genes))
