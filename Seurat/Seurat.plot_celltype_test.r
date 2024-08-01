@@ -51,8 +51,3 @@ plot_celltype_test = function(obj,idents = "cell",sample_column = "orig.ident"
   p = wrap_plots(pplist,nrow = nrow,ncol = ncol)
   p
 }
-
-### example
-p = plot_celltype_test(obj = obj,idents = "cell",sample_column = "orig.ident",sample = c("Young1", "Young2", "Young3", "Old1", "Old2", "Old3"),
-                       group = c(rep("Young", 3), rep("Old", 3)),my_comparisons = list(c("Young", "Old")),
-                       method = "t.test", label = "p.signif", nrow = 4, ncol = 3,col = c("#5488ef","#d6503a"))
