@@ -2,8 +2,8 @@ plot.Enrich.heat = function(df, nes = 2, pval = .05, adj = T, label = T, grid = 
   suppressMessages(library(reshape2))
   suppressMessages(library(ComplexHeatmap))
   suppressMessages(library(circlize))
-  nes = acast(df, pathway ~ type, value.var = 'NES',  fill = 0)
-  pvl = acast(df, pathway ~ type, value.var = if (adj) 'padj' else 'pval', fill = 1)
+  nes = acast(df, pathway ~ group, value.var = 'NES',  fill = 0)
+  pvl = acast(df, pathway ~ group, value.var = if (adj) 'padj' else 'pval', fill = 1)
   ff  = gpar(fontfamily = 'serif')
   p   = Heatmap(nes, name = 'NES',
                 col = colorRamp2(c(-nes, 0, nes), c('blue', 'white', 'red')), 
