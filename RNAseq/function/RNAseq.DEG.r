@@ -1,20 +1,24 @@
 #### Differential expression analysis ####
 #### DESeq2
-RNAseq.DESeq2 = function(expr, pos = NULL, neg = NULL, name = NULL) {
+RNAseq.DESeq2 = function(expr, pos = NULL, neg = NULL, name = NULL, exp_cut = 10) {
   suppressMessages(library(DESeq2))
-  type = paste(paste(pos, collapse = ','), 'vs', paste(neg, collapse = ',') )
-  if (!length(name)) name = type
-  message('DEG: ', type)
   ## expr split
   exprP = if (length(pos)) expr[, colnames(expr) %in% pos, drop = F] else 
     expr[, !colnames(expr) %in% neg, drop = F]
   exprN = if (length(neg)) expr[, colnames(expr) %in% neg, drop = F] else 
     expr[, !colnames(expr) %in% pos, drop = F]
+  ## expr type
+  type = paste(paste(colnames(exprP), collapse = ','), 'vs', paste(colnames(exprN), collapse = ',') )
+  if (!length(name)) name = type
+  message('DEG: ', type)
   ## condition control ~ treatment
   condition = factor( c(rep('Neg', ncol(exprN)), rep('Pos', ncol(exprP))), c('Neg', 'Pos') )
   ## counts
   expr  = cbind(exprN, exprP)
   expr  = expr[rowSums(expr) > 0, , drop = F]
+  if (length(exp_cut))
+    expr = expr[apply(expr, 1, function(i) !any(i < exp_cut) ), ]
+  ##
   exprP = expr[, condition == 'Pos', drop = F]
   exprN = expr[, condition == 'Neg', drop = F]
   ## meta
@@ -27,8 +31,8 @@ RNAseq.DESeq2 = function(expr, pos = NULL, neg = NULL, name = NULL) {
   data.frame(p_val = dds$pvalue, avg_log2FC = dds$log2FoldChange, 
              pct.1 = apply(exprP, 1, function(i) sum(i > 0)/ncol(exprP) ),
              pct.2 = apply(exprN, 1, function(i) sum(i > 0)/ncol(exprN) ),
-             p_val_adj = dds$padj, gene = rownames(dds), average = rowMeans(expr), 
-             median = apply(expr, 1, median), 
+             p_val_adj = dds$padj, gene = rownames(dds), 
+             average = rowMeans(expr), median = apply(expr, 1, median), 
              posAvg = rowMeans(exprP), posMed = apply(exprP, 1, median),
              negAvg = rowMeans(exprN), negMed = apply(exprN, 1, median),
              type = name, row.names = NULL)
