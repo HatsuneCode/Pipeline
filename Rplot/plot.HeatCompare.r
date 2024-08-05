@@ -17,12 +17,14 @@ plot.HeatCompare = function(pList, pvList = NULL, fc = 1, pval = .01, upCol = 'r
     p = pList[[n]]
     p@row_order = seq(all)
     mtr = p@matrix
-    if (length(pvList)) pvl = pvList[[n]]
-    p@matrix_param$cell_fun = function(j, i, x, y, w, h, col) {
-      f = mtr[i, j]; p = pvl[i, j]
-      if (length(pvList)) if (abs(f) > fc & p < pval)
-        grid.rect(x, y, w, h, gp = gpar(fill = 'transparent', lwd = 1.5, col = ifelse(f > 0, upCol, downCol)))
-    }
+    if (length(pvList)) {
+      pvl = pvList[[n]]
+      p@matrix_param$cell_fun = function(j, i, x, y, w, h, col) {
+        f = mtr[i, j]; p = pvl[i, j]
+        if (abs(f) > fc & p < pval)
+          grid.rect(x, y, w, h, gp = gpar(fill = 'transparent', lwd = 1.5, col = ifelse(f > 0, upCol, downCol)))
+      }
+    } else p@matrix_param$cell_fun = NULL
     p@row_names_param$anno@var_env$value = rownames(mtr)
     p@row_dend_param$cluster = F
     p@row_dend_param$show = F
