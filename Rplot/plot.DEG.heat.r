@@ -7,9 +7,8 @@ plot.DEG.heat = function(df, log2FC = 1, pval = .05, adj = T, label = T, grid = 
   fc = acast(df, gene ~ group, value.var = 'avg_log2FC', fill = 0)
   pv = acast(df, gene ~ group, value.var = if (adj) 'p_val_adj' else 'p_val', fill = 1)
   p  = Heatmap(fc, name = 'Log2FC',
-               row_dend_side = 'right', row_names_side = 'left',
                col = colorRamp2(c(-log2FC, 0, log2FC), c('blue', 'white', 'red')),
-               row_names_gp = ff, column_names_gp = ff, 
+               row_names_side = 'left', row_dend_side = 'right', row_names_gp = ff, row_title_gp = ff,
                cell_fun = function(j, i, x, y, w, h, col) {
                  f = fc[i, j]; p = pv[i, j]
                  if (label) 
