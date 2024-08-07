@@ -1,4 +1,5 @@
-Visium.cleanImg = function(obj, images) {
+Visium.cleanImg = function(obj, images = NULL) {
+  if (!length(images)) images = names(obj@images)
   ## remove otiose
   obj@images = obj@images[intersect(names(obj@images), images)]
   ## match cells
