@@ -25,7 +25,7 @@ Visium.ReCluster = function(obj, group.by = 'slides', assay = 'ST', cluster = T,
   obj = Visium.cleanImg(obj, imgs)
   #### restore
   VariableFeatures(obj) = unique(if (length(ctrl)) 
-    cleanGene( unlist(feature[grepl(ctrl, unique(obj$orig.ident))]) ) else 
+    cleanGene( unlist(feature[grepl(ctrl, unique(idx))]) ) else 
       cleanGene( unlist(feature)) )
   message('--> nVarGene: ', length(VariableFeatures(obj)), ' <--')
   obj = PrepSCTFindMarkers(obj)
