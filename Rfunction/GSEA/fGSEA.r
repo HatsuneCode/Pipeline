@@ -11,14 +11,14 @@ fGSEA = function(gene, sig = NULL, scoreType = 'std', minSize = 2, maxSize = 500
     sig = keggn
   }
   if ('WIKI' %in% type) {
-    wp  = msigdbr::msigdbr(species, 'C2', 'WIKIPATHWAYS')
+    wp  = msigdbr(species, 'C2', 'WIKIPATHWAYS')
     wpn = setNames(lapply(unique(wp$gs_name), function(i)
       unique(as.character(wp$gene_symbol)[wp$gs_name == i])), unique(wp$gs_name))
     rm(wp)
     sig = wpn
   }
   if ('REACT' %in% type) {
-    reactome  = msigdbr::msigdbr(species, 'C2', 'REACTOME')
+    reactome  = msigdbr(species, 'C2', 'REACTOME')
     reactomen = setNames(lapply(unique(reactome$gs_name), function(i)
       unique(as.character(reactome$gene_symbol)[reactome$gs_name == i])), unique(reactome$gs_name))
     rm(reactome)
