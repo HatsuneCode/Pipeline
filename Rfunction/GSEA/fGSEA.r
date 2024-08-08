@@ -1,5 +1,5 @@
 #### GSEA ####
-fGSEA = function(gene, sig = NULL, scoreType = 'std', minSize = 4, maxSize = 500, type = NULL, species = 'Homo sapiens') {
+fGSEA = function(gene, sig = NULL, scoreType = 'std', minSize = 2, maxSize = 500, type = NULL, species = 'Homo sapiens') {
   # species: Homo sapiens / Mus musculus
   suppressMessages(library(fgsea))
   suppressMessages(library(msigdbr))
@@ -11,11 +11,18 @@ fGSEA = function(gene, sig = NULL, scoreType = 'std', minSize = 4, maxSize = 500
     sig = keggn
   }
   if ('WIKI' %in% type) {
-    wp  = msigdbr::msigdbr('Mus musculus', 'C2', 'WIKIPATHWAYS')
+    wp  = msigdbr::msigdbr(species, 'C2', 'WIKIPATHWAYS')
     wpn = setNames(lapply(unique(wp$gs_name), function(i)
       unique(as.character(wp$gene_symbol)[wp$gs_name == i])), unique(wp$gs_name))
     rm(wp)
     sig = wpn
+  }
+  if ('REACT' %in% type) {
+    reactome  = msigdbr::msigdbr(species, 'C2', 'REACTOME')
+    reactomen = setNames(lapply(unique(reactome$gs_name), function(i)
+      unique(as.character(reactome$gene_symbol)[reactome$gs_name == i])), unique(reactome$gs_name))
+    rm(reactome)
+    sig = reactomen
   }
   if ('GOBP' %in% type) {
     bp   = msigdbr(species, 'C5', 'BP')
