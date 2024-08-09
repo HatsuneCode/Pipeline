@@ -1,5 +1,5 @@
 ## reCluster
-Visium.ReCluster = function(obj, harmony = T, group.by = 'slides', dims = 1:50) {
+Visium.ReCluster = function(obj, harmony = T, group.by = 'slides', dims = 1:50, reso = .8) {
   suppressMessages(library(Seurat))
   suppressMessages(library(harmony))
   #### SCT
@@ -13,6 +13,6 @@ Visium.ReCluster = function(obj, harmony = T, group.by = 'slides', dims = 1:50) 
     obj = RunUMAP(obj, dims = dims)
     obj = FindNeighbors(obj, dims = dims)
   }
-  obj = FindClusters(obj)
+  obj = FindClusters(obj, resolution = reso)
   obj
 }
