@@ -1,4 +1,4 @@
-Visium.Normalize = function(obj, group.by = 'slides', assay = 'ST', ctrl = NULL, ...) {
+Visium.Normalize = function(obj, group.by = 'slides', assay = 'ST', var.ctrl = NULL, ...) {
   suppressMessages(library(Seurat))
   suppressMessages(library(harmony))
   #### SCT
@@ -23,8 +23,8 @@ Visium.Normalize = function(obj, group.by = 'slides', assay = 'ST', ctrl = NULL,
   names(obj@images) = imgs
   obj = Visium.cleanImg(obj, imgs)
   #### restore
-  VariableFeatures(obj) = unique(if (length(ctrl)) 
-    cleanGene( unlist(feature[grepl(ctrl, unique(idx))]) ) else 
+  VariableFeatures(obj) = unique(if (length(var.ctrl)) 
+    cleanGene( unlist(feature[grepl(var.ctrl, unique(idx))]) ) else 
       cleanGene( unlist(feature)) )
   message('--> nVarGene: ', length(VariableFeatures(obj)), ' <--')
   obj = PrepSCTFindMarkers(obj)
