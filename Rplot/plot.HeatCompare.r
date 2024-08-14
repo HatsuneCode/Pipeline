@@ -6,11 +6,9 @@ plot.HeatCompare = function(pList, pvList = NULL, fc = 1, pval = .01, upCol = 'r
   ## process
   for (i in seq(mtrs)) {
     dif = setdiff(all, rows[[i]])
-    if (length(dif)) {
       pList[[i]]@matrix = rbind(mtrs[[i]], matrix(0, nrow = length(dif), ncol = ncol(mtrs[[i]]), dimnames = list(dif, colnames(mtrs[[i]]))) )[all,]
       if (length(pvList))
         pvList[[i]] = rbind(pvList[[i]], matrix(1, nrow = length(dif), ncol = ncol(pvList[[i]]), dimnames = list(dif, colnames(pvList[[i]]))) )[all,]
-    }
   }
   ## plots
   lapply(seq(pList), function(n) {
