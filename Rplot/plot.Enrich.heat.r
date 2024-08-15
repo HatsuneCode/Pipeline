@@ -1,4 +1,4 @@
-plot.Enrich.heat = function(df, nes = 2, pval = .05, adj = T, label = T, grid = T, ...) {
+plot.GSEA.heat = function(df, nes = 2, pval = .05, adj = T, label = T, grid = T, ...) {
   suppressMessages(library(reshape2))
   suppressMessages(library(ComplexHeatmap))
   suppressMessages(library(circlize))
@@ -19,5 +19,5 @@ plot.Enrich.heat = function(df, nes = 2, pval = .05, adj = T, label = T, grid = 
                               gp = gpar(fill = 'transparent', lwd = 1.5, col = ifelse(f > 0, 'red', 'blue')))
                 }, ...)
   p@matrix_legend_param = c(p@matrix_legend_param, gpar(title_gp = ff, labels_gp = ff))
-  p
+  list(plot = p, pvalue = Pvl)
 }
