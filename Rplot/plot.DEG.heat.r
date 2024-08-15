@@ -20,5 +20,5 @@ plot.DEG.heat = function(df, log2FC = 1, pval = .05, adj = T, label = T, grid = 
                              gp = gpar(fill = 'transparent', lwd = 1.5, col = ifelse(f > 0, 'red', 'blue')))
                }, ...)
   p@matrix_legend_param = c(p@matrix_legend_param, gpar(title_gp = ff, labels_gp = ff))
-  p
+  list(plot = p, pvalue = pv)
 }
