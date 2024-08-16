@@ -7,7 +7,7 @@ Visium.Normalize = function(obj, group.by = 'slides', assay = 'ST', var.ctrl = N
     message('SCT: ', m)
     st = obj[, idx == m]
     st = Visium.cleanImg(st, names(obj@images))
-    st = SCTransform(st, assay, vst.flavor = 'v2', vars.to.regress = c('mt.pct', 'cc.diff', 'nCount_ST'), ...)
+    st = SCTransform(st, assay, vst.flavor = 'v2', vars.to.regress = c('mt.pct', 'cc.diff', paste0('nCount_', assay)), ...)
     list(obj = st, feature = VariableFeatures(st))
   })
   #### merge
