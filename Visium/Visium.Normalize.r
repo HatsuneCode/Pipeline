@@ -1,6 +1,5 @@
 Visium.Normalize = function(obj, group.by = 'slides', assay = 'ST', var.ctrl = NULL, ...) {
   suppressMessages(library(Seurat))
-  suppressMessages(library(harmony))
   #### SCT
   idx = obj@meta.data[[group.by]]
   obj = lapply(unique(idx), function(m) {
