@@ -1,5 +1,5 @@
 ## reCluster
-Seurat.Cluster = function(obj, harmony = T, group.by = NULL, dims = 1:50, reso = .8) {
+Seurat.Cluster = function(obj, group.by = NULL, harmony = T, dims = 1:50, reso = .8) {
   suppressMessages(library(Seurat))
   suppressMessages(library(harmony))
   #### SCT
