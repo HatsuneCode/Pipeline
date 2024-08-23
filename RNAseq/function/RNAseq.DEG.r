@@ -35,7 +35,7 @@ RNAseq.DESeq2 = function(expr, pos = NULL, neg = NULL, name = NULL, exp_cut = 10
              average = rowMeans(expr), median = apply(expr, 1, median), 
              posAvg = rowMeans(exprP), posMed = apply(exprP, 1, median),
              negAvg = rowMeans(exprN), negMed = apply(exprN, 1, median),
-             type = name, row.names = NULL)
+             type = name, upDown = ifelse(dds$log2FoldChange > 0, 'Up', 'Down'), row.names = NULL)
 }
 #### Limma
 RNAseq.Limma = function(expr, pos = NULL, neg = NULL, name = NULL) {
@@ -76,5 +76,5 @@ RNAseq.Limma = function(expr, pos = NULL, neg = NULL, name = NULL) {
              median = apply(expr, 1, median), 
              posAvg = rowMeans(exprP), posMed = apply(exprP, 1, median),
              negAvg = rowMeans(exprN), negMed = apply(exprN, 1, median),
-             type = name, row.names = NULL)
+             type = name, upDown = ifelse(dds$log2FoldChange > 0, 'Up', 'Down'), row.names = NULL)
 }
