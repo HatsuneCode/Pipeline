@@ -25,7 +25,7 @@ fGSEA.title = function(x) {
     ' Nadh ' = ' NADH ',
     ' Atp '  = ' ATP '
   )
-  x = gsub('_', ' ', sub('^WP_', '', sub('^KEGG_', '', sub('^GOBP_', '', x))))
+  x = gsub('_', ' ', sub('^REACTOME_', '', sub('^WP_', '', sub('^KEGG_', '', sub('^GOBP_', '', x)))))
   x = str_to_title(x)
   for (i in seq(subT)) x = gsub(names(subT)[i], subT[[i]], x)
   x
