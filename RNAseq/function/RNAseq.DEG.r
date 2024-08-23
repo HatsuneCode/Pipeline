@@ -78,5 +78,7 @@ RNAseq.Limma = function(expr, pos = NULL, neg = NULL, name = NULL) {
              median = apply(expr, 1, median), 
              posAvg = rowMeans(exprP), posMed = apply(exprP, 1, median),
              negAvg = rowMeans(exprN), negMed = apply(exprN, 1, median),
-             type = name, upDown = ifelse(dds$log2FoldChange > 0, 'Up', 'Down'), row.names = NULL)
+             type = name, 
+             upDown = factor(ifelse(dds$log2FoldChange > 0, 'Up', 'Down'), c('Up', 'Down')), 
+             row.names = NULL )
 }
