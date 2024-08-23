@@ -25,5 +25,6 @@ Seurat.DEG = function(obj, pos = NULL, neg = NULL, group.by = 'seurat_clusters',
   mk$negAvg  = rowMeans(exprN)
   mk$negMed  = apply(exprN, 1, median)
   mk$type    = name
+  mk$upDown  = factor(ifelse(mk$avg_log2FC > 0, 'Up', 'Down'), c('Up', 'Down'))
   mk
-}        
+}
