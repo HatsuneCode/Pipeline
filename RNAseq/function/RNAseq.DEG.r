@@ -54,8 +54,8 @@ RNAseq.Limma = function(expr, pos = NULL, neg = NULL, name = NULL) {
   exp   = cbind(exprN, exprP)
   exp   = exp[rowSums(exp) > 0,,drop = F]
   condition = c(rep('Neg', ncol(exprN)), rep('Pos', ncol(exprP)))
-  exprP = exp[, condition == pos, drop = F]
-  exprN = exp[, condition == neg, drop = F]
+  exprP = exp[, condition == 'Pos', drop = F]
+  exprN = exp[, condition == 'Neg', drop = F]
   ## make coldata
   coldata = data.frame(group = factor( condition ), c('Neg', 'Pos') )
   ## design
@@ -74,7 +74,7 @@ RNAseq.Limma = function(expr, pos = NULL, neg = NULL, name = NULL) {
   data.frame(p_val = dds$P.Value, avg_log2FC = dds$logFC, 
              pct.1 = apply(exprP, 1, function(i) sum(i > 0)/ncol(exprP) ),
              pct.2 = apply(exprN, 1, function(i) sum(i > 0)/ncol(exprN) ),
-             p_val_adj = dds$adj.P.Val, gene = rownames(dds), average = rowMeans(expr), 
+             p_val_adj = dds$adj.P.Val, gene = rownames(dds), average = rowMeans(exp), 
              median = apply(expr, 1, median), 
              posAvg = rowMeans(exprP), posMed = apply(exprP, 1, median),
              negAvg = rowMeans(exprN), negMed = apply(exprN, 1, median),
