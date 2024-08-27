@@ -57,7 +57,7 @@ RNAseq.Limma = function(expr, pos = NULL, neg = NULL, name = NULL) {
   exprP = exp[, condition == 'Pos', drop = F]
   exprN = exp[, condition == 'Neg', drop = F]
   ## make coldata
-  coldata = data.frame(group = factor( condition ), c('Neg', 'Pos') )
+  coldata = data.frame(group = factor(condition, c('Neg', 'Pos')) )
   ## design
   design = model.matrix(~ 0 + group, data = coldata)
   colnames(design) = levels(coldata$group)
