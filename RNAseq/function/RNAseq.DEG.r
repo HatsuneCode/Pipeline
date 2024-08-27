@@ -63,7 +63,7 @@ RNAseq.Limma = function(expr, pos = NULL, neg = NULL, name = NULL) {
   colnames(design) = levels(coldata$group)
   rownames(design) = colnames(exp)
   ## contrast
-  contrast = makeContrasts('Neg-Pos', levels = design)
+  contrast = makeContrasts('Pos-Neg', levels = design)
   v = voom(exp, design)
   ## fit
   fit  = lmFit(v, design)
