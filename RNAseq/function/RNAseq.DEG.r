@@ -75,7 +75,7 @@ RNAseq.Limma = function(expr, pos = NULL, neg = NULL, name = NULL) {
              pct.1 = apply(exprP, 1, function(i) sum(i > 0)/ncol(exprP) ),
              pct.2 = apply(exprN, 1, function(i) sum(i > 0)/ncol(exprN) ),
              p_val_adj = dds$adj.P.Val, gene = rownames(dds), average = rowMeans(exp), 
-             median = apply(expr, 1, median), 
+             median = apply(exp, 1, median), 
              posAvg = rowMeans(exprP), posMed = apply(exprP, 1, median),
              negAvg = rowMeans(exprN), negMed = apply(exprN, 1, median),
              type = name, 
