@@ -29,12 +29,18 @@ checkDupRow = function(expr, method = 'mean') {
   expr
 }
 
+## yml ##
+suppressMessages(library(yaml))
+suppressMessages(library(rlang))
+handlers = list('bool#no'  = function(x) if ( x %in% c('false', 'FALSE', 'no')  ) FALSE else x,
+                'bool#yes' = function(x) if ( x %in% c('true',  'TRUE',  'yes') ) TRUE  else x )
+
 ## args ##
 args  = commandArgs()
 me    = normalizePath(sub('--file=', '', grep('--file=', args, value = T)), '/')
 args  = args[-seq(grep('--args', args))]
 message(Wa('-->', timer(), 'Run: ', me, '<--'))
-main  = Er(me, '<RNAseq_path> <order>')
+main  = Er(me, '<RNAseq.parameter.yml> <order>')
 path  = args[1]
 if (is.na(path)) { message(main); q('no') }
 path  = normalizePath(path, '/', T)
@@ -52,13 +58,19 @@ color20 = c('#00468B', '#5377A7', '#6C6DA4', '#925E9F', '#759EDD', '#0099B4', '#
             '#76D1B1', '#0A7C2E', '#B8D24D', '#EDE447', '#FAB158', '#FDAF91', '#FF7777', 
             '#FD0000', '#AD002A', '#AE8691', '#DEB8A1', '#4C4E4E', '#5B4232')
 
+#### 0. read yml samples
+message(Sa('-->', timer(), '1. check parameters <--'))
+parameter = yaml.load_file(path, handlers = handlers)
+samples   = names(parameter$samples)
+outdir    = as.character(parameter$outdir %||% '.')
+pref      = paste0(outdir, '/', samples, '/', samples)
+
 #### 1. stat Fastp
 message(Sa('-->', timer(), '1. stat Fastp <--'))
-fs   = list.files(path, '.fastp.json$', recursive = T, full.names = T)
-ns   = sub('.fastp.json$', '', sub('.*/', '', fs))
+fs   = paste0(pref, '.fastp.json')
 stat = do.call(rbind, lapply(seq(fs), function(i) {
   f = fs[i]
-  n = ns[i]
+  n = samples[i]
   message(f)
   json = fromJSON(file = f)
   q30  = paste0(round(json$summary$before_filtering$q30_rate, 4)*100, '%')
@@ -103,11 +115,10 @@ ggsave('1.stat.Q30.png', p, w = 1 + nrow(stat)*.3, h = 4, limitsize = F)
 
 #### 2. stat rRNA
 message(Sa('-->', timer(), '2. stat rRNA <--'))
-fs   = list.files(path, '.rRNA.log$', full.names = T, recursive = T)
-ns   = sub('.rRNA.log$', '', sub('.*/', '', fs))
+fs = paste0(pref, '.rRNA.log')
 stat = do.call(rbind, lapply(seq(fs), function(i) {
   f = fs[i]
-  n = ns[i]
+  n = samples[i]
   message(f)
   data.frame( Name = n, rRNA = sub(' .*', '', readLines(f)[15]) )
 }))
@@ -128,13 +139,12 @@ ggsave('2.stat.rRNA.png', p, w = 1 + nrow(stat)*.3, h = 4, limitsize = F)
 
 #### 3. stat STAR
 message(Sa('-->', timer(), '3. stat STAR <--'))
-fs   = list.files(path, '.Log.final.out$', full.names = T, recursive = T)
-ns   = sub('.Log.final.out$', '', sub('.*/', '', fs))
+fs   = paste0(pref, '.Log.final.out')
 meta = c('Uniquely mapped reads %', '% of reads mapped to multiple loci', 
          '% of reads unmapped: too many mismatches', '% of reads unmapped: too short')
 stat = do.call(rbind, lapply(seq(fs), function(i) {
   f  = fs[i]
-  n  = ns[i]
+  n  = samples[i]
   message('--> ', n, ' ', f, ' <--')
   a  = readLines(f)
   df = data.frame(t(setNames(sapply(meta, function(m) sub('.*\t', '', grep(m, a, value = T)) ), 
@@ -161,12 +171,11 @@ ggsave('3.stat.STAR.png', p, w = 1 + nrow(stat)*.3, h = 4, limitsize = F)
 
 #### 4. stat RSEM
 message(Sa('-->', timer(), '4. stat RSEM <--'))
-fs = list.files(path, recursive = T, full.names = T, pattern = 'genes.results')
-ns = sub('.genes.results$', '', sub('.*/', '', fs))
+fs = paste0(pref, '.genes.results')
 ms = c('expected_count', 'TPM', 'FPKM')
-data = lapply(seq(ns), function(i) {
+data = lapply(seq(fs), function(i) {
   f = fs[i]
-  n = ns[i]
+  n = samples[i]
   message(n)
   df = read.table(f, sep = '\t', header = T)
   setNames(lapply(ms, function(m) {
