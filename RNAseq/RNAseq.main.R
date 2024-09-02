@@ -38,6 +38,7 @@ if (timeIt < 1) stop(Er('!!! Detect time interval could not less than 1 minutes 
 # check softwre paths
 softwares  = lapply(parameter$softwares, checkPath)
 # check steps
+continue   = parameter$continue
 steps      = parameter$steps
 fastp      = steps$fastp %||% T
 rseqc      = steps$rseqc %||% F
@@ -51,8 +52,7 @@ samples    = lapply(parameter$samples, checkPath)
 # check mem
 mem        = parameter$mem %||% 10
 # check outdir
-outdir     = parameter$outdir %||% '.'
-outdir     = as.character(outdir)
+outdir     = as.character(parameter$outdir %||% '.')
 
 ## 1. set work dir ##
 dir.create(outdir, F, T)
@@ -63,7 +63,7 @@ dir.create('log', F)
 ## choose cu ##
 pe    = system('pestat', intern = T)
 pe    = grep('fat', grep('free', pe, value = T), invert = T, value = T)
-gpu   = paste0('cu', 26:35)
+gpu   = paste0('cu', c(13,26:35))
 load  = unlist(lapply(strsplit(pe, '\\s+'), function(i) setNames(i[4], i[2]) ))
 load  = load[!names(load) %in% gpu]
 #### less than 70
@@ -91,13 +91,13 @@ run = future_lapply(seq(samples), function(i) {
      paste0(softwares$fastp, ' -q 20 -u 10 -l ', fastp_LR, ' -w 8 -i ', samples[[i]][1], if (pairEnd) paste0(' -I ', samples[[i]][2]), ' -o ', n, '.r1.fq.gz', if (pairEnd) paste0(' -O ', n, '.r2.fq.gz '), ' -j ', n, '.fastp.json -h ', n, '.fastp.html >> ../log/', n, '.log 2>&1') else
      paste0('cat ', samples[[i]][1], ' > ', n, '.r1.fq.gz', if (pairEnd) paste0('; cat ', samples[[i]][2], ' > ', n, '.r2.fq.gz')),
    # s2.bowtie2
-   s2 = paste0(softwares$bowtie2, ' -p 8 -x ', references$rRNAref, ' --local ', ifelse(pairEnd, '-1', '-U'), ' ', n, '.r1.fq.gz', if (pairEnd) paste0(' -2 ', n, '.r2.fq.gz'), ' --un-conc-gz ', n, '.filter.fq.gz -S rRNA.sam > ', n, '.rRNA.log 2>&1; rm rRNA.sam'),
+   s2 = paste0(softwares$bowtie2, ' -p 8 -x ', references$rRNAref, ' --local ', ifelse(pairEnd, '-1', '-U'), ' ', n, '.r1.fq.gz', if (pairEnd) paste0(' -2 ', n, '.r2.fq.gz'), ' --un', if (pairEnd) '-conc', '-gz ', n, '.filter.fq.gz -S rRNA.sam > ', n, '.rRNA.log 2>&1; rm rRNA.sam'),
    # s3.STAR
    s3 = paste0(softwares$STAR, ' --runThreadN 6 --genomeDir ', references$STARref, ' --readFilesIn ', n, '.filter.fq.1.gz ', if (pairEnd) paste0(n, '.filter.fq.2.gz '), '--readFilesCommand zcat --outBAMsortingThreadN 6 --outSAMattributes All --outSAMtype BAM SortedByCoordinate --quantMode TranscriptomeSAM GeneCounts --outFileNamePrefix ', n, '. >> ../log/', n, '.log 2>&1'),
    # s4.RSEM
    s4 = paste0(softwares$RSEM, ' --alignments', if (pairEnd) ' --paired-end', ' -p 8 --append-names --no-bam-output ', n, '.Aligned.toTranscriptome.out.bam ', references$RSEM, ' ', n, ' >> ../log/', n, '.log 2>&1'),
    # s5.Seq satu
-   s5 = paste0(softwares$Rscript, ' /home/songlianhao/pipeline/RNAseq.SeqSatu.r ', n, ' > ', n, '.seqSatu.log 2>&1'),
+   s5 = paste0(softwares$Rscript, ' ', softwares$SeqSatu, ' ', n, ' >> ../log/', n, '.log 2>&1'),
    # clean
    cl = paste0('rm ', n, '.*.fq*gz'),
    # index
