@@ -1,0 +1,64 @@
+## B/Plasma cell ##
+CD79A, CD79B, MS4A1
+## B/Plasma cell: B cell ##
+BANK1, CD19, CD22, PAX5
+## B/Plasma cell: Germinal B cell ##
+HMCES, NEIL1, RGS13
+## B/Plasma cell: Plasma cell ##
+DERL3, IGHG1, IGHG2, IGHG3, IGHG4, IGLL5, MZB1, XBP1
+
+## T/NK cell ##
+CD2, CD3D, CD3E, CD3G, CD7, IL32
+## T/NK cell: Cytotoxic Lymphocyte ##
+GZMA, GZMB, NKG7
+## T/NK cell: Helper T cell ##
+CXCL13
+## T/NK cell: Th17 cell ##
+IL17A
+## T/NK cell: Regulatory T cell ##
+FOXP3, IL2RA, TNFRSF4
+## T/NK cell: NK cell ##
+KIR2DL1, KIR2DL2, KIR2DL3, KIR2DL4, KIR3DL1, KIR3DL2, KIR3DL3, NCR1, SH2D1B
+
+## Endothelial cell ##
+ECSCR, EGFL7, RAMP2, RAMP3, VWF
+
+## Epithelial cell ##
+KRT5, KRT6A, S100A2, SFN
+
+## Fibroblast ##
+COL1A1, COL1A2, COL3A1, COL6A1, COL6A2
+## Fibroblast: Myofibroblast ##
+ACTA2, CDH6, MUSTN1, MYH11, PLN
+## Fibroblast: Cancer-associated Fibroblast ##
+FAP, LUM, WNT5A
+## Fibroblast: CFD+ Fibroblast ##
+ADH1B, CFD, PI16, PLA2G2A, WISP2
+
+## Mature DC ##
+CCL19, LAMP3
+
+## Langerin DC ##
+CD1A, CD207, FCGBP, HLA-DQB2
+
+## Mast cell ##
+CPA3, HDC, MS4A2, TPSAB1, TPSB2
+
+## Monocyte ##
+ADAP2, LYZ
+## Monocyte: Myeloid cDC1 ##
+CLEC9A, WDFY4, XCR1
+## Monocyte: Myeloid cDC2 ##
+CD1C, CLEC10A
+## Monocyte: M1 Macrophage ##
+CXCL2, CXCL3, G0S2, IL1B
+## Monocyte: M2 Macrophage ##
+APOC1, APOE, CD163, SPP1
+## Monocyte: Chemokine Macrophage ##
+CXCL10, CXCL11, CXCL9
+
+## Plasmacytoid DC ##
+LILRA4, SCT, SMPD3
+
+## Melanocyte ##
+DCT, MLANA, PMEL, TYR, TYRP1
