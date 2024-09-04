@@ -113,7 +113,7 @@ KEGG_NON_SMALL_CELL_LUNG_CANCER	Non-small cell lung cancer	Cancer
 KEGG_NOTCH_SIGNALING_PATHWAY	Notch signaling pathway	Signaling Pathway
 KEGG_NUCLEOTIDE_EXCISION_REPAIR	Nucleotide excision repair	Replication and repair
 KEGG_N_GLYCAN_BIOSYNTHESIS	N-Glycan biosynthesis	Metabolism
-KEGG_OLFACTORY_TRANSDUCTION	Olfactory transduction	Sensation
+KEGG_OLFACTORY_TRANSDUCTION	Olfactory transduction	Sensory system
 KEGG_ONE_CARBON_POOL_BY_FOLATE	One carbon pool by folate	Metabolism
 KEGG_OOCYTE_MEIOSIS	Oocyte meiosis	Cell growth and death
 KEGG_OTHER_GLYCAN_DEGRADATION	Other glycan degradation	Metabolism
