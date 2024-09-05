@@ -30,9 +30,9 @@ KEGG_BUTANOATE_METABOLISM	Butanoate metabolism	Metabolism
 KEGG_B_CELL_RECEPTOR_SIGNALING_PATHWAY	B cell receptor signaling pathway	Immune (Adaptive)
 KEGG_CALCIUM_SIGNALING_PATHWAY	Calcium signaling pathway	Signaling Pathway
 KEGG_CARDIAC_MUSCLE_CONTRACTION	Cardiac muscle contraction	Circulatory system
-KEGG_CELL_ADHESION_MOLECULES_CAMS	Cell adhesion molecules	Inflammation
+KEGG_CELL_ADHESION_MOLECULES_CAMS	Cell adhesion molecules	Signaling molecules and interaction
 KEGG_CELL_CYCLE	Cell cycle	Cell growth and death
-KEGG_CHEMOKINE_SIGNALING_PATHWAY	Chemokine Signaling Pathway	Inflammation
+KEGG_CHEMOKINE_SIGNALING_PATHWAY	Chemokine Signaling Pathway	Immune
 KEGG_CHRONIC_MYELOID_LEUKEMIA	Chronic myeloid leukemia	Cancer
 KEGG_CIRCADIAN_RHYTHM_MAMMAL	Circadian rhythm	Environmental adaptation
 KEGG_CITRATE_CYCLE_TCA_CYCLE	Citrate cycle (TCA cycle)	Metabolism
