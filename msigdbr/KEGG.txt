@@ -32,7 +32,7 @@ KEGG_CALCIUM_SIGNALING_PATHWAY	Calcium signaling pathway	Signaling Pathway
 KEGG_CARDIAC_MUSCLE_CONTRACTION	Cardiac muscle contraction	Circulatory system
 KEGG_CELL_ADHESION_MOLECULES_CAMS	Cell adhesion molecules	Signaling molecules and interaction
 KEGG_CELL_CYCLE	Cell cycle	Cell growth and death
-KEGG_CHEMOKINE_SIGNALING_PATHWAY	Chemokine Signaling Pathway	Immune
+KEGG_CHEMOKINE_SIGNALING_PATHWAY	Chemokine signaling pathway	Immune
 KEGG_CHRONIC_MYELOID_LEUKEMIA	Chronic myeloid leukemia	Cancer
 KEGG_CIRCADIAN_RHYTHM_MAMMAL	Circadian rhythm	Environmental adaptation
 KEGG_CITRATE_CYCLE_TCA_CYCLE	Citrate cycle (TCA cycle)	Metabolism
