@@ -119,7 +119,7 @@ KEGG_OOCYTE_MEIOSIS	Oocyte meiosis	Cell growth and death
 KEGG_OTHER_GLYCAN_DEGRADATION	Other glycan degradation	Metabolism
 KEGG_OXIDATIVE_PHOSPHORYLATION	Oxidative phosphorylation	Metabolism (Energy)
 KEGG_O_GLYCAN_BIOSYNTHESIS	Mucin type O-glycan biosynthesis	Metabolism
-KEGG_P53_SIGNALING_PATHWAY	p53 signaling pathway	Signaling Pathway
+KEGG_P53_SIGNALING_PATHWAY	p53 signaling pathway	Cell growth and death
 KEGG_PANCREATIC_CANCER	Pancreatic cancer	Cancer
 KEGG_PANTOTHENATE_AND_COA_BIOSYNTHESIS	Pantothenate and CoA biosynthesis	Metabolism
 KEGG_PARKINSONS_DISEASE	Parkinson disease	Disease (Neuron)
