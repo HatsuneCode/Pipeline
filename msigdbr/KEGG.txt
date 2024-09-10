@@ -2,7 +2,7 @@ Pathway	Name	Class
 KEGG_ABC_TRANSPORTERS	ABC transporters	Membrane transport
 KEGG_ACUTE_MYELOID_LEUKEMIA	Acute myeloid leukemia	Disease (Immune)
 KEGG_ADHERENS_JUNCTION	Adherens junction	Cellular community
-KEGG_ADIPOCYTOKINE_SIGNALING_PATHWAY	Adipocytokine signaling pathway	Signaling Pathway
+KEGG_ADIPOCYTOKINE_SIGNALING_PATHWAY	Adipocytokine signaling pathway	Signaling pathway
 KEGG_ALANINE_ASPARTATE_AND_GLUTAMATE_METABOLISM	"Alanine, aspartate and glutamate metabolism"	Metabolism
 KEGG_ALDOSTERONE_REGULATED_SODIUM_REABSORPTION	Aldosterone-regulated sodium reabsorption	Metabolism
 KEGG_ALLOGRAFT_REJECTION	Allograft rejection	Disease (Immune)
@@ -28,7 +28,7 @@ KEGG_BIOSYNTHESIS_OF_UNSATURATED_FATTY_ACIDS	Biosynthesis of unsaturated fatty a
 KEGG_BLADDER_CANCER	Bladder cancer	Cancer
 KEGG_BUTANOATE_METABOLISM	Butanoate metabolism	Metabolism
 KEGG_B_CELL_RECEPTOR_SIGNALING_PATHWAY	B cell receptor signaling pathway	Immune (Adaptive)
-KEGG_CALCIUM_SIGNALING_PATHWAY	Calcium signaling pathway	Signaling Pathway
+KEGG_CALCIUM_SIGNALING_PATHWAY	Calcium signaling pathway	Signaling pathway
 KEGG_CARDIAC_MUSCLE_CONTRACTION	Cardiac muscle contraction	Circulatory system
 KEGG_CELL_ADHESION_MOLECULES_CAMS	Cell adhesion molecules	Signaling molecules and interaction
 KEGG_CELL_CYCLE	Cell cycle	Cell growth and death
@@ -50,7 +50,7 @@ KEGG_ECM_RECEPTOR_INTERACTION	ECM-receptor interaction	Signaling molecules and i
 KEGG_ENDOCYTOSIS	Endocytosis	Transport and catabolism
 KEGG_ENDOMETRIAL_CANCER	Endometrial cancer	Cancer
 KEGG_EPITHELIAL_CELL_SIGNALING_IN_HELICOBACTER_PYLORI_INFECTION	Epithelial cell signaling in Helicobacter pylori infection	Immune (Innate)
-KEGG_ERBB_SIGNALING_PATHWAY	ErbB signaling pathway	Signaling Pathway
+KEGG_ERBB_SIGNALING_PATHWAY	ErbB signaling pathway	Signaling pathway
 KEGG_ETHER_LIPID_METABOLISM	Ether lipid metabolism	Metabolism
 KEGG_FATTY_ACID_METABOLISM	Fatty acid metabolism	Metabolism
 KEGG_FC_EPSILON_RI_SIGNALING_PATHWAY	Fc epsilon RI signaling pathway	Immune (Innate)
@@ -77,16 +77,16 @@ KEGG_GLYCOSYLPHOSPHATIDYLINOSITOL_GPI_ANCHOR_BIOSYNTHESIS	Glycosylphosphatidylin
 KEGG_GLYOXYLATE_AND_DICARBOXYLATE_METABOLISM	Glyoxylate and dicarboxylate metabolism	Metabolism
 KEGG_GNRH_SIGNALING_PATHWAY	GnRH signaling pathway	Endocrine system
 KEGG_GRAFT_VERSUS_HOST_DISEASE	Graft-versus-host disease	Disease (Immune)
-KEGG_HEDGEHOG_SIGNALING_PATHWAY	Hedgehog signaling pathway	Signaling Pathway
+KEGG_HEDGEHOG_SIGNALING_PATHWAY	Hedgehog signaling pathway	Signaling pathway
 KEGG_HEMATOPOIETIC_CELL_LINEAGE	Hematopoietic cell lineage	Immune
 KEGG_HISTIDINE_METABOLISM	Histidine metabolism	Metabolism
 KEGG_HOMOLOGOUS_RECOMBINATION	Homologous recombination	Replication and repair
 KEGG_HUNTINGTONS_DISEASE	Huntington disease	Disease (Neuron)
 KEGG_HYPERTROPHIC_CARDIOMYOPATHY_HCM	Hypertrophic cardiomyopathy	Disease
 KEGG_INOSITOL_PHOSPHATE_METABOLISM	Inositol phosphate metabolism	Metabolism
-KEGG_INSULIN_SIGNALING_PATHWAY	Insulin signaling pathway	Signaling Pathway
+KEGG_INSULIN_SIGNALING_PATHWAY	Insulin signaling pathway	Signaling pathway
 KEGG_INTESTINAL_IMMUNE_NETWORK_FOR_IGA_PRODUCTION	Intestinal immune network for IgA production	Immune (Adaptive)
-KEGG_JAK_STAT_SIGNALING_PATHWAY	JAK-STAT signaling pathway	Signaling Pathway
+KEGG_JAK_STAT_SIGNALING_PATHWAY	JAK-STAT signaling pathway	Signaling pathway
 KEGG_LEISHMANIA_INFECTION	Leishmaniasis	Disease (Immune)
 KEGG_LEUKOCYTE_TRANSENDOTHELIAL_MIGRATION	Leukocyte transendothelial migration	Immune (Adaptive)
 KEGG_LIMONENE_AND_PINENE_DEGRADATION	Limonene degradation	Metabolism
@@ -95,13 +95,13 @@ KEGG_LONG_TERM_DEPRESSION	Long-term depression	Neuron
 KEGG_LONG_TERM_POTENTIATION	Long-term potentiation	Neuron
 KEGG_LYSINE_DEGRADATION	Lysine degradation	Metabolism
 KEGG_LYSOSOME	Lysosome	Transport and catabolism
-KEGG_MAPK_SIGNALING_PATHWAY	MAPK signaling pathway	Signaling Pathway
+KEGG_MAPK_SIGNALING_PATHWAY	MAPK signaling pathway	Signaling pathway
 KEGG_MATURITY_ONSET_DIABETES_OF_THE_YOUNG	Maturity onset diabetes of the young	Disease
 KEGG_MELANOGENESIS	Melanogenesis	Endocrine system
 KEGG_MELANOMA	Melanoma	Cancer
 KEGG_METABOLISM_OF_XENOBIOTICS_BY_CYTOCHROME_P450	Metabolism of xenobiotics by cytochrome P450	Metabolism
 KEGG_MISMATCH_REPAIR	Mismatch repair	Replication and repair
-KEGG_MTOR_SIGNALING_PATHWAY	mTOR signaling pathway	Signaling Pathway
+KEGG_MTOR_SIGNALING_PATHWAY	mTOR signaling pathway	Signaling pathway
 KEGG_NATURAL_KILLER_CELL_MEDIATED_CYTOTOXICITY	Natural killer cell mediated cytotoxicity	Immune (Innate)
 KEGG_NEUROACTIVE_LIGAND_RECEPTOR_INTERACTION	Neuroactive ligand-receptor interaction	Neuron
 KEGG_NEUROTROPHIN_SIGNALING_PATHWAY	Neurotrophin signaling pathway	Neuron
@@ -110,7 +110,7 @@ KEGG_NITROGEN_METABOLISM	Nitrogen metabolism	Metabolism (Energy)
 KEGG_NOD_LIKE_RECEPTOR_SIGNALING_PATHWAY	NOD-like receptor signaling pathway	Immune (Innate)
 KEGG_NON_HOMOLOGOUS_END_JOINING	Non-homologous end-joining	Replication and repair
 KEGG_NON_SMALL_CELL_LUNG_CANCER	Non-small cell lung cancer	Cancer
-KEGG_NOTCH_SIGNALING_PATHWAY	Notch signaling pathway	Signaling Pathway
+KEGG_NOTCH_SIGNALING_PATHWAY	Notch signaling pathway	Signaling pathway
 KEGG_NUCLEOTIDE_EXCISION_REPAIR	Nucleotide excision repair	Replication and repair
 KEGG_N_GLYCAN_BIOSYNTHESIS	N-Glycan biosynthesis	Metabolism
 KEGG_OLFACTORY_TRANSDUCTION	Olfactory transduction	Sensory system
@@ -129,9 +129,9 @@ KEGG_PENTOSE_AND_GLUCURONATE_INTERCONVERSIONS	Pentose and glucuronate interconve
 KEGG_PENTOSE_PHOSPHATE_PATHWAY	Pentose phosphate pathway	Metabolism
 KEGG_PEROXISOME	Peroxisome	Transport and catabolism
 KEGG_PHENYLALANINE_METABOLISM	Phenylalanine metabolism	Metabolism
-KEGG_PHOSPHATIDYLINOSITOL_SIGNALING_SYSTEM	Phosphatidylinositol signaling system	Signaling Pathway
+KEGG_PHOSPHATIDYLINOSITOL_SIGNALING_SYSTEM	Phosphatidylinositol signaling system	Signaling pathway
 KEGG_PORPHYRIN_AND_CHLOROPHYLL_METABOLISM	Porphyrin metabolism	Metabolism
-KEGG_PPAR_SIGNALING_PATHWAY	PPAR signaling pathway	Signaling Pathway
+KEGG_PPAR_SIGNALING_PATHWAY	PPAR signaling pathway	Signaling pathway
 KEGG_PRIMARY_BILE_ACID_BIOSYNTHESIS	Primary bile acid biosynthesis	Metabolism
 KEGG_PRIMARY_IMMUNODEFICIENCY	Primary immunodeficiency	Disease (Immune)
 KEGG_PRION_DISEASES	Prion disease	Disease (Neuron)
@@ -167,7 +167,7 @@ KEGG_SYSTEMIC_LUPUS_ERYTHEMATOSUS	Systemic lupus erythematosus	Disease (Immune)
 KEGG_TASTE_TRANSDUCTION	Taste transduction	Sensory system
 KEGG_TAURINE_AND_HYPOTAURINE_METABOLISM	Taurine and hypotaurine metabolism	Metabolism
 KEGG_TERPENOID_BACKBONE_BIOSYNTHESIS	Terpenoid backbone biosynthesis	Metabolism
-KEGG_TGF_BETA_SIGNALING_PATHWAY	TGF-beta signaling pathway	Signaling Pathway
+KEGG_TGF_BETA_SIGNALING_PATHWAY	TGF-beta signaling pathway	Signaling pathway
 KEGG_THYROID_CANCER	Thyroid cancer	Cancer
 KEGG_TIGHT_JUNCTION	Tight junction	Cellular community
 KEGG_TOLL_LIKE_RECEPTOR_SIGNALING_PATHWAY	Toll-like receptor signaling pathway	Immune (Innate)
@@ -181,7 +181,7 @@ KEGG_VALINE_LEUCINE_AND_ISOLEUCINE_BIOSYNTHESIS	"Valine, leucine and isoleucine 
 KEGG_VALINE_LEUCINE_AND_ISOLEUCINE_DEGRADATION	"Valine, leucine and isoleucine degradation"	Metabolism
 KEGG_VASCULAR_SMOOTH_MUSCLE_CONTRACTION	Vascular smooth muscle contraction	Circulatory system
 KEGG_VASOPRESSIN_REGULATED_WATER_REABSORPTION	Vasopressin-regulated water reabsorption	Excretory system
-KEGG_VEGF_SIGNALING_PATHWAY	VEGF signaling pathway	Signaling Pathway
+KEGG_VEGF_SIGNALING_PATHWAY	VEGF signaling pathway	Signaling pathway
 KEGG_VIBRIO_CHOLERAE_INFECTION	Vibrio cholerae infection	Disease (Immune)
 KEGG_VIRAL_MYOCARDITIS	Viral myocarditis	Disease
-KEGG_WNT_SIGNALING_PATHWAY	Wnt signaling pathway	Signaling Pathway
+KEGG_WNT_SIGNALING_PATHWAY	Wnt signaling pathway	Signaling pathway
