@@ -56,7 +56,7 @@ KEGG_FATTY_ACID_METABOLISM	Fatty acid metabolism	Metabolism
 KEGG_FC_EPSILON_RI_SIGNALING_PATHWAY	Fc epsilon RI signaling pathway	Immune (Innate)
 KEGG_FC_GAMMA_R_MEDIATED_PHAGOCYTOSIS	Fc gamma R-mediated phagocytosis	Immune (Innate)
 KEGG_FOCAL_ADHESION	Focal adhesion	Cellular community
-KEGG_FOLATE_BIOSYNTHESIS	Folate biosynthesis	Metabolism
+KEGG_FOLATE_BIOSYNTHESIS	Folate biosynthesis	Metabolism of cofactors and vitamins
 KEGG_FRUCTOSE_AND_MANNOSE_METABOLISM	Fructose and mannose metabolism	Metabolism
 KEGG_GALACTOSE_METABOLISM	Galactose metabolism	Metabolism
 KEGG_GAP_JUNCTION	Gap junction	Cellular community
