@@ -6,14 +6,14 @@ KEGG_ADIPOCYTOKINE_SIGNALING_PATHWAY	Adipocytokine signaling pathway	Signaling p
 KEGG_ALANINE_ASPARTATE_AND_GLUTAMATE_METABOLISM	"Alanine, aspartate and glutamate metabolism"	Metabolism
 KEGG_ALDOSTERONE_REGULATED_SODIUM_REABSORPTION	Aldosterone-regulated sodium reabsorption	Metabolism
 KEGG_ALLOGRAFT_REJECTION	Allograft rejection	Disease (Immune)
-KEGG_ALPHA_LINOLENIC_ACID_METABOLISM	alpha-Linolenic acid metabolism	Metabolism
+KEGG_ALPHA_LINOLENIC_ACID_METABOLISM	alpha-Linolenic acid metabolism	Lipid metabolism
 KEGG_ALZHEIMERS_DISEASE	Alzheimer disease	Disease (Neuron)
 KEGG_AMINOACYL_TRNA_BIOSYNTHESIS	Aminoacyl-tRNA biosynthesis	Translation
 KEGG_AMINO_SUGAR_AND_NUCLEOTIDE_SUGAR_METABOLISM	Amino sugar and nucleotide sugar metabolism	Metabolism
 KEGG_AMYOTROPHIC_LATERAL_SCLEROSIS_ALS	Amyotrophic lateral sclerosis	Disease (Neuron)
 KEGG_ANTIGEN_PROCESSING_AND_PRESENTATION	Antigen processing and presentation	Immune
 KEGG_APOPTOSIS	Apoptosis	Cell growth and death
-KEGG_ARACHIDONIC_ACID_METABOLISM	Arachidonic acid metabolism	Metabolism
+KEGG_ARACHIDONIC_ACID_METABOLISM	Arachidonic acid metabolism	Lipid metabolism
 KEGG_ARGININE_AND_PROLINE_METABOLISM	Arginine and proline metabolism	Metabolism
 KEGG_ARRHYTHMOGENIC_RIGHT_VENTRICULAR_CARDIOMYOPATHY_ARVC	Arrhythmogenic right ventricular cardiomyopathy	Disease
 KEGG_ASCORBATE_AND_ALDARATE_METABOLISM	Ascorbate and aldarate metabolism	Metabolism
@@ -24,7 +24,7 @@ KEGG_BASAL_CELL_CARCINOMA	Basal cell carcinoma	Cancer
 KEGG_BASAL_TRANSCRIPTION_FACTORS	Basal transcription factors	Transcription
 KEGG_BASE_EXCISION_REPAIR	Base excision repair	Replication and repair
 KEGG_BETA_ALANINE_METABOLISM	beta-Alanine metabolism	Metabolism
-KEGG_BIOSYNTHESIS_OF_UNSATURATED_FATTY_ACIDS	Biosynthesis of unsaturated fatty acids	Metabolism
+KEGG_BIOSYNTHESIS_OF_UNSATURATED_FATTY_ACIDS	Biosynthesis of unsaturated fatty acids	Lipid metabolism
 KEGG_BLADDER_CANCER	Bladder cancer	Cancer
 KEGG_BUTANOATE_METABOLISM	Butanoate metabolism	Metabolism
 KEGG_B_CELL_RECEPTOR_SIGNALING_PATHWAY	B cell receptor signaling pathway	Immune (Adaptive)
@@ -51,7 +51,7 @@ KEGG_ENDOCYTOSIS	Endocytosis	Transport and catabolism
 KEGG_ENDOMETRIAL_CANCER	Endometrial cancer	Cancer
 KEGG_EPITHELIAL_CELL_SIGNALING_IN_HELICOBACTER_PYLORI_INFECTION	Epithelial cell signaling in Helicobacter pylori infection	Immune (Innate)
 KEGG_ERBB_SIGNALING_PATHWAY	ErbB signaling pathway	Signaling pathway
-KEGG_ETHER_LIPID_METABOLISM	Ether lipid metabolism	Metabolism
+KEGG_ETHER_LIPID_METABOLISM	Ether lipid metabolism	Lipid metabolism
 KEGG_FATTY_ACID_METABOLISM	Fatty acid metabolism	Metabolism
 KEGG_FC_EPSILON_RI_SIGNALING_PATHWAY	Fc epsilon RI signaling pathway	Immune (Innate)
 KEGG_FC_GAMMA_R_MEDIATED_PHAGOCYTOSIS	Fc gamma R-mediated phagocytosis	Immune (Innate)
@@ -62,8 +62,8 @@ KEGG_GALACTOSE_METABOLISM	Galactose metabolism	Metabolism
 KEGG_GAP_JUNCTION	Gap junction	Cellular community
 KEGG_GLIOMA	Glioma	Cancer
 KEGG_GLUTATHIONE_METABOLISM	Glutathione metabolism	Metabolism
-KEGG_GLYCEROLIPID_METABOLISM	Glycerolipid metabolism	Metabolism
-KEGG_GLYCEROPHOSPHOLIPID_METABOLISM	Glycerophospholipid metabolism	Metabolism
+KEGG_GLYCEROLIPID_METABOLISM	Glycerolipid metabolism	Lipid metabolism
+KEGG_GLYCEROPHOSPHOLIPID_METABOLISM	Glycerophospholipid metabolism	Lipid metabolism
 KEGG_GLYCINE_SERINE_AND_THREONINE_METABOLISM	"Glycine, serine and threonine metabolism"	Metabolism
 KEGG_GLYCOLYSIS_GLUCONEOGENESIS	Glycolysis / Gluconeogenesis	Metabolism
 KEGG_GLYCOSAMINOGLYCAN_BIOSYNTHESIS_CHONDROITIN_SULFATE	Glycosaminoglycan biosynthesis - chondroitin sulfate / dermatan sulfate	Metabolism
@@ -90,7 +90,7 @@ KEGG_JAK_STAT_SIGNALING_PATHWAY	JAK-STAT signaling pathway	Signaling pathway
 KEGG_LEISHMANIA_INFECTION	Leishmaniasis	Disease (Immune)
 KEGG_LEUKOCYTE_TRANSENDOTHELIAL_MIGRATION	Leukocyte transendothelial migration	Immune (Adaptive)
 KEGG_LIMONENE_AND_PINENE_DEGRADATION	Limonene degradation	Metabolism
-KEGG_LINOLEIC_ACID_METABOLISM	Linoleic acid metabolism	Metabolism
+KEGG_LINOLEIC_ACID_METABOLISM	Linoleic acid metabolism	Lipid metabolism
 KEGG_LONG_TERM_DEPRESSION	Long-term depression	Neuron
 KEGG_LONG_TERM_POTENTIATION	Long-term potentiation	Neuron
 KEGG_LYSINE_DEGRADATION	Lysine degradation	Metabolism
@@ -132,7 +132,7 @@ KEGG_PHENYLALANINE_METABOLISM	Phenylalanine metabolism	Metabolism
 KEGG_PHOSPHATIDYLINOSITOL_SIGNALING_SYSTEM	Phosphatidylinositol signaling system	Signaling pathway
 KEGG_PORPHYRIN_AND_CHLOROPHYLL_METABOLISM	Porphyrin metabolism	Metabolism
 KEGG_PPAR_SIGNALING_PATHWAY	PPAR signaling pathway	Signaling pathway
-KEGG_PRIMARY_BILE_ACID_BIOSYNTHESIS	Primary bile acid biosynthesis	Metabolism
+KEGG_PRIMARY_BILE_ACID_BIOSYNTHESIS	Primary bile acid biosynthesis	Lipid metabolism
 KEGG_PRIMARY_IMMUNODEFICIENCY	Primary immunodeficiency	Disease (Immune)
 KEGG_PRION_DISEASES	Prion disease	Disease (Neuron)
 KEGG_PROGESTERONE_MEDIATED_OOCYTE_MATURATION	Progesterone-mediated oocyte maturation	Endocrine system
@@ -157,11 +157,11 @@ KEGG_RNA_POLYMERASE	RNA polymerase	Transcription
 KEGG_SELENOAMINO_ACID_METABOLISM	Selenocompound metabolism	Metabolism
 KEGG_SMALL_CELL_LUNG_CANCER	Small cell lung cancer	Cancer
 KEGG_SNARE_INTERACTIONS_IN_VESICULAR_TRANSPORT	SNARE interactions in vesicular transport	"Folding, sorting and degradation"
-KEGG_SPHINGOLIPID_METABOLISM	Sphingolipid metabolism	Metabolism
+KEGG_SPHINGOLIPID_METABOLISM	Sphingolipid metabolism	Lipid metabolism
 KEGG_SPLICEOSOME	Spliceosome	Transcription
 KEGG_STARCH_AND_SUCROSE_METABOLISM	Starch and sucrose metabolism	Metabolism
-KEGG_STEROID_BIOSYNTHESIS	Steroid biosynthesis	Metabolism
-KEGG_STEROID_HORMONE_BIOSYNTHESIS	Steroid hormone biosynthesis	Metabolism
+KEGG_STEROID_BIOSYNTHESIS	Steroid biosynthesis	Lipid metabolism
+KEGG_STEROID_HORMONE_BIOSYNTHESIS	Steroid hormone biosynthesis	Lipid metabolism
 KEGG_SULFUR_METABOLISM	Sulfur metabolism	Metabolism
 KEGG_SYSTEMIC_LUPUS_ERYTHEMATOSUS	Systemic lupus erythematosus	Disease (Immune)
 KEGG_TASTE_TRANSDUCTION	Taste transduction	Sensory system
