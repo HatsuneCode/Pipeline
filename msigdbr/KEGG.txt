@@ -40,7 +40,7 @@ KEGG_COLORECTAL_CANCER	Colorectal cancer	Cancer
 KEGG_COMPLEMENT_AND_COAGULATION_CASCADES	Complement and coagulation cascades	Immune (Innate)
 KEGG_CYSTEINE_AND_METHIONINE_METABOLISM	Cysteine and methionine metabolism	Metabolism
 KEGG_CYTOKINE_CYTOKINE_RECEPTOR_INTERACTION	Cytokine-cytokine receptor interaction	Signaling molecules and interaction
-KEGG_CYTOSOLIC_DNA_SENSING_PATHWAY	Cytosolic DNA Sensing Pathway	Immune (Innate)
+KEGG_CYTOSOLIC_DNA_SENSING_PATHWAY	Cytosolic DNA-sensing pathway	Immune (Innate)
 KEGG_DILATED_CARDIOMYOPATHY	Dilated cardiomyopathy	Disease
 KEGG_DNA_REPLICATION	DNA replication	Replication and repair
 KEGG_DORSO_VENTRAL_AXIS_FORMATION	Dorso-ventral axis formation	Development and regeneration
