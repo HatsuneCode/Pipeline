@@ -8,7 +8,7 @@ KEGG_ALDOSTERONE_REGULATED_SODIUM_REABSORPTION	Aldosterone-regulated sodium reab
 KEGG_ALLOGRAFT_REJECTION	Allograft rejection	Disease (Immune)
 KEGG_ALPHA_LINOLENIC_ACID_METABOLISM	alpha-Linolenic acid metabolism	Metabolism
 KEGG_ALZHEIMERS_DISEASE	Alzheimer disease	Disease (Neuron)
-KEGG_AMINOACYL_TRNA_BIOSYNTHESIS	Aminoacyl-tRNA biosynthesis	Metabolism
+KEGG_AMINOACYL_TRNA_BIOSYNTHESIS	Aminoacyl-tRNA biosynthesis	Translation
 KEGG_AMINO_SUGAR_AND_NUCLEOTIDE_SUGAR_METABOLISM	Amino sugar and nucleotide sugar metabolism	Metabolism
 KEGG_AMYOTROPHIC_LATERAL_SCLEROSIS_ALS	Amyotrophic lateral sclerosis	Disease (Neuron)
 KEGG_ANTIGEN_PROCESSING_AND_PRESENTATION	Antigen processing and presentation	Immune
