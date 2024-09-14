@@ -71,6 +71,7 @@ RNAseq.Limma = function(expr, pos = NULL, neg = NULL, name = NULL) {
   fit2 = eBayes(fit2)
   ## output
   dds = topTable(fit2, n = Inf)
+  dds = dds[row.names(exp),]
   data.frame(p_val = dds$P.Value, avg_log2FC = dds$logFC, 
              pct.1 = apply(exprP, 1, function(i) sum(i > 0)/ncol(exprP) ),
              pct.2 = apply(exprN, 1, function(i) sum(i > 0)/ncol(exprN) ),
