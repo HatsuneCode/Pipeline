@@ -106,7 +106,7 @@ KEGG_NATURAL_KILLER_CELL_MEDIATED_CYTOTOXICITY	Natural killer cell mediated cyto
 KEGG_NEUROACTIVE_LIGAND_RECEPTOR_INTERACTION	Neuroactive ligand-receptor interaction	Neuron
 KEGG_NEUROTROPHIN_SIGNALING_PATHWAY	Neurotrophin signaling pathway	Neuron
 KEGG_NICOTINATE_AND_NICOTINAMIDE_METABOLISM	Nicotinate and nicotinamide metabolism	Metabolism
-KEGG_NITROGEN_METABOLISM	Nitrogen metabolism	Metabolism (Energy)
+KEGG_NITROGEN_METABOLISM	Nitrogen metabolism	Energy metabolism
 KEGG_NOD_LIKE_RECEPTOR_SIGNALING_PATHWAY	NOD-like receptor signaling pathway	Immune (Innate)
 KEGG_NON_HOMOLOGOUS_END_JOINING	Non-homologous end-joining	Replication and repair
 KEGG_NON_SMALL_CELL_LUNG_CANCER	Non-small cell lung cancer	Cancer
@@ -117,7 +117,7 @@ KEGG_OLFACTORY_TRANSDUCTION	Olfactory transduction	Sensory system
 KEGG_ONE_CARBON_POOL_BY_FOLATE	One carbon pool by folate	Metabolism
 KEGG_OOCYTE_MEIOSIS	Oocyte meiosis	Cell growth and death
 KEGG_OTHER_GLYCAN_DEGRADATION	Other glycan degradation	Metabolism
-KEGG_OXIDATIVE_PHOSPHORYLATION	Oxidative phosphorylation	Metabolism (Energy)
+KEGG_OXIDATIVE_PHOSPHORYLATION	Oxidative phosphorylation	Energy metabolism
 KEGG_O_GLYCAN_BIOSYNTHESIS	Mucin type O-glycan biosynthesis	Metabolism
 KEGG_P53_SIGNALING_PATHWAY	p53 signaling pathway	Cell growth and death
 KEGG_PANCREATIC_CANCER	Pancreatic cancer	Cancer
