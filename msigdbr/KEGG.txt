@@ -114,7 +114,7 @@ KEGG_NOTCH_SIGNALING_PATHWAY	Notch signaling pathway	Signaling pathway
 KEGG_NUCLEOTIDE_EXCISION_REPAIR	Nucleotide excision repair	Replication and repair
 KEGG_N_GLYCAN_BIOSYNTHESIS	N-Glycan biosynthesis	Metabolism
 KEGG_OLFACTORY_TRANSDUCTION	Olfactory transduction	Sensory system
-KEGG_ONE_CARBON_POOL_BY_FOLATE	One carbon pool by folate	Metabolism
+KEGG_ONE_CARBON_POOL_BY_FOLATE	One carbon pool by folate	Metabolism of cofactors and vitamins
 KEGG_OOCYTE_MEIOSIS	Oocyte meiosis	Cell growth and death
 KEGG_OTHER_GLYCAN_DEGRADATION	Other glycan degradation	Metabolism
 KEGG_OXIDATIVE_PHOSPHORYLATION	Oxidative phosphorylation	Energy metabolism
