@@ -1,7 +1,7 @@
 ## pList: ComplexHeatmap plots list; pvList: pvalue matrixs list
 plot.HeatCompare = function(pList, pvList = NULL, fc = 1, pval = .01, upCol = 'red', downCol = 'blue') {
   mtrs = lapply(pList, function(p) p@matrix )
-  rows = lapply(seq(mtrs), function(i) rownames(mtrs[[i]])[row_order(draw(pList[[i]]))] )
+  rows = lapply(seq(mtrs), function(i) rownames(mtrs[[i]])[unlist(row_order(draw(pList[[i]])))] )
   all  = unique(unlist(rows))
   ## process
   for (i in seq(mtrs)) {
