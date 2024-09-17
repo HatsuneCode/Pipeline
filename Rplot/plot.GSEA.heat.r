@@ -11,7 +11,7 @@ plot.GSEA.heat = function(df, nes = 2, pval = .05, adj = T, label = T, grid = T,
                 rect_gp = gpar(col = 'grey80'),
                 row_names_side = 'left', row_names_gp = ff, row_title_gp = ff,
                 row_names_max_width = max_text_width(rownames(Nes)), column_names_max_height = max_text_width(colnames(Nes)),
-                cluster_columns = t, cluster_rows = !t, show_column_dend = F, show_row_dend = F,
+                show_column_dend = F, show_row_dend = F,
                 column_names_side = 'top', column_names_gp = ff, column_title_gp = ff, 
                 cell_fun = function(j, i, x, y, w, h, col) {
                   f = Nes[i, j]; p = Pvl[i, j]
