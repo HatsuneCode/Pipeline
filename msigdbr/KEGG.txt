@@ -19,7 +19,7 @@ KEGG_ARRHYTHMOGENIC_RIGHT_VENTRICULAR_CARDIOMYOPATHY_ARVC	Arrhythmogenic right v
 KEGG_ASCORBATE_AND_ALDARATE_METABOLISM	Ascorbate and aldarate metabolism	Metabolism
 KEGG_ASTHMA	Asthma	Disease (Immune)
 KEGG_AUTOIMMUNE_THYROID_DISEASE	Autoimmune thyroid disease	Disease (Immune)
-KEGG_AXON_GUIDANCE	Axon guidance	Neuron
+KEGG_AXON_GUIDANCE	Axon guidance	Development and regeneration
 KEGG_BASAL_CELL_CARCINOMA	Basal cell carcinoma	Cancer
 KEGG_BASAL_TRANSCRIPTION_FACTORS	Basal transcription factors	Transcription
 KEGG_BASE_EXCISION_REPAIR	Base excision repair	Replication and repair
