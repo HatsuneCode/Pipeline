@@ -7,7 +7,6 @@ plot_FP = function(df, logFC = 1, padj = .01, label.logFC = 1.5, exprAvg = .1, t
   ## 设置 x 轴的最大和最小范围
   lim = max(abs(df$avg_log2FC))
   
-  ## 处理 p 值的下限
   df$p_val_adj[ -log10(df$p_val_adj) > -log10(pmax) ] = pmax
   
   ## 手动生成曲线的点
