@@ -1,4 +1,4 @@
-plot_FP = function(df, logFC = 1, padj = .01, exprAvg = .1, title = 'DEG FC-Padj', adj = T, pmax = 1e-300,dot_num=500) {
+plot_FPcur = function(df, logFC = 1, padj = .01, exprAvg = .1, title = 'DEG FC-Padj', adj = T, pmax = 1e-300,dot_num=500) {
   suppressMessages(library(ggplot2))
   suppressMessages(library(ggrepel))
   
