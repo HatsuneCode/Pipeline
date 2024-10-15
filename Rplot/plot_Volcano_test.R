@@ -70,5 +70,5 @@ plot_FP = function(df, logFC = 1, padj = .01, exprAvg = .1, title = 'DEG FC-Padj
     geom_line(data = curve_data, aes(x = x_vals, y = curve_1_vals), color = "purple", linetype = 1, size = 1) +
     geom_line(data = curve_data, aes(x = x_vals, y = curve_2_vals), color = "purple", linetype = 1, size = 1)
   
-  return(p)
+  return(list(plot = p, df = df))
 }
