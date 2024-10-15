@@ -1,4 +1,4 @@
-plot_FP = function(df, logFC = 1, padj = .01, label.logFC = 1.5, exprAvg = .1, title = 'DEG FC-Padj', adj = T, pmax = 1e-300,dot_num=500) {
+plot_FP = function(df, logFC = 1, padj = .01, exprAvg = .1, title = 'DEG FC-Padj', adj = T, pmax = 1e-300,dot_num=500) {
   suppressMessages(library(ggplot2))
   suppressMessages(library(ggrepel))
   
@@ -7,6 +7,7 @@ plot_FP = function(df, logFC = 1, padj = .01, label.logFC = 1.5, exprAvg = .1, t
   ## 设置 x 轴的最大和最小范围
   lim = max(abs(df$avg_log2FC))
   
+  ## 处理 p 值的下限
   df$p_val_adj[ -log10(df$p_val_adj) > -log10(pmax) ] = pmax
   
   ## 手动生成曲线的点
@@ -34,7 +35,7 @@ plot_FP = function(df, logFC = 1, padj = .01, label.logFC = 1.5, exprAvg = .1, t
   ## 标记需要标注的点
   df$lable = ifelse((-log10(df$p_val_adj) > curve_1(df$avg_log2FC) | 
                        -log10(df$p_val_adj) > curve_2(df$avg_log2FC)) & 
-                      (df$avg_log2FC > label.logFC | df$avg_log2FC < -label.logFC) & (df$p_val_adj < padj), 
+                        (df$p_val_adj < padj), 
                     TRUE, FALSE)
   
   ## 设置 Up/Down/NS 标记
@@ -42,13 +43,16 @@ plot_FP = function(df, logFC = 1, padj = .01, label.logFC = 1.5, exprAvg = .1, t
   df$annot[df$p_val_adj > padj | is.na(df$p_val_adj)] = 'NS'
   df$annot[df$average < exprAvg] = 'NS'
   df$annot = factor(df$annot, levels = c("Up", "Down", "NS"))
+  df$annot2 <- ifelse(df$annot == 'Up' & df$lable == T,'Up',ifelse(df$annot == 'Down' & df$lable == T,'Down','NS'))
+  df$annot2[is.na(df$annot2)] <- 'NS'
+  df$annot2 <- factor(df$annot2, levels = c("Up", "Down", "NS"))
   
   ## 设置颜色
   color = setNames(c('red', 'blue', 'black'), c('Up', 'Down', 'NS'))
   
   ## 绘制图像
   p <- ggplot(df, aes(avg_log2FC, -log10(p_val_adj))) + 
-    geom_point(aes(color = annot)) + 
+    geom_point(aes(color = annot2)) + 
     xlim(c(-lim, lim)) + 
     theme_bw() +
     geom_hline(yintercept = -log10(padj), linetype = 2) +
