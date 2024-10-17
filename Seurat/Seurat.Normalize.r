@@ -1,4 +1,4 @@
-Seurat.Normalize = function(obj, group.by = 'orig.ident', assay = 'RNA', var.ctrl = NULL, ...) {
+Seurat.Normalize = function(obj, group.by = 'samples', assay = 'RNA', var.ctrl = NULL, ...) {
   suppressMessages(library(Seurat))
   ## SCT
   idx = obj@meta.data[[group.by]]
