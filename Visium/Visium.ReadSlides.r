@@ -40,7 +40,7 @@ Visium.ReadSlides = function(names, dirs = names, name = 'ST', clean = F, force 
     cc.s   = intersect(c(str_to_title(cc.genes.updated.2019$s.genes), 
                          cc.genes.updated.2019$s.genes), rownames(obj))
     cc.g2m = intersect(c(str_to_title(cc.genes.updated.2019$g2m.genes), 
-                         cc.genes.updated.2019$s.genes), rownames(obj))
+                         cc.genes.updated.2019$g2m.genes), rownames(obj))
     obj = CellCycleScoring(obj, s.features = cc.s, g2m.features = cc.g2m)
     obj$cc.diff = obj$S.Score - obj$G2M.Score
     # set image
