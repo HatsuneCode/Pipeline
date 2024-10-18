@@ -1,4 +1,5 @@
 Seurat.Create = function(x, samples = NULL, cell.cycle = T) {
+  suppressMessages(library(Seurat))
   suppressMessages(library(stringr))
   obj = CreateSeuratObject(x)
   ## check samples
