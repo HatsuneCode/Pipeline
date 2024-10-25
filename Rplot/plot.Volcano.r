@@ -28,7 +28,7 @@ plot_FP = function(df, logFC = 1, padj = .01, label.logFC = 1.5, exprAvg = .1, t
     scale_color_manual(values = color) + 
     labs(x = 'Log2 Fold Change', y = if (adj) expression(-log[10](Padj)) else expression(-log[10](Pvalue)), color = NULL, title = title) +
     theme(text = element_text(family = 'serif', size = 14), plot.title = element_text(hjust = .5))
-  return(plot = p, df = df)
+  list(plot = p, df = df)
 }
 ##########
 plot_EF = function(df, logFC = 1, padj = .01, label.logFC = 1.5, exprAvg = .1, title = 'DEG Expr-FC', adj = T) {
@@ -59,10 +59,10 @@ plot_EF = function(df, logFC = 1, padj = .01, label.logFC = 1.5, exprAvg = .1, t
     scale_color_manual(values = color) + 
     labs(x = 'Average Expression', y = 'Log2 Fold Change', color = NULL, title = title) + 
     theme(text = element_text(family = 'serif', size = 14), plot.title = element_text(hjust = .5))
-  return(plot = p, df = df)
+  list(plot = p, df = df)
 }
 #########
-plot_FPcur = function(df, logFC = 1, padj = .01, exprAvg = .1, title = 'DEG FC-Padj', adj = T, pmax = 1e-300, dot_num = 500) {
+plot_FPcur = function(df, logFC = 1, padj = .01, exprAvg = .1, title = 'DEG FC-Padj', adj = T, pmax = 1e-300, dot_num = 500, color.cur = 'purple') {
   suppressMessages(library(ggplot2))
   suppressMessages(library(ggrepel))
   ##
@@ -97,11 +97,11 @@ plot_FPcur = function(df, logFC = 1, padj = .01, exprAvg = .1, title = 'DEG FC-P
     geom_hline(yintercept = -log10(padj), linetype = 2) +
     geom_vline(xintercept = c(-logFC, logFC), linetype = 2) +
     geom_text_repel(aes(label = ifelse(df$lable, df$gene, NA)), family = 'serif') +
-    geom_line(data = curve_data, aes(x = x_vals, y = curve_1_vals), color = 'purple', linetype = 1, size = 1) +
-    geom_line(data = curve_data, aes(x = x_vals, y = curve_2_vals), color = 'purple', linetype = 1, size = 1) +
+    geom_line(data = curve_data, aes(x = x_vals, y = curve_1_vals), color = color.cur, linetype = 2) +
+    geom_line(data = curve_data, aes(x = x_vals, y = curve_2_vals), color = color.cur, linetype = 2) +
     scale_color_manual(values = color) +
     xlim(c(-lim, lim)) + 
     labs(x = 'Log2 Fold Change', y = if (adj) expression(-log[10](Padj)) else expression(-log[10](Pvalue)), color = NULL, title = title) +
     theme_bw() + theme(text = element_text(family = 'serif', size = 14), plot.title = element_text(hjust = .5))  
-  return(list(plot = p, df = df))
+  list(plot = p, df = df)
 }
