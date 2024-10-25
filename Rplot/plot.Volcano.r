@@ -100,7 +100,7 @@ plot_FPcur = function(df, logFC = 1, padj = .01, exprAvg = 0, title = 'DEG FC-Pa
   idx   = sapply(c('Up', 'NS', 'Down'), function(i) sum(grepl(i, annot)) )
   color = setNames(c(if (idx[1]) 'red', if (idx[2]) 'black', if (idx[3]) 'blue') , annot)
   p = ggplot(df, aes(avg_log2FC, -log10(p_val_adj))) + 
-    geom_point(aes(color = annot2)) + 
+    geom_point(aes(color = annot)) + 
     geom_hline(yintercept = -log10(padj), linetype = 2) +
     geom_vline(xintercept = c(-logFC, logFC), linetype = 2) +
     geom_text_repel(aes(label = ifelse(df$lable, df$gene, NA)), family = 'serif') +
