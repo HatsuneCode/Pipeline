@@ -5,7 +5,7 @@ plot.Boxplot = function(expr, gene, group = NULL, compare = NULL, cols = NULL, l
   suppressMessages(library(ggplot2))
   suppressMessages(library(ggpubr))
   if (!length(group)) group = colnames(expr)
-  exp = data.frame(Expr = expr[gene,], Group = group)
+  exp = data.frame(Expr = as.numeric(expr[gene,]), Group = group)
   p   = ggplot(exp, aes(Group, Expr)) + 
     geom_boxplot(aes(fill = Group), outlier.shape = NA, show.legend = F) +
     geom_point(show.legend = F) +
