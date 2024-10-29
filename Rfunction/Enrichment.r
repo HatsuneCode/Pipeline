@@ -7,6 +7,6 @@ Enrich = function(genes, ont = NULL, pval = .05, og = 'org.Mm.eg.db') {
     enrichGO(entrez_ids, og, ont = 'BP', pvalueCutoff = pval, readable = T)@result
   }
   if ('KEGG' %in% ont){
-    enrichKEGG(entrez_ids, organism = ifelse(og == 'org.Mm.eg.db', 'mmu', 'hsa'))@result[,c(3:11)]
+    enrichKEGG(entrez_ids, organism = ifelse(og == 'org.Mm.eg.db', 'mmu', 'hsa'))@result
   }
 }
