@@ -1,5 +1,5 @@
 ## DEG for seurat ##
-Seurat.DEG = function(obj, pos = NULL, neg = NULL, group.by = 'seurat_clusters', min.pct = .1, logfc = 0, min.cell = 3, max.cells.per.ident = Inf,
+Seurat.DEG = function(obj, pos = NULL, neg = NULL, group.by = 'seurat_clusters', min.pct = .01, logfc = 0, min.cell = 3, max.cells.per.ident = Inf,
                assay = 'SCT', slot = 'data', method = 'wilcox_limma', only.pos = F, pre = F) {
   name = paste(if (length(pos)) paste(pos, collapse = ',') else 'Others', 'vs',
                if (length(neg)) paste(neg, collapse = ',') else 'Others')
