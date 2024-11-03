@@ -1,5 +1,4 @@
-## Read slides ##
-Visium.ReadSlides = function(names, dirs = names, name = 'ST', clean = F, force = T) {
+Visium.ReadSlides = function(names, dirs = names, name = 'ST', clean = F, cell.cycle = T, SCT = T, force = F) {
   suppressMessages(library(Seurat))
   suppressMessages(library(stringr))
   ## check
@@ -31,18 +30,21 @@ Visium.ReadSlides = function(names, dirs = names, name = 'ST', clean = F, force 
     colnames(data) = paste0(n, '_', colnames(data))
     obj            = CreateSeuratObject(data, assay = 'ST', project = n)
     obj$mt.pct     = PercentageFeatureSet(obj, '^mt-|^MT-')
+    obj$cc.diff    = 0
     rm(data)
-    # normalize
-    message('--> Normalize data <--')
-    obj = NormalizeData(obj, verbose = F)
-    # calculate cell cycle
-    message('--> Calculate cell cycle <--')
-    cc.s   = intersect(c(str_to_title(cc.genes.updated.2019$s.genes), 
-                         cc.genes.updated.2019$s.genes), rownames(obj))
-    cc.g2m = intersect(c(str_to_title(cc.genes.updated.2019$g2m.genes), 
-                         cc.genes.updated.2019$g2m.genes), rownames(obj))
-    obj = CellCycleScoring(obj, s.features = cc.s, g2m.features = cc.g2m)
-    obj$cc.diff = obj$S.Score - obj$G2M.Score
+    if (cell.cycle) {
+      # normalize
+      message('--> Normalize data <--')
+      obj = NormalizeData(obj, verbose = F)
+      # calculate cell cycle
+      message('--> Calculate cell cycle <--')
+      cc.s   = intersect(c(str_to_title(cc.genes.updated.2019$s.genes), 
+                           cc.genes.updated.2019$s.genes), rownames(obj))
+      cc.g2m = intersect(c(str_to_title(cc.genes.updated.2019$g2m.genes), 
+                           cc.genes.updated.2019$g2m.genes), rownames(obj))
+      obj = CellCycleScoring(obj, s.features = cc.s, g2m.features = cc.g2m)
+      obj$cc.diff = obj$S.Score - obj$G2M.Score
+    }
     # set image
     message('--> Set image <--')
     img = Read10X_Image(paste0(d, '/spatial'))[sub('.*_', '', Cells(obj))]
@@ -51,9 +53,11 @@ Visium.ReadSlides = function(names, dirs = names, name = 'ST', clean = F, force 
     obj[['img']] = img
     names(obj@images) = n
     rm(img)
-    # SCTransform v2
-    message('--> SCT <--')
-    obj = SCTransform(obj, assay = 'ST', verbose = F, vars.to.regress = c('mt.pct', 'cc.diff', 'nCount_ST'), vst.flavor = 'v2')
+    if (SCT) {
+      # SCTransform v2
+      message('--> SCT <--')
+      obj = SCTransform(obj, assay = 'ST', verbose = F, vars.to.regress = c('mt.pct', 'cc.diff', 'nCount_ST'), vst.flavor = 'v2')
+    }
     # variable features
     list(obj = obj, feature = VariableFeatures(obj))
   })), names)
@@ -65,11 +69,12 @@ Visium.ReadSlides = function(names, dirs = names, name = 'ST', clean = F, force 
     message('--> merging ... <--')
     obj = merge(objs[[1]], objs[-1])
   } else obj = objs[[1]]
+  names = intersect(names, obj$orig.ident)
   names(obj@images) = names
   obj@misc = features
   rm(features, objs)
   # slides: names
-  obj$slides = factor(obj$orig.ident, intersect(names, obj$orig.ident))
+  obj$slides = factor(obj$orig.ident, names)
   ## save
   message('--> saving ... <--')
   saveRDS(obj, f)
