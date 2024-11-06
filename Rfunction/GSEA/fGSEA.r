@@ -31,6 +31,20 @@ fGSEA = function(gene, sig = NULL, scoreType = 'std', minSize = 2, maxSize = 500
     rm(bp)
     sig = bpn
   }
+  if ('GOCC' %in% type) {
+    cc   = msigdbr(species, 'C5', 'CC')
+    ccn  = setNames(lapply(unique(cc$gs_name), function(i)
+      unique(as.character(cc$gene_symbol)[cc$gs_name == i] )), unique(cc$gs_name))
+    rm(cc)
+    sig = ccn
+  }
+  if ('GOMF' %in% type) {
+    mf   = msigdbr(species, 'C5', 'MF')
+    mfn  = setNames(lapply(unique(mf$gs_name), function(i)
+      unique(as.character(mf$gene_symbol)[mf$gs_name == i] )), unique(mf$gs_name))
+    rm(mf)
+    sig = mfn
+  }
   set.seed(1)
   gsea = fgsea(sig, gene, minSize = minSize, maxSize = maxSize, scoreType = scoreType)
   if (nrow(gsea)) {
