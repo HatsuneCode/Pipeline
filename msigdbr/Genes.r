@@ -28,25 +28,10 @@ mitoCPX = list(
   ), ', '))
 )
 
-## load msigdbr ##
-kegg  = msigdbr::msigdbr('Mus musculus', 'C2', 'KEGG')
-keggn = stats::setNames(lapply(unique(kegg$gs_name), function(i)
-  unique(as.character(kegg$gene_symbol)[kegg$gs_name == i])), unique(kegg$gs_name))
-bp   = msigdbr::msigdbr('Mus musculus', 'C5', 'BP')
-bpn  = stats::setNames(lapply(unique(bp$gs_name), function(i)
-  unique(as.character(bp$gene_symbol)[bp$gs_name == i] )), unique(bp$gs_name))
-cc   = msigdbr::msigdbr('Mus musculus', 'C5', 'CC')
-ccn  = stats::setNames(lapply(unique(cc$gs_name), function(i)
-  unique(as.character(cc$gene_symbol)[cc$gs_name == i] )), unique(cc$gs_name))
-mf   = msigdbr::msigdbr('Mus musculus', 'C5', 'MF')
-mfn  = stats::setNames(lapply(unique(mf$gs_name), function(i)
-  unique(as.character(mf$gene_symbol)[mf$gs_name == i] )), unique(mf$gs_name))
-rm(kegg, bp, cc, mf)
-                       
 ## Complement Related Genes ##
-ComplementRG = sort(unique(c(keggn$KEGG_COMPLEMENT_AND_COAGULATION_CASCADES, as.character(unlist(bpn[grep('complement', names(bpn), ignore.case = T)])))))
+# ComplementRG = sort(unique(c(keggn$KEGG_COMPLEMENT_AND_COAGULATION_CASCADES, as.character(unlist(bpn[grep('complement', names(bpn), ignore.case = T)])))))
 ## Lysosome Related Genes ##
-LysosomeRG = sort(unique(c(keggn$KEGG_LYSOSOME, as.character(unlist(bpn[grep('lysosome', names(bpn), ignore.case = T)])))))
+# LysosomeRG = sort(unique(c(keggn$KEGG_LYSOSOME, as.character(unlist(bpn[grep('lysosome', names(bpn), ignore.case = T)])))))
 
 ## Disease associate microglia (DAM) genes ##
 DAM = c('Ank', 'Apoe', 'Axl', 'B2m', 'Cadm1', 'Ccl2', 'Ccl6', 'Cd52', 'Cd63', 'Cd68', 'Cd9', 'Clec7a', 'Csf1', 'Cst7', 'Cstb', 'Ctsa', 'Ctsb', 'Ctsd', 'Ctsl', 'Ctsz', 'Cx3cr1', 'Gusb', 'H2-D1', 'Hif1a', 'Itgax',
