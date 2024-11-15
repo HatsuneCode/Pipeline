@@ -5,7 +5,8 @@ Enrich = function(genes, ont = NULL, pval = .05, og = 'org.Mm.eg.db') {
   map = suppressMessages(bitr(genes, 'SYMBOL', 'ENTREZID', og))
   ids = map$ENTREZID
   if ('GOBP' %in% ont) {
-    enrichGO(ids, og, ont = 'BP', pvalueCutoff = pval, readable = T)@result
+    go = enrichGO(ids, og, ont = 'BP', pvalueCutoff = pval, readable = T)@result
+    return(go)
   }
   if ('KEGG' %in% ont){
     ke = enrichKEGG(ids, pvalueCutoff = pval, organism = ifelse(og == 'org.Mm.eg.db', 'mmu', 'hsa'))@result
