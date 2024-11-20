@@ -1,9 +1,13 @@
-plot.GSEA.heat = function(df, nes = 2, pval = .05, adj = T, label = T, grid = T, t = F, ...) {
+plot.GSEA.heat = function(df, nes = 2, pval = .05, adj = T, label = T, grid = T, t = F, tgs = NULL, ...) {
   suppressMessages(library(reshape2))
   suppressMessages(library(ComplexHeatmap))
   suppressMessages(library(circlize))
-  Nes = acast(df, pathway ~ group, value.var = 'NES',  fill = 0)
-  Pvl = acast(df, pathway ~ group, value.var = if (adj) 'padj' else 'pval', fill = 1)
+  if (length(tgs)) {
+    df = df[df$pathway %in% tgs,]
+    df$pathway = factor(df$pathway, tgs)
+  }
+  Nes = acast(df, pathway ~ group, value.var = 'NES', drop = F, fill = 0)
+  Pvl = acast(df, pathway ~ group, value.var = if (adj) 'padj' else 'pval', drop = F, fill = 1)
   if (t) { Nes = t(Nes); Pvl = t(Pvl) }
   ff  = gpar(fontfamily = 'serif')
   p   = Heatmap(Nes, name = 'NES',
