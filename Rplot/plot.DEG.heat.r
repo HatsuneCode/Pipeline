@@ -1,8 +1,12 @@
 ## df: gene, group, avg_log2FC, p_val; if adj = T: p_val_adj
-plot.DEG.heat = function(df, log2FC = 1, pval = .05, adj = T, label = T, grid = T, upCol = 'red', dnCol = 'blue', fill = 0, ...) {
+plot.DEG.heat = function(df, log2FC = 1, pval = .05, adj = T, label = T, grid = T, upCol = 'red', dnCol = 'blue', fill = 0, tgs = NULL, ...) {
   suppressMessages(library(reshape2))
   suppressMessages(library(ComplexHeatmap))
   suppressMessages(library(circlize))
+  if (length(tgs)) {
+    df = df[df$gene %in% tgs,]
+    df$gene = factor(df$gene, tgs)
+  }
   ff = gpar(fontfamily = 'serif')
   fc = acast(df, gene ~ group, value.var = 'avg_log2FC', fill = fill, drop = F)
   pv = acast(df, gene ~ group, value.var = if (adj) 'p_val_adj' else 'p_val', fill = 1, drop = F)
