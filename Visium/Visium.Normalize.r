@@ -1,5 +1,6 @@
 Visium.Normalize = function(obj, group.by = 'slides', assay = 'ST', var.ctrl = NULL, ...) {
   suppressMessages(library(Seurat))
+  misc = obj@misc
   #### SCT
   idx = obj@meta.data[[group.by]]
   obj = lapply(unique(idx), function(m) {
@@ -27,5 +28,6 @@ Visium.Normalize = function(obj, group.by = 'slides', assay = 'ST', var.ctrl = N
       cleanGene( unlist(feature)) )
   message('--> nVarGene: ', length(VariableFeatures(obj)), ' <--')
   obj = PrepSCTFindMarkers(obj)
+  obj@misc = misc                               
   obj
 }
