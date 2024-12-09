@@ -1,5 +1,5 @@
 ## df: gene, group, avg_log2FC, p_val; if adj = T: p_val_adj
-plot.DEG.heat = function(df, log2FC = 1, pval = .05, adj = T, label = T, grid = T, upCol = 'red', dnCol = 'blue', fill = 0, tgs = NULL, ...) {
+plot.DEG.heat = function(df, log2FC = 1, log2FC.col = log2(1.2), pval = .05, adj = T, label = T, grid = T, upCol = 'black', dnCol = 'black', fill = 0, tgs = NULL, ...) {
   suppressMessages(library(reshape2))
   suppressMessages(library(ComplexHeatmap))
   suppressMessages(library(circlize))
@@ -19,7 +19,7 @@ plot.DEG.heat = function(df, log2FC = 1, pval = .05, adj = T, label = T, grid = 
                  f = fc[i, j]; p = pv[i, j]
                  if (label) 
                    grid.text(paste0(round(f, 2), '\n(', round(p, 2), ')'), x, y, gp = ff)
-                 if (grid & p < pval)
+                 if (grid & p < pval & abs(f) > log2FC.col )
                    grid.rect(x, y, w, h, 
                              gp = gpar(fill = 'transparent', lwd = 1.5, col = ifelse(f > 0, upCol, dnCol)))
                }, ...)
