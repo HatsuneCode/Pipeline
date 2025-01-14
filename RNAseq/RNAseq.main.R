@@ -93,7 +93,7 @@ run = future_lapply(seq(samples), function(i) {
    # s2.bowtie2
    s2 = paste0(softwares$bowtie2, ' -p 8 -x ', references$rRNAref, ' --local ', ifelse(pairEnd, '-1', '-U'), ' ', n, '.r1.fq.gz', if (pairEnd) paste0(' -2 ', n, '.r2.fq.gz'), ' --un', if (pairEnd) '-conc', '-gz ', n, '.filter.fq.gz -S rRNA.sam > ', n, '.rRNA.log 2>&1; rm rRNA.sam'),
    # s3.STAR
-   s3 = paste0(softwares$STAR, ' --runThreadN 6 --genomeDir ', references$STARref, ' --readFilesIn ', n, '.filter.fq.1.gz ', if (pairEnd) paste0(n, '.filter.fq.2.gz '), '--readFilesCommand zcat --outBAMsortingThreadN 6 --outSAMattributes All --outSAMtype BAM SortedByCoordinate --quantMode TranscriptomeSAM GeneCounts --outFileNamePrefix ', n, '. >> ../log/', n, '.log 2>&1'),
+   s3 = paste0(softwares$STAR, ' --runThreadN 6 --genomeDir ', references$STARref, ' --readFilesIn ', n, '.filter.fq', if (pairEnd) '.1', '.gz ', if (pairEnd) paste0(n, '.filter.fq.2.gz '), '--readFilesCommand zcat --outBAMsortingThreadN 6 --outSAMattributes All --outSAMtype BAM SortedByCoordinate --quantMode TranscriptomeSAM GeneCounts --outFileNamePrefix ', n, '. >> ../log/', n, '.log 2>&1'),
    # s4.RSEM
    s4 = paste0(softwares$RSEM, ' --alignments', if (pairEnd) ' --paired-end', ' -p 8 --append-names --no-bam-output ', n, '.Aligned.toTranscriptome.out.bam ', references$RSEM, ' ', n, ' >> ../log/', n, '.log 2>&1'),
    # s5.Seq satu
