@@ -12,6 +12,7 @@ softwares:
   bowtie2: /opt/software/bowtie2-2.3.5.1/bin/bowtie2
   STAR:    /home/songlianhao/conda/envs/lhsong/bin/STAR
   RSEM:    /home/songlianhao/conda/envs/lhsong/bin/rsem-calculate-expression
+  SeqSatu: /home/songlianhao/pipeline/RNAseq/RNAseq.SeqSatu.r 
   Rscript: /home/songlianhao/conda/envs/lhsong/bin/Rscript
 
 ## Step:
@@ -26,9 +27,9 @@ fastp:
 
 ## Reference
 references:
-  rRNAref: /home/songlianhao/reference/Mus/rRNA/rRNA
-  STARref: /home/songlianhao/reference/Mus/starRef
-  RSEMref: /home/songlianhao/reference/Mus/rsemRef/rsemRef
+  rRNAref: /home/songlianhao/reference/Mus/rRNA/rRNA        ## /home/songlianhao/reference/Hsa/rRNA/rRNA
+  STARref: /home/songlianhao/reference/Mus/starRef          ## /home/songlianhao/reference/Hsa/starRef
+  RSEMref: /home/songlianhao/reference/Mus/rsemRef/rsemRef  ## /home/songlianhao/reference/Hsa/rsemRef/rsemRef
 
 ## Samples info
 samples:
