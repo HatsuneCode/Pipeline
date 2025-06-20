@@ -1,6 +1,6 @@
-RNAseq.checkDupRow = function(expr, method = 'mean') {
+RNAseq.checkDupRow = function(expr, pattern = '^ENS.*?_', method = 'mean') {
   ## process symbols
-  gene  = sub('^ENS.*?_', '', rownames(expr))
+  gene  = sub(pattern, '', rownames(expr))
   dgene = unique(gene[duplicated(gene)])
   ## check duplicated symbols
   if (length(dgene)) {
@@ -15,6 +15,6 @@ RNAseq.checkDupRow = function(expr, method = 'mean') {
   }
   rm(gene, dgene)
   ## restore symbol
-  rownames(expr) = sub('^ENS.*?_', '', rownames(expr))
+  rownames(expr) = sub(pattern, '', rownames(expr))
   expr
 }
