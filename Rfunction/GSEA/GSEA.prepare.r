@@ -1,5 +1,6 @@
 ## Need cmd.out equal to getwd() ##
-GSEA.prepare = function(expr.p, expr.n, name.p = 'Pos', name.n = 'Neg', set.max = 1e3, set.min = 15,
+GSEA.prepare = function(expr.p, expr.n, name.p = 'Pos', name.n = 'Neg', 
+                        set.max = 1e3, set.min = 15, nperm = 1e3,
                         cmd.gsea = '/mnt/d/Linux/software/GSEA_Linux_4.3.3/gsea-cli.sh',
                         cmd.out  = '/mnt/e/Project/NDD-Database',
                         cmd.gmt  = '/mnt/d/Resources/GMT/hsa/GOandKEGG.v2024.1.Hs.symbols.gmt') {
@@ -29,7 +30,7 @@ GSEA.prepare = function(expr.p, expr.n, name.p = 'Pos', name.n = 'Neg', set.max 
   writeLines(cls.pn, clsFile)
   ## cmd
   para  = paste0(cmd.gsea, ' GSEA -out ', cmd.out, '/GSEA -gmx ', gmt,
-                 ' -collapse No_Collapse -mode Max_probe -norm meandiv -nperm 1000 -permute gene_set',
+                 ' -collapse No_Collapse -mode Max_probe -norm meandiv -nperm ', nperm, ' -permute gene_set',
                  ' -rnd_seed 149 -rnd_type no_balance -scoring_scheme weighted -metric Signal2Noise -sort real',
                  ' -order descending -create_gcts false -create_svgs false -include_only_symbols true -make_sets true',
                  ' -median false -num 100 -plot_top_x 0 -save_rnd_lists false -set_max ', set.max, ' -set_min ', set.min, ' -zip_report false',
