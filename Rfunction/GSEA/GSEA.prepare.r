@@ -33,7 +33,7 @@ GSEA.prepare = function(expr.p, expr.n, name.p = 'Pos', name.n = 'Neg',
                  ' -collapse No_Collapse -mode Max_probe -norm meandiv -nperm ', nperm, ' -permute gene_set',
                  ' -rnd_seed 149 -rnd_type no_balance -scoring_scheme weighted -metric Signal2Noise -sort real',
                  ' -order descending -create_gcts false -create_svgs false -include_only_symbols true -make_sets true',
-                 ' -median false -num 100 -plot_top_x 0 -save_rnd_lists false -set_max ', set.max, ' -set_min ', set.min, ' -zip_report false',
+                 ' -median false -num 100 -plot_top_x 0 -save_rnd_lists false -set_max ', set.max, ' -set_min ', set.min, ' -zip_report true',
                  ' -res ', cmd.out, '/', expFile, ' -cls ', cmd.out, '/', clsFile, '#', vs.pn, ' -rpt_label ', vs.pn)
   writeLines(para, paste0('GSEA/', vs.pn, '.GSEA.sh'))
 }
