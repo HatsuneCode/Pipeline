@@ -35,6 +35,6 @@ GSEA.prepare = function(expr.p, expr.n, name.p = 'Pos', name.n = 'Neg',
                  ' -order descending -create_gcts false -create_svgs false -include_only_symbols true -make_sets true',
                  ' -median false -num 100 -plot_top_x 0 -save_rnd_lists false -set_max ', set.max, ' -set_min ', set.min, ' -zip_report true',
                  ' -res ', cmd.out, '/', expFile, ' -cls ', cmd.out, '/', clsFile, '#', vs.pn, ' -rpt_label ', vs.pn)
-  cmd2  = paste0(cmd.gsea, ' LeadingEdgeTool -enrichment_zip ', vs.pn, '*/*.zip -dir ', vs.pn, '*')
+  cmd2  = paste0(cmd.gsea, ' LeadingEdgeTool -enrichment_zip ', vs.pn, '*/*.zip -dir ', vs.pn, '.Gsea*')
   writeLines(c(cmd1, cmd2), paste0('GSEA/', vs.pn, '.GSEA.sh'))
 }
