@@ -29,7 +29,7 @@ GSEA.prepare = function(expr.p, expr.n, name.p = 'Pos', name.n = 'Neg',
   message('--> save: ', clsFile, ' <--')
   writeLines(cls.pn, clsFile)
   ## cmd: GSEA
-  cmd  = paste0(cmd.gsea, ' GSEA -out ', cmd.out, '/GSEA -gmx ', gmt,
+  cmd  = paste0(cmd.gsea, ' GSEA -out ', cmd.out, '/GSEA -gmx ', cmd.gmt,
                 ' -collapse No_Collapse -mode Max_probe -norm meandiv -nperm ', nperm, ' -permute gene_set',
                 ' -rnd_seed 149 -rnd_type no_balance -scoring_scheme weighted -metric Signal2Noise -sort real',
                 ' -order descending -create_gcts false -create_svgs false -include_only_symbols true -make_sets true',
