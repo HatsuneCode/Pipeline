@@ -29,12 +29,11 @@ GSEA.prepare = function(expr.p, expr.n, name.p = 'Pos', name.n = 'Neg',
   message('--> save: ', clsFile, ' <--')
   writeLines(cls.pn, clsFile)
   ## cmd: GSEA
-  cmd1  = paste0(cmd.gsea, ' GSEA -out ', cmd.out, '/GSEA -gmx ', gmt,
-                 ' -collapse No_Collapse -mode Max_probe -norm meandiv -nperm ', nperm, ' -permute gene_set',
-                 ' -rnd_seed 149 -rnd_type no_balance -scoring_scheme weighted -metric Signal2Noise -sort real',
-                 ' -order descending -create_gcts false -create_svgs false -include_only_symbols true -make_sets true',
-                 ' -median false -num 100 -plot_top_x 0 -save_rnd_lists false -set_max ', set.max, ' -set_min ', set.min, ' -zip_report true',
-                 ' -res ', cmd.out, '/', expFile, ' -cls ', cmd.out, '/', clsFile, '#', vs.pn, ' -rpt_label ', vs.pn)
-  cmd2  = paste0(cmd.gsea, ' LeadingEdgeTool -enrichment_zip false -out LE.', vs.pn, ' -dir ', vs.pn, '.Gsea*')
-  writeLines(c(cmd1, cmd2), paste0('GSEA/', vs.pn, '.GSEA.sh'))
+  cmd  = paste0(cmd.gsea, ' GSEA -out ', cmd.out, '/GSEA -gmx ', gmt,
+                ' -collapse No_Collapse -mode Max_probe -norm meandiv -nperm ', nperm, ' -permute gene_set',
+                ' -rnd_seed 149 -rnd_type no_balance -scoring_scheme weighted -metric Signal2Noise -sort real',
+                ' -order descending -create_gcts false -create_svgs false -include_only_symbols true -make_sets true',
+                ' -median false -num 100 -plot_top_x 0 -save_rnd_lists false -set_max ', set.max, ' -set_min ', set.min, ' -zip_report true',
+                ' -res ', cmd.out, '/', expFile, ' -cls ', cmd.out, '/', clsFile, '#', vs.pn, ' -rpt_label ', vs.pn)
+  writeLines(cmd, paste0('GSEA/', vs.pn, '.GSEA.sh'))
 }
