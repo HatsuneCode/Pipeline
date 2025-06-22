@@ -51,7 +51,7 @@ RNAseq.DESeq2 = function(expr, pos = NULL, neg = NULL, name = NULL, exp_cut = 10
              row.names = NULL )
 }
 #### Limma
-RNAseq.Limma = function(expr, pos = NULL, neg = NULL, name = NULL) {
+RNAseq.Limma = function(expr, pos = NULL, neg = NULL, name = NULL, voom = T) {
   suppressMessages(library(limma))
   if (!length(name)) 
     name = paste(paste(pos, collapse = ','), 'vs', paste(neg, collapse = ',') )
@@ -62,8 +62,7 @@ RNAseq.Limma = function(expr, pos = NULL, neg = NULL, name = NULL) {
   exprN = if (length(neg)) expr[, colnames(expr) %in% neg, drop = F] else 
     expr[, !colnames(expr) %in% pos, drop = F]
   ## counts
-  exp   = cbind(exprN, exprP)
-  exp   = exp[rowSums(exp) > 0,,drop = F]
+  exp = cbind(exprN, exprP)
   condition = c(rep('Neg', ncol(exprN)), rep('Pos', ncol(exprP)))
   exprP = exp[, condition == 'Pos', drop = F]
   exprN = exp[, condition == 'Neg', drop = F]
@@ -75,9 +74,8 @@ RNAseq.Limma = function(expr, pos = NULL, neg = NULL, name = NULL) {
   rownames(design) = colnames(exp)
   ## contrast
   contrast = makeContrasts('Pos-Neg', levels = design)
-  v = voom(exp, design)
   ## fit
-  fit  = lmFit(v, design)
+  fit  = if (voom) lmFit(voom(exp, design), design) else lmFit(exp, design)
   fit2 = contrasts.fit(fit, contrast)
   fit2 = eBayes(fit2)
   ## output
