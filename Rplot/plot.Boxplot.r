@@ -1,4 +1,4 @@
-plot.Boxplot = function(expr, gene, group = NULL, compare = NULL, cols = NULL, 
+plot.Boxplot = function(expr, target, group = NULL, compare = NULL, cols = NULL, ylab = 'Normalized Expression',
                         pt.size = 1, label = 'p.signif', method = 't.test', show.legend = T) {
   ## group: findInList(colnames(expr), pair)
   ## compare: list( c('pos1', 'neg1'), c('pos2', 'neg2') )
@@ -6,11 +6,11 @@ plot.Boxplot = function(expr, gene, group = NULL, compare = NULL, cols = NULL,
   suppressMessages(library(ggplot2))
   suppressMessages(library(ggpubr))
   if (!length(group)) group = colnames(expr)
-  exp = data.frame(Expr = as.numeric(expr[gene,]), Group = group)
+  exp = data.frame(Expr = as.numeric(expr[target,]), Group = group)
   p   = ggplot(exp, aes(Group, Expr)) + 
     geom_boxplot(aes(fill = Group), outlier.shape = NA, show.legend = show.legend) +
     geom_point(show.legend = F, size = pt.size) +
-    labs(x = NULL, y = 'Normalized Expression', title = gene) +
+    labs(x = NULL, y = ylab, title = target) +
     theme_classic() +
     theme(text = element_text(family = 'serif', size = 14), 
           axis.text.x = element_text(angle = 45, hjust = 1),
