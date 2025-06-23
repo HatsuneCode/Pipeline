@@ -1,5 +1,5 @@
 ## df need: avg_log2FC, p_val_adj, gene
-plot_FP = function(df, logFC = 1, padj = .01, label.logFC = 1.5, exprAvg = 0, title = 'DEG FC-Padj', adj = T, pmax = 1e-300) {
+plot_FP = function(df, logFC = 1, padj = .01, label.logFC = 1.5, exprAvg = 0, title = 'DEG Log2FC-Padj', adj = T, pmax = 1e-300) {
   suppressMessages(library(ggplot2))
   suppressMessages(library(ggrepel))
   if (!adj) df$p_val_adj = df$p_val
