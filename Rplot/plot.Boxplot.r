@@ -1,4 +1,5 @@
-plot.Boxplot = function(expr, gene, group = NULL, compare = NULL, cols = NULL, pt.size = 1, label = 'p.signif', method = 't.test') {
+plot.Boxplot = function(expr, gene, group = NULL, compare = NULL, cols = NULL, 
+                        pt.size = 1, label = 'p.signif', method = 't.test', show.legend = T) {
   ## group: findInList(colnames(expr), pair)
   ## compare: list( c('pos1', 'neg1'), c('pos2', 'neg2') )
   ## label: p.signif, p.format
@@ -7,7 +8,7 @@ plot.Boxplot = function(expr, gene, group = NULL, compare = NULL, cols = NULL, p
   if (!length(group)) group = colnames(expr)
   exp = data.frame(Expr = as.numeric(expr[gene,]), Group = group)
   p   = ggplot(exp, aes(Group, Expr)) + 
-    geom_boxplot(aes(fill = Group), outlier.shape = NA, show.legend = F) +
+    geom_boxplot(aes(fill = Group), outlier.shape = NA, show.legend = show.legend) +
     geom_point(show.legend = F, size = pt.size) +
     labs(x = NULL, y = 'Normalized Expression', title = gene) +
     theme_classic() +
