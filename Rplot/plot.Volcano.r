@@ -1,5 +1,8 @@
 ## df need: avg_log2FC, p_val_adj, gene
-plot_FP = function(df, logFC = 1, padj = .01, label.logFC = 1.5, exprAvg = 0, title = 'DEG Log2FC-Padj', adj = T, pmax = 1e-300) {
+plot_FP = function(df, logFC = 1, padj = .01, label.logFC = 1.5, exprAvg = 0, 
+                   title = 'DEG Log2FC-Padj', adj = T, pmax = 1e-300, 
+                   label = F, label.name = NULL, label.color = 'red',
+                   max.overlaps = 10) {
   suppressMessages(library(ggplot2))
   suppressMessages(library(ggrepel))
   if (!adj) df$p_val_adj = df$p_val
@@ -7,11 +10,12 @@ plot_FP = function(df, logFC = 1, padj = .01, label.logFC = 1.5, exprAvg = 0, ti
   df$annot = ifelse(df$avg_log2FC > logFC, 'Up', ifelse(df$avg_log2FC < -logFC, 'Down', 'NS'))
   df$annot[df$p_val_adj > padj | is.na(df$p_val_adj)] = 'NS'
   df$annot[df$average < exprAvg] = 'NS'
-  df$annot[df$annot == 'Up']   = paste0('Up (', table(df$annot)['Up'], ')')
-  df$annot[df$annot == 'Down'] = paste0('Down (', table(df$annot)['Down'], ')')
-  df$annot[df$annot == 'NS']   = paste0('NS (', table(df$annot)['NS'], ')')
+  df$annot[df$annot == 'Up']     = paste0('Up (', table(df$annot)['Up'], ')')
+  df$annot[df$annot == 'Down']   = paste0('Down (', table(df$annot)['Down'], ')')
+  df$annot[df$annot == 'NS']     = paste0('NS (', table(df$annot)['NS'], ')')
   df$annot = factor(df$annot, sort(unique(df$annot), T))
-  df$lable = abs(df$avg_log2FC) > label.logFC & !grepl('^NS', df$annot)
+  df$lable = if (label) if (length(label.name)) df$gene %in% label.name else 
+    abs(df$avg_log2FC) > label.logFC & !grepl('^NS', df$annot) else NA
   ## color
   annot = levels(df$annot)
   idx   = sapply(c('Up', 'NS', 'Down'), function(i) sum(grepl(i, annot)) )
@@ -21,13 +25,20 @@ plot_FP = function(df, logFC = 1, padj = .01, label.logFC = 1.5, exprAvg = 0, ti
   df$p_val_adj[ -log10(df$p_val_adj) > -log10(pmax) ] = pmax
   ## plot
   p = ggplot(df, aes(avg_log2FC, -log10(p_val_adj))) + 
-    geom_point(aes(color = annot)) + xlim(c(-lim, lim)) + theme_bw() +
+    geom_point(aes(color = annot)) + xlim(c(-lim, lim)) + 
     geom_hline(yintercept = -log10(padj), linetype = 2) +
     geom_vline(xintercept = c(-logFC, logFC), linetype = 2) +
-    geom_text_repel(label = ifelse(df$lable, df$gene, NA), family = 'serif') +
+    geom_text_repel(label = ifelse(df$lable, df$gene, NA), family = 'serif', 
+                    max.overlaps = max.overlaps, color = label.color) +
     scale_color_manual(values = color) + 
-    labs(x = 'Log2 Fold Change', y = if (adj) expression(-log[10](Padj)) else expression(-log[10](Pvalue)), color = NULL, title = title) +
-    theme(text = element_text(family = 'serif', size = 14), plot.title = element_text(hjust = .5))
+    labs(x = 'Log2 Fold Change', 
+         y = if (adj) expression(-log[10](Padj)) else expression(-log[10](Pvalue)), 
+         color = NULL, title = title) +
+    theme_bw() +
+    theme(text = element_text(family = 'serif', size = 14), 
+          plot.title = element_text(hjust = .5))
+  if (label & length(label.name)) p = p + 
+    geom_point(data = df[df$gene %in% label.name,], color = label.color)
   list(plot = p, df = df)
 }
 ##########
