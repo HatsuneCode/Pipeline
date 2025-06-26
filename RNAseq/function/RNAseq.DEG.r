@@ -1,7 +1,7 @@
 #### Differential expression analysis ####
 #### DESeq2
 # RNAseq: DESeq2 
-RNAseq.DESeq2 = function(expr, pos = NULL, neg = NULL, name = NULL, exp_cut = 10, cut.method = 'inter') {
+RNAseq.DESeq2 = function(expr, pos = NULL, neg = NULL, name = NULL, exp_cut = 10, cut.method = 'inter', ...) {
   ## cut.method: inter, union
   suppressMessages(library(DESeq2))
   ## expr split
@@ -36,7 +36,7 @@ RNAseq.DESeq2 = function(expr, pos = NULL, neg = NULL, name = NULL, exp_cut = 10
   meta = data.frame(row.names = colnames(expr), condition)
   ## DESeq2
   dds = DESeqDataSetFromMatrix(countData = expr, colData = meta, design = ~ condition)
-  dds = DESeq(dds)
+  dds = DESeq(dds, ...)
   dds = data.frame(results(dds), check.names = F)
   ## output
   data.frame(p_val = dds$pvalue, avg_log2FC = dds$log2FoldChange, 
