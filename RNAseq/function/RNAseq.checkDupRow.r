@@ -4,7 +4,7 @@ RNAseq.checkDupRow = function(expr, pattern = '^ENS.*?_', method = 'mean') {
   dgene = unique(gene[duplicated(gene)])
   ## check duplicated symbols
   if (length(dgene)) {
-    expr1 = expr[!gene %in% dgene,]
+    expr1 = expr[!gene %in% dgene, , drop = F]
     expr2 = do.call(rbind, lapply(dgene, function(g) {
       e = expr[gene == g, , drop = F]
       if (method == 'mean')
