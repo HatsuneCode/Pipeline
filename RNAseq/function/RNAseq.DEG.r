@@ -1,6 +1,5 @@
 #### Differential expression analysis ####
 #### DESeq2
-# RNAseq: DESeq2 
 RNAseq.DESeq2 = function(expr, pos = NULL, neg = NULL, name = NULL, exp_cut = 10, cut.method = 'inter', ...) {
   ## cut.method: inter, union
   suppressMessages(library(DESeq2))
@@ -34,20 +33,42 @@ RNAseq.DESeq2 = function(expr, pos = NULL, neg = NULL, name = NULL, exp_cut = 10
   exprN = expr[, condition == 'Neg', drop = F]
   ## meta
   meta = data.frame(row.names = colnames(expr), condition)
-  ## DESeq2
-  dds = DESeqDataSetFromMatrix(countData = expr, colData = meta, design = ~ condition)
+  ## DESeq2 normalize
+  dds   = DESeqDataSetFromMatrix(countData = expr, colData = meta, design = ~ condition)
+  dds.n = estimateSizeFactors(dds)
+  ## DESeq2 compare
   dds = DESeq(dds, ...)
   dds = data.frame(results(dds), check.names = F)
+  ## split normalized pos/neg
+  expr.n  = counts(dds.n, normalize = T)
+  expr.nP = expr.n[, condition == 'Pos', drop = F]
+  expr.nN = expr.n[, condition == 'Neg', drop = F]
   ## output
-  data.frame(p_val = dds$pvalue, avg_log2FC = dds$log2FoldChange, 
+  data.frame(p_val = dds$pvalue, 
+             avg_log2FC = dds$log2FoldChange, 
              pct.1 = apply(exprP, 1, function(i) sum(i > 0)/ncol(exprP) ),
              pct.2 = apply(exprN, 1, function(i) sum(i > 0)/ncol(exprN) ),
-             p_val_adj = dds$padj, gene = rownames(dds), 
-             average = rowMeans(expr),  median = apply(expr,  1, median), 
-             posAvg  = rowMeans(exprP), posMed = apply(exprP, 1, median),
-             negAvg  = rowMeans(exprN), negMed = apply(exprN, 1, median),
-             type    = name, 
-             upDown  = factor(ifelse(dds$log2FoldChange > 0, 'Up', 'Down'), c('Up', 'Down')), 
+             p_val_adj = dds$padj, 
+             gene = rownames(dds),
+             ## global
+             average.raw  = rowMeans(expr), 
+             average.norm = rowMeans(expr.n),
+             median.raw   = apply(expr,   1, median), 
+             median.norm  = apply(expr.n, 1, median), 
+             ## average
+             posAvg.raw   = rowMeans(exprP), 
+             negAvg.raw   = rowMeans(exprN), 
+             posAvg.norm  = rowMeans(expr.nP), 
+             negAvg.norm  = rowMeans(expr.nN), 
+             ## median
+             posMed.raw   = apply(exprP,   1, median),
+             negMed.raw   = apply(exprN,   1, median),
+             posMed.norm  = apply(expr.nP, 1, median),
+             negMed.norm  = apply(expr.nN, 1, median),
+             ## meta
+             type     = name, 
+             upDown   = factor(ifelse(dds$log2FoldChange > 0, 'Up', 'Down'), c('Up', 'Down')),
+             validNum = nrow(expr.n),
              row.names = NULL )
 }
 #### Limma
