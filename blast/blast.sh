@@ -4,6 +4,6 @@
 # pigz -d -k -p 16 nt.gz -c > /mnt/e/NCBI.NT.20240208/nt.fasta
 # mkdir nt
 # makeblastdb -in nt.fasta -dbtype nucl -out nt/nt.db
-
+blastn -db nt -query unmap.fa -num_threads 16
 ## also can remote online ##
-blastn -db nt -remote -query unmap.fa -num_threads 16
+blastn -db nt -remote -query unmap.fa
