@@ -11,7 +11,7 @@ checkPath = function(x) normalizePath(x, '/', T)
 ## yml ##
 suppressMessages(library(yaml))
 suppressMessages(library(rlang))
-handlers = list('bool#no'  = function(x) if ( x %in% c('false', 'False', 'FALSE', 'no')  ) FALSE else x,
+handlers = list('bool#no'  = function(x) if ( x %in% c('false', 'False', 'FALSE', 'no')  ) FALSE else x, 
                 'bool#yes' = function(x) if ( x %in% c('true',  'True', 'TRUE',  'yes') ) TRUE  else x )
 ## args ##
 args  = commandArgs()
@@ -60,8 +60,8 @@ dir.create('log', F)
 message(Sa('-->', timer(), '2. RNAseq pipeline running... <--'))
 suppressMessages(library(future.apply))
 if (thread > 1) plan(multicore(workers = function() thread ))
-message(Sa('-->', timer(), 'use Cores:', Pa(thread), 'availableCores:',
-           Pa(as.numeric(suppressWarnings(availableCores()))), '<--'))
+message(Sa('-->', timer(), 'use Cores:', Pa(thread), 'availableCores:', 
+	   Pa(as.numeric(suppressWarnings(availableCores()))), '<--'))
 run = function(i) {
   n = names(samples)[i]
   message(Sa('-->', timer(), paste0('No.', i, ':'), 'working on', Pa(n), '<--'))
@@ -70,9 +70,9 @@ run = function(i) {
   log = if (file.exists(log)) readLines(log)
   ## check each steps
   rn.fp = !sum(grepl('Fastp work is done', log))   | enforce
-  rn.bt = !sum(grepl('Bowtie2 work is done', log)) | enforce
+  rn.bt = !sum(grepl('Bowtie2 work is done', log)) | enforce 
   rn.st = !sum(grepl('STAR work is done', log))    | enforce
-  rn.rs = !sum(grepl('RSEM work is done', log))    | enforce
+  rn.rs = !sum(grepl('RSEM work is done', log))    | enforce 
   message(Sa('--> run fastp:', Pa(ifelse(rn.fp & fastp, 'need', 'skip')), '<--'))
   message(Sa('--> run bowtie2:', Pa(ifelse(rn.bt, 'need', 'skip')), '<--'))
   message(Sa('--> run STAR:', Pa(ifelse(rn.st, 'need', 'skip')), '<--'))
@@ -82,12 +82,12 @@ run = function(i) {
    err = 'set -e',
    # s0.cd
    cd = paste0('cd ', wdir, '/', n),
-   rn = paste0('echo This work is running... > ../log/', n, '.log'),
+   rn = paste0('echo "--> ', n, ' <--"; echo This work is running... > ../log/', n, '.log'),
    '',
    # s1.fastp
    if (rn.fp)
-   s1 = if (fastp)
-     paste0(softwares$fastp, ' -q 20 -u 10 -l ', fastp_LR, ' -w 8 -i ', samples[[i]][1], if (pairEnd) paste0(' -I ', samples[[i]][2]), ' -o ', n, '.r1.fq.gz', if (pairEnd) paste0(' -O ', n, '.r2.fq.gz '), ' -j ', n, '.fastp.json -h ', n, '.fastp.html >> ../log/', n, '.log 2>&1') else
+   s1 = if (fastp) 
+     paste0(softwares$fastp, ' -q 20 -u 10 -l ', fastp_LR, ' -w 8 -i ', samples[[i]][1], if (pairEnd) paste0(' -I ', samples[[i]][2]), ' -o ', n, '.r1.fq.gz', if (pairEnd) paste0(' -O ', n, '.r2.fq.gz --detect_adapter_for_pe'), ' -j ', n, '.fastp.json -h ', n, '.fastp.html >> ../log/', n, '.log 2>&1') else
      paste0('cat ', samples[[i]][1], ' > ', n, '.r1.fq.gz', if (pairEnd) paste0('; cat ', samples[[i]][2], ' > ', n, '.r2.fq.gz')),
    dn.fastp = paste0('msg="Fastp work is done."; echo $msg; echo $msg >> ../log/', n, '.log'),
    '',
@@ -98,7 +98,7 @@ run = function(i) {
    '',
    # s3.STAR
    if (rn.st)
-   s3 = paste0(softwares$STAR, ' --runThreadN 6 --genomeDir ', references$STARref, ' --readFilesIn ', n, '.filter', if (pairEnd) '.1', '.fq ', if (pairEnd) paste0(n, '.filter.2.fq '), '--outBAMsortingThreadN 6 --outSAMattributes All --outSAMtype BAM SortedByCoordinate --quantMode TranscriptomeSAM GeneCounts --outFileNamePrefix ', n, '. >> ../log/', n, '.log 2>&1', if (cleanFq) '; rm *filter*fq'),
+   s3 = paste0(softwares$STAR, ' --outReadsUnmapped Fastx --runThreadN 6 --genomeDir ', references$STARref, ' --readFilesIn ', n, '.filter', if (pairEnd) '.1', '.fq ', if (pairEnd) paste0(n, '.filter.2.fq '), '--outBAMsortingThreadN 6 --outSAMattributes All --outSAMtype BAM SortedByCoordinate --quantMode TranscriptomeSAM GeneCounts --outFileNamePrefix ', n, '. >> ../log/', n, '.log 2>&1; gzip -1 ', n, '.Unmapped.out.mate*', if (cleanFq) '; rm *filter*fq'),
    dn.star = paste0('msg="STAR work is done."; echo $msg; echo $msg >> ../log/', n, '.log'),
    '',
    # s4.RSEM
@@ -119,3 +119,4 @@ message(Sa('-->', timer(), 'all samples done <--'))
 
 ## done ##
 message(Wa('-->', timer(), 'Done:', me, '<--'))
+
