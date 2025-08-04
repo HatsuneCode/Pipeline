@@ -1,55 +1,67 @@
 ---
 ## Project
-project: Name
-thread: 10
-detect: 30 ## unit: minutes
-mem: 20    ## each sample memory, unit: GB
+project: Skin
+thread: 4
 pairEnd: true
-
+## Clean
+cleanFq: true
+cleanBam: false
 ## Software
 softwares:
-  fastp:   /home/songlianhao/conda/envs/lhsong/bin/fastp
-  bowtie2: /opt/software/bowtie2-2.3.5.1/bin/bowtie2
-  STAR:    /home/songlianhao/conda/envs/lhsong/bin/STAR
-  RSEM:    /home/songlianhao/conda/envs/lhsong/bin/rsem-calculate-expression
-  SeqSatu: /home/songlianhao/pipeline/RNAseq/RNAseq.SeqSatu.r 
-  Rscript: /home/songlianhao/conda/envs/lhsong/bin/Rscript
-
+  fastp:   /home/chenyang/songlianhaoConda/envs/lhsong/bin/fastp 
+  bowtie2: /opt/software/bowtie2-2.3.5.1/bin/bowtie2 
+  STAR:    /home/chenyang/songlianhaoConda/envs/lhsong/bin/STAR
+  RSEM:    /home/chenyang/songlianhaoConda/envs/lhsong/bin/rsem-calculate-expression
+  Rscript: /home/chenyang/songlianhaoConda/envs/lhsong/bin/Rscript
 ## Step:
-continue: True
+enforce: False
 steps:
   fastp: True
-  rseqc: False
-
 ## Parameter:
 fastp:
   length_required: 15
-
 ## Reference
 references:
-  rRNAref: /home/songlianhao/reference/Mus/rRNA/rRNA        ## /home/songlianhao/reference/Hsa/rRNA/rRNA
-  STARref: /home/songlianhao/reference/Mus/starRef          ## /home/songlianhao/reference/Hsa/starRef
-  RSEMref: /home/songlianhao/reference/Mus/rsemRef/rsemRef  ## /home/songlianhao/reference/Hsa/rsemRef/rsemRef
-
-## Samples info
+  rRNAref: /home/chenyang/reference/Mus/rRNA/rRNA 
+  STARref: /home/chenyang/reference/Mus/starRef 
+  RSEMref: /home/chenyang/reference/Mus/rsemRef/rsemRef
+## Outdir
+outdir: /home/tuzhiwei/Project/SLH/Skin_Process
+## Samples
 samples:
-  Ctrl.1:   [/home/songlianhao/Fastq/RNAseq/HiMAP/ctr-1/ctr-1_R1.fq.gz,        /home/songlianhao/Fastq/RNAseq/HiMAP/ctr-1/ctr-1_R2.fq.gz]
-  Ctrl.2:   [/home/songlianhao/Fastq/RNAseq/HiMAP/ctr-2/ctr-2_R1.fq.gz,        /home/songlianhao/Fastq/RNAseq/HiMAP/ctr-2/ctr-2_R2.fq.gz]
-  ##
-  RA.1:     [/home/songlianhao/Fastq/RNAseq/HiMAP/RA-1/RA-1_R1.fq.gz,          /home/songlianhao/Fastq/RNAseq/HiMAP/RA-1/RA-1_R2.fq.gz]
-  RA.2:     [/home/songlianhao/Fastq/RNAseq/HiMAP/RA-2/RA-2_R1.fq.gz,          /home/songlianhao/Fastq/RNAseq/HiMAP/RA-2/RA-2_R2.fq.gz]
-  ##
-  VGVAPG.1: [/home/songlianhao/Fastq/RNAseq/HiMAP/VGVAPG-1/VGVAPG-1_R1.fq.gz,  /home/songlianhao/Fastq/RNAseq/HiMAP/VGVAPG-1/VGVAPG-1_R2.fq.gz]
-  VGVAPG.2: [/home/songlianhao/Fastq/RNAseq/HiMAP/VGVAPG-2/VGVAPG-2_R1.fq.gz,  /home/songlianhao/Fastq/RNAseq/HiMAP/VGVAPG-2/VGVAPG-2_R2.fq.gz]
-  ##
-  GHK.1:    [/home/songlianhao/Fastq/RNAseq/HiMAP/GHK-1/GHK-1_R1.fq.gz,        /home/songlianhao/Fastq/RNAseq/HiMAP/GHK-1/GHK-1_R2.fq.gz]
-  GHK.2:    [/home/songlianhao/Fastq/RNAseq/HiMAP/GHK-2/GHK-2_R1.fq.gz,        /home/songlianhao/Fastq/RNAseq/HiMAP/GHK-2/GHK-2_R2.fq.gz]
-  ##
-  KVK.1:    [/home/songlianhao/Fastq/RNAseq/HiMAP/kvk-1/kvk-1_R1.fq.gz,        /home/songlianhao/Fastq/RNAseq/HiMAP/kvk-1/kvk-1_R2.fq.gz]
-  KVK.2:    [/home/songlianhao/Fastq/RNAseq/HiMAP/kvk-2/kvk-2_R1.fq.gz,        /home/songlianhao/Fastq/RNAseq/HiMAP/kvk-2/kvk-2_R2.fq.gz]
-  ##
-  NAD.1:    [/home/songlianhao/Fastq/RNAseq/HiMAP/NAD-1/NAD-1_R1.fq.gz,        /home/songlianhao/Fastq/RNAseq/HiMAP/NAD-1/NAD-1_R2.fq.gz]
-  NAD.2:    [/home/songlianhao/Fastq/RNAseq/HiMAP/NAD-2/NAD-2_R1.fq.gz,        /home/songlianhao/Fastq/RNAseq/HiMAP/NAD-2/NAD-2_R2.fq.gz]
-
-## Output dir
-outdir: /home/songlianhao/Project/HiMAP/Batch1
+  NOUVB-1:
+  - /home/tuzhiwei/Project/SLH/Skin.Fq/ANNO_XS01KF2023090215_PM-XS01KF2023090215-48_20250730/Cleandata/NOUVB-1/NOUVB-1_R1.fq.gz
+  - /home/tuzhiwei/Project/SLH/Skin.Fq/ANNO_XS01KF2023090215_PM-XS01KF2023090215-48_20250730/Cleandata/NOUVB-1/NOUVB-1_R2.fq.gz
+  NOUVB-2:
+  - /home/tuzhiwei/Project/SLH/Skin.Fq/ANNO_XS01KF2023090215_PM-XS01KF2023090215-48_20250730/Cleandata/NOUVB-2/NOUVB-2_R1.fq.gz
+  - /home/tuzhiwei/Project/SLH/Skin.Fq/ANNO_XS01KF2023090215_PM-XS01KF2023090215-48_20250730/Cleandata/NOUVB-2/NOUVB-2_R2.fq.gz
+  NOUVB-3:
+  - /home/tuzhiwei/Project/SLH/Skin.Fq/ANNO_XS01KF2023090215_PM-XS01KF2023090215-48_20250730/Cleandata/NOUVB-3/NOUVB-3_R1.fq.gz
+  - /home/tuzhiwei/Project/SLH/Skin.Fq/ANNO_XS01KF2023090215_PM-XS01KF2023090215-48_20250730/Cleandata/NOUVB-3/NOUVB-3_R2.fq.gz
+  UVB-1:
+  - /home/tuzhiwei/Project/SLH/Skin.Fq/ANNO_XS01KF2023090215_PM-XS01KF2023090215-48_20250730/Cleandata/UVB-1/UVB-1_R1.fq.gz
+  - /home/tuzhiwei/Project/SLH/Skin.Fq/ANNO_XS01KF2023090215_PM-XS01KF2023090215-48_20250730/Cleandata/UVB-1/UVB-1_R2.fq.gz
+  UVB-2:
+  - /home/tuzhiwei/Project/SLH/Skin.Fq/ANNO_XS01KF2023090215_PM-XS01KF2023090215-48_20250730/Cleandata/UVB-2/UVB-2_R1.fq.gz
+  - /home/tuzhiwei/Project/SLH/Skin.Fq/ANNO_XS01KF2023090215_PM-XS01KF2023090215-48_20250730/Cleandata/UVB-2/UVB-2_R2.fq.gz
+  UVB-3:
+  - /home/tuzhiwei/Project/SLH/Skin.Fq/ANNO_XS01KF2023090215_PM-XS01KF2023090215-48_20250730/Cleandata/UVB-3/UVB-3_R1.fq.gz
+  - /home/tuzhiwei/Project/SLH/Skin.Fq/ANNO_XS01KF2023090215_PM-XS01KF2023090215-48_20250730/Cleandata/UVB-3/UVB-3_R2.fq.gz
+  UVB-COL3A1-1:
+  - /home/tuzhiwei/Project/SLH/Skin.Fq/ANNO_XS01KF2023090215_PM-XS01KF2023090215-48_20250730/Cleandata/UVB-COL3A1-1/UVB-COL3A1-1_R1.fq.gz
+  - /home/tuzhiwei/Project/SLH/Skin.Fq/ANNO_XS01KF2023090215_PM-XS01KF2023090215-48_20250730/Cleandata/UVB-COL3A1-1/UVB-COL3A1-1_R2.fq.gz
+  UVB-COL3A1-2:
+  - /home/tuzhiwei/Project/SLH/Skin.Fq/ANNO_XS01KF2023090215_PM-XS01KF2023090215-48_20250730/Cleandata/UVB-COL3A1-2/UVB-COL3A1-2_R1.fq.gz
+  - /home/tuzhiwei/Project/SLH/Skin.Fq/ANNO_XS01KF2023090215_PM-XS01KF2023090215-48_20250730/Cleandata/UVB-COL3A1-2/UVB-COL3A1-2_R2.fq.gz
+  UVB-COL3A1-3:
+  - /home/tuzhiwei/Project/SLH/Skin.Fq/ANNO_XS01KF2023090215_PM-XS01KF2023090215-48_20250730/Cleandata/UVB-COL3A1-3/UVB-COL3A1-3_R1.fq.gz
+  - /home/tuzhiwei/Project/SLH/Skin.Fq/ANNO_XS01KF2023090215_PM-XS01KF2023090215-48_20250730/Cleandata/UVB-COL3A1-3/UVB-COL3A1-3_R2.fq.gz
+  UVB-FLUC-1:
+  - /home/tuzhiwei/Project/SLH/Skin.Fq/ANNO_XS01KF2023090215_PM-XS01KF2023090215-48_20250730/Cleandata/UVB-FLUC-1/UVB-FLUC-1_R1.fq.gz
+  - /home/tuzhiwei/Project/SLH/Skin.Fq/ANNO_XS01KF2023090215_PM-XS01KF2023090215-48_20250730/Cleandata/UVB-FLUC-1/UVB-FLUC-1_R2.fq.gz
+  UVB-FLUC-2:
+  - /home/tuzhiwei/Project/SLH/Skin.Fq/ANNO_XS01KF2023090215_PM-XS01KF2023090215-48_20250730/Cleandata/UVB-FLUC-2/UVB-FLUC-2_R1.fq.gz
+  - /home/tuzhiwei/Project/SLH/Skin.Fq/ANNO_XS01KF2023090215_PM-XS01KF2023090215-48_20250730/Cleandata/UVB-FLUC-2/UVB-FLUC-2_R2.fq.gz
+  UVB-FLUC-3:
+  - /home/tuzhiwei/Project/SLH/Skin.Fq/ANNO_XS01KF2023090215_PM-XS01KF2023090215-48_20250730/Cleandata/UVB-FLUC-3/UVB-FLUC-3_R1.fq.gz
+  - /home/tuzhiwei/Project/SLH/Skin.Fq/ANNO_XS01KF2023090215_PM-XS01KF2023090215-48_20250730/Cleandata/UVB-FLUC-3/UVB-FLUC-3_R2.fq.gz
