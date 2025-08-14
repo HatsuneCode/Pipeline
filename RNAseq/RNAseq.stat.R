@@ -179,7 +179,7 @@ ms = c('expected_count', 'TPM', 'FPKM')
 data = lapply(seq(fs), function(i) {
   f = fs[i]
   n = samples[i]
-  message('Genes:', n)
+  message('Genes: ', n)
   df = read.table(f, sep = '\t', header = T)
   setNames(lapply(ms, function(m) {
     setNames(data.frame(df[[m]], row.names = df$gene_id, check.rows = F), n)
@@ -197,15 +197,16 @@ ms = c(ms, 'IsoPct')
 data = lapply(seq(fs), function(i) {
   f = fs[i]
   n = samples[i]
-  message('Isoforms:', n)
+  message('Isoforms: ', n)
   df = read.table(f, sep = '\t', header = T)
   setNames(lapply(ms, function(m) {
     setNames(data.frame(df[[m]], row.names = df$transcript_id, check.rows = F), n)
   }), ms)
 })
+gene.iso = read.table(fs[1], sep = '\t', header = T)[['gene_id']]
 cnts.iso = setNames(lapply(ms, function(m) {
   df = do.call(cbind, lapply(data, function(i) i[[m]] ))
-  df = cbind(Gene = rownames(df), df)
+  df = cbind(Isoform = rownames(df), Gene = gene.iso, df)
   write.table(df, paste0('4.', m, '.isoforms.xls'), sep = '\t', quote = F, row.names = F)
   df
 }), ms)
@@ -258,4 +259,3 @@ ggsave('5.GeneCounts.png', p, w = 3.8*ncol, h = 3.5*ceiling(ncol(data)/ncol), li
 
 ## done ##
 message(Wa('-->', timer(), 'Done:', me, '<--'))
-
