@@ -27,23 +27,28 @@ file = normalizePath(file, '/', T)
 ## 0. check parameters ##
 message(Sa('-->', timer(), '1. check parameters:', Pa(file), '<--'))
 parameter = yaml.load_file(file, handlers = handlers)
-# check project name
+
+# check project
 project  = as.character(parameter$project %||% 'RNAseq')
 thread   = as.numeric(parameter$thread %||% 1)
 pairEnd  = parameter$pairEnd  %||% T
 cleanFq  = parameter$cleanFq  %||% T
 cleanBam = parameter$cleanBam %||% T
-# check softwre paths
-softwares  = lapply(parameter$softwares, checkPath)
+
 # check steps
 enforce    = parameter$enforce %||% F
 steps      = parameter$steps
-fastp      = steps$fastp %||% T
+fastp      = steps$fastp       %||% T
+splice     = steps$splicing    %||% T
+
+# check softwre paths
+softwares  = lapply(c(parameter$softwares, if (splice) parameter$softwares.splicing), checkPath)
+
 # check para
 fastpPara  = parameter$fastp
 fastp_LR   = fastpPara$length_required %||% 15
 # check reference
-references = parameter$references
+references = c(parameter$references, if (splice) parameter$references.splicing)
 # check sample names and paths
 samples    = lapply(parameter$samples, checkPath)
 # check outdir
@@ -56,27 +61,45 @@ wdir = getwd()
 message(Sa('-->', timer(), 'working in dir:', Pa(wdir), '<--'))
 dir.create('log', F)
 
-## 2. run each samples
+## 2. set constants
+fpd = 'Fastp work is done'
+btd = 'Bowtie2 work is done'
+std = 'STAR work is done'
+rsd = 'RSEM work is done'
+ptd = 'Portcullis work is done'
+rtd = 'RMATS work is done'
+
+## 3. run each samples
 message(Sa('-->', timer(), '2. RNAseq pipeline running... <--'))
 suppressMessages(library(future.apply))
 if (thread > 1) plan(multicore(workers = function() thread ))
 message(Sa('-->', timer(), 'use Cores:', Pa(thread), 'availableCores:', 
 	   Pa(as.numeric(suppressWarnings(availableCores()))), '<--'))
+
 run = function(i) {
   n = names(samples)[i]
   message(Sa('-->', timer(), paste0('No.', i, ':'), 'working on', Pa(n), '<--'))
   dir.create(n, F)
   log = paste0('log/', n, '.log')
   log = if (file.exists(log)) readLines(log)
+  
   ## check each steps
-  rn.fp = !sum(grepl('Fastp work is done', log))   | enforce
-  rn.bt = !sum(grepl('Bowtie2 work is done', log)) | enforce 
-  rn.st = !sum(grepl('STAR work is done', log))    | enforce
-  rn.rs = !sum(grepl('RSEM work is done', log))    | enforce 
-  message(Sa('--> run fastp:', Pa(ifelse(rn.fp & fastp, 'need', 'skip')), '<--'))
-  message(Sa('--> run bowtie2:', Pa(ifelse(rn.bt, 'need', 'skip')), '<--'))
-  message(Sa('--> run STAR:', Pa(ifelse(rn.st, 'need', 'skip')), '<--'))
-  message(Sa('--> run RSEM:', Pa(ifelse(rn.st, 'need', 'skip')), '<--'))
+  rn.fp = !sum(grepl(fpd, log)) | enforce
+  rn.bt = !sum(grepl(btd, log)) | enforce 
+  rn.st = !sum(grepl(std, log)) | enforce
+  rn.rs = !sum(grepl(rsd, log)) | enforce 
+  rn.pt = !sum(grepl(ptd, log)) | enforce
+  rn.rt = !sum(grepl(rtd, log)) | enforce
+  message(Sa('--> run fastp:',    Pa(ifelse(rn.fp & fastp, 'need', 'skip')), '<--'))
+  message(Sa('--> run bowtie2:',  Pa(ifelse(rn.bt,  'need', 'skip')), '<--'))
+  message(Sa('--> run STAR:',     Pa(ifelse(rn.st,  'need', 'skip')), '<--'))
+  message(Sa('--> run RSEM:',     Pa(ifelse(rn.rs,  'need', 'skip')), '<--'))
+  message(Sa('--> run Splicing:', Pa(ifelse(splice, 'need', 'skip')), '<--'))
+  if (splice) {
+    message(Sa('--> run Splicing - portcullis:', Pa(ifelse(rn.pt, 'need', 'skip')), '<--'))
+    message(Sa('--> run Splicing - rMATS:',      Pa(ifelse(rn.rt, 'need', 'skip')), '<--'))
+  }
+
   ## make RNAseq.sh
   sh = c(
    err = 'set -e',
@@ -89,34 +112,43 @@ run = function(i) {
    s1 = if (fastp) 
      paste0(softwares$fastp, ' -q 20 -u 10 -l ', fastp_LR, ' -w 8 -i ', samples[[i]][1], if (pairEnd) paste0(' -I ', samples[[i]][2]), ' -o ', n, '.r1.fq.gz', if (pairEnd) paste0(' -O ', n, '.r2.fq.gz --detect_adapter_for_pe'), ' -j ', n, '.fastp.json -h ', n, '.fastp.html >> ../log/', n, '.log 2>&1') else
      paste0('cat ', samples[[i]][1], ' > ', n, '.r1.fq.gz', if (pairEnd) paste0('; cat ', samples[[i]][2], ' > ', n, '.r2.fq.gz')),
-   dn.fastp = paste0('msg="Fastp work is done."; echo $msg; echo $msg >> ../log/', n, '.log'),
+   dn.fastp = paste0('msg="', fpd, '"; echo $msg; echo $msg >> ../log/', n, '.log'),
    '',
    # s2.bowtie2
    if (rn.bt)
    s2 = paste0(softwares$bowtie2, ' -p 8 -x ', references$rRNAref, ' --local ', ifelse(pairEnd, '-1', '-U'), ' ', n, '.r1.fq.gz', if (pairEnd) paste0(' -2 ', n, '.r2.fq.gz'), ' --un', if (pairEnd) '-conc ', n, '.filter.fq -S /dev/null > ', n, '.rRNA.log 2>&1', if (cleanFq) '; rm *r*.fq.gz'),
-   dn.bt2 = paste0('msg="Bowtie2 work is done."; echo $msg; echo $msg >> ../log/', n, '.log'),
+   dn.bt2 = paste0('msg="', btd, '"; echo $msg; echo $msg >> ../log/', n, '.log'),
    '',
    # s3.STAR
    if (rn.st)
    s3 = paste0(softwares$STAR, ' --outReadsUnmapped Fastx --runThreadN 6 --genomeDir ', references$STARref, ' --readFilesIn ', n, '.filter', if (pairEnd) '.1', '.fq ', if (pairEnd) paste0(n, '.filter.2.fq '), '--outBAMsortingThreadN 6 --outSAMattributes All --outSAMtype BAM SortedByCoordinate --quantMode TranscriptomeSAM GeneCounts --outFileNamePrefix ', n, '. >> ../log/', n, '.log 2>&1; gzip -1 ', n, '.Unmapped.out.mate*', if (cleanFq) '; rm *filter*fq'),
-   dn.star = paste0('msg="STAR work is done."; echo $msg; echo $msg >> ../log/', n, '.log'),
+   dn.star = paste0('msg="', std, '"; echo $msg; echo $msg >> ../log/', n, '.log'),
    '',
    # s4.RSEM
    if (rn.rs)
-   s4 = paste0(softwares$RSEM, ' --alignments', if (pairEnd) ' --paired-end', ' -p 8 --append-names --no-bam-output ', n, '.Aligned.toTranscriptome.out.bam ', references$RSEM, ' ', n, ' >> ../log/', n, '.log 2>&1', if (cleanBam) '; rm *.bam'),
-   dn.rsem = paste0('msg="RSEM work is done."; echo $msg; echo $msg >> ../log/', n, '.log'),
+   s4 = paste0(softwares$RSEM, ' -q --alignments', if (pairEnd) ' --paired-end', ' -p 8 --append-names --no-bam-output ', n, '.Aligned.toTranscriptome.out.bam ', references$RSEM, ' ', n, ' >> ../log/', n, '.log 2>&1', if (cleanBam) '; rm *.bam'),
+   dn.rsem = paste0('msg="', rsd, '"; echo $msg; echo $msg >> ../log/', n, '.log'),
    '',
-   # index
+   # s5.Portcullis
+   if (splice & rn.pt)
+   s5 = paste0(softwares$portcullis, ' full -t 8 -b ', references$Genome, ' ', n, '.Aligned.sortedByCoord.out.bam -o ', n, '.port >> ../log/', n, '.log 2>&1'),
+   dn.port = paste0('msg="', ptd, '"; echo $msg; echo $msg >> ../log/', n, '.log'),
+   '',
+   # s6.rMATS-turbo
+   if (splice & rn.rt)
+   s6 = paste0('echo ', n, '.port/portcullis.filtered.bam > portBAM.txt; ', softwares$rmats.py, ' ', softwares$rmats.main, ' -t ', if (pairEnd) 'paired' else 'single', ' --gtf ', references$Gtf, ' --b1 portBAM.txt --readLength ', references$ReadLength, ' --nthread 8 --statoff --od ', n, '.rmats --tmp ', n, '.rmatsTMP >> ../log/', n, '.log 2>&1'),
+   dn.rmats = paste0('msg="', rtd, '"; echo $msg; echo $msg >> ../log/', n, '.log'),
+   '',
    dn = paste0('msg="This work is done."; echo $msg; echo $msg >> ../log/', n, '.log')
   )
   writeLines(sh, paste0(n, '/', n, '.RNAseq.sh'))
   ## qsub
   system(paste0('sh ', n, '/', n, '.RNAseq.sh'))
 }
+
 ## run
-if (thread > 1) future_lapply(seq(samples), run) else lapply(seq(samples), run)
+r = if (thread > 1) future_lapply(seq(samples), run) else lapply(seq(samples), run)
 message(Sa('-->', timer(), 'all samples done <--'))
 
 ## done ##
 message(Wa('-->', timer(), 'Done:', me, '<--'))
-
