@@ -1,4 +1,5 @@
-Seurat.Normalize = function(obj, group.by = 'samples', assay = 'RNA', var.ctrl = NULL, ...) {
+Seurat.Normalize = function(obj, group.by = 'samples', assay = 'RNA', clean = T, var.ctrl = NULL, ...) {
+  raw.cell = Cells(obj)
   suppressMessages(library(Seurat))
   ## SCT
   idx = obj@meta.data[[group.by]]
@@ -16,10 +17,11 @@ Seurat.Normalize = function(obj, group.by = 'samples', assay = 'RNA', var.ctrl =
     message('--> merge... <--'); obj = merge(obj[[1]], obj[-1])
   } else obj = obj[[1]]
   #### restore
-  VariableFeatures(obj) = unique(if (length(var.ctrl)) 
-    cleanGene( unlist(feature[grepl(var.ctrl, unique(idx))]) ) else 
-      cleanGene( unlist(feature)) )
+  VariableFeatures(obj) =
+    unique(if (clean) cleanGene( if (length(var.ctrl)) 
+         unlist(feature[grepl(var.ctrl, unique(idx))]) else 
+          unlist(feature) ) else unlist(feature) )
   message('--> nVarGene: ', length(VariableFeatures(obj)), ' <--')
   obj = PrepSCTFindMarkers(obj)
-  obj
+  obj[, raw.cell]
 }
