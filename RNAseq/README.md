@@ -13,4 +13,4 @@ Run `Rscript RNAseq.FastqPath.R` with the following arguments:
   
 Such as: `Rscript RNAseq.FastqPath.R /mnt/d/fastq _R[1-2].fq.gz RNAseq.parameter.yml`  
   
-The `RNAseq.FastqPath.R` script generates an `RNAseq.parameter.yaml` file, populating it with parameters from the example file and the automatically identified Fastq.gz paths.  
+The `RNAseq.FastqPath.R` script generates an `RNAseq.parameter.yaml` file, populating it with parameters from the example file and the automatically identified fastq.gz paths.  
