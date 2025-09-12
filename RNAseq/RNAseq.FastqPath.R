@@ -14,9 +14,10 @@ args = commandArgs()
 me   = normalizePath(sub('--file=', '', grep('--file=', args, value = T)), '/')
 args = args[-seq(grep('--args', args))]
 message(Wa('-->', timer(), 'Run: ', me, '<--'))
-main = Er(me, '<fastq_dir> <pattern> (pattern like _R[1-2].fq.gz)')
+main = Er(me, '<fastq_dir> <pattern> (pattern like _R[1-2].fq.gz) <RNAseq.parameter.yml>')
 file = args[1]
 part = args[2] %|||% '_R[1-2].fq.gz'
+para = args[3]
 if (is.na(file)) { message(main); q('no') }
 file = normalizePath(file, '/', T)
 message(Sa('--> Fq dir:', Pa(file), '<--'))
@@ -35,4 +36,4 @@ samples = setNames(lapply(unique(names), function(n) {
 yaml::write_yaml(list(samples = samples), 'samples.yml')
 
 ## combine with para.yml
-system('cat /home/tuzhiwei/Project/SLH/RNAseq/RNAseq.parameter.yml samples.yml > RNAseq.parameter.yaml; rm samples.yml')
+system(paste0('cat ', para, ' samples.yml > RNAseq.parameter.yaml; rm samples.yml'))
