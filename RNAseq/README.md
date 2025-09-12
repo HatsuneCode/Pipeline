@@ -12,4 +12,5 @@ Run `Rscript RNAseq.FastqPath.R` with the following arguments:
 `<path to the example RNAseq.parameter.yml>`: The path to the example `RNAseq.parameter.yml` file. Remember to remove the samples section from the example parameter.yml.  
   
 Such as: `Rscript RNAseq.FastqPath.R /mnt/d/fastq _R[1-2].fq.gz RNAseq.parameter.yml`  
+  
 The `RNAseq.FastqPath.R` script generates an `RNAseq.parameter.yaml` file, populating it with parameters from the example file and the automatically identified Fastq.gz paths.  
