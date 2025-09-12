@@ -3,6 +3,7 @@
 Download the files `RNAseq.FastqPath.R`, `RNAseq.main.R`, and `RNAseq.parameter.yml` to your computer, whether it's Linux or Windows-wsl.  
 Install the following required software: fastp, bowtie2, STAR, RSEM, Rscript.
 Update your software paths by following the examples in `RNAseq.parameter.yml` (please use absolute paths).  
+Refer to the `RNAseq.makeRef.sh` file to configure the references required for each software.  
 
 ## Step 2: Automatically identify Fastq data
 
