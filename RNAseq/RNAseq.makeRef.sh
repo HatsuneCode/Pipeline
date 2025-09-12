@@ -29,7 +29,7 @@ gffread Mus_musculus.GRCm39.111.gtf -g Mus_musculus.GRCm39.dna_sm.primary_assemb
 ## Download Ensembl 111
 wget https://ftp.ensembl.org/pub/release-113/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna_sm.primary_assembly.fa.gz
 wget https://ftp.ensembl.org/pub/release-113/gtf/homo_sapiens/Homo_sapiens.GRCh38.113.gtf.gz
-## rRNA
+## rRNA: can be download from RNAcentral website
 rRNA=rRNA_AND_so_rna_type_nameRRNA_AND_TAXONOMY9606_AND_rna_typerRNA_AND_entry_typeSequence.fasta
 ## Path
 rRNAref=rRNA/rRNA
