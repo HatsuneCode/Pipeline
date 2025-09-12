@@ -1,8 +1,8 @@
 # Step 1: Preparation
 
-Download the files `RNAseq.FastqPath.R`, `RNAseq.main.R`, and `RNAseq.parameter.yml` to your computer, whether it's Linux or Windows.
-Install the following required software: fastp, bowtie2, STAR, RSEM, Rscript.
-Update your software paths by following the examples in `parameter.yml`. Please use absolute paths.
+Download the files `RNAseq.FastqPath.R`, `RNAseq.main.R`, and `RNAseq.parameter.yml` to your computer, whether it's Linux or Windows.  
+Install the following required software: fastp, bowtie2, STAR, RSEM, Rscript.  
+Update your software paths by following the examples in `parameter.yml`. Please use absolute paths.  
 
 
 
