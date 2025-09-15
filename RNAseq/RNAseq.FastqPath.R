@@ -18,7 +18,7 @@ main = Er(me, '<fastq_dir> <pattern> (pattern like _R[1-2].fq.gz) <RNAseq.parame
 file = args[1]
 part = args[2] %|||% '_R[1-2].fq.gz'
 para = args[3]
-if (is.na(file)) { message(main); q('no') }
+if (is.na(file) | is.na(para)) { message(main); q('no') }
 file = normalizePath(file, '/', T)
 message(Sa('--> Fq dir:', Pa(file), '<--'))
 message(Sa('--> Pattern:', Pa(part), '<--'))
@@ -37,3 +37,6 @@ yaml::write_yaml(list(samples = samples), 'samples.yml')
 
 ## combine with para.yml
 system(paste0('cat ', para, ' samples.yml > RNAseq.parameter.yaml; rm samples.yml'))
+
+## done ##
+message(Wa('-->', timer(), 'Done:', me, '<--'))
