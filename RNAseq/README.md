@@ -4,7 +4,7 @@
 2. Install the following required software: fastp, bowtie2, STAR, RSEM, Rscript. Update your software paths by following the examples in `RNAseq.parameter.yml` (please use absolute paths).  
 3. Refer to the `RNAseq.makeRef.sh` file to build the references required for each software.  
 
-## Step 2: Automatically identify Fastq data
+## Step 2: Automatically identify fastq data
 
 Run `Rscript RNAseq.FastqPath.R` with the following arguments:  
 1. `<path to raw data directory>`: The path to the folder containing your fastq.gz files.  
@@ -15,6 +15,6 @@ Such as: `Rscript RNAseq.FastqPath.R /mnt/d/fastq _R[1-2].fq.gz RNAseq.parameter
   
 The `RNAseq.FastqPath.R` script generates an `RNAseq.parameter.yaml` file, populating it with parameters from the example file and the automatically identified fastq.gz paths.  
 
-## Step 3: Start the Main Program
+## Step 3: Start the main program
 
 Review and modify the `RNAseq.parameter.yaml` file, then run: `Rscript RNAseq.main.R RNAseq.parameter.yaml`.  
