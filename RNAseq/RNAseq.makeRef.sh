@@ -24,7 +24,6 @@ samtools faidx Mus_musculus.GRCm39.dna_sm.primary_assembly.fa
 ## CDS
 gffread Mus_musculus.GRCm39.111.gtf -g Mus_musculus.GRCm39.dna_sm.primary_assembly.fa -x Mus_musculus.GRCm39.cds.fa -y Mus_musculus.GRCm39.protein.fa
 
-
 ## Make reference for Homo_sapiens
 ## Download Ensembl 113
 wget https://ftp.ensembl.org/pub/release-113/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna_sm.primary_assembly.fa.gz
