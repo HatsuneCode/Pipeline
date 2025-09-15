@@ -26,7 +26,7 @@ gffread Mus_musculus.GRCm39.111.gtf -g Mus_musculus.GRCm39.dna_sm.primary_assemb
 
 
 ## Make reference for Homo_sapiens
-## Download Ensembl 111
+## Download Ensembl 113
 wget https://ftp.ensembl.org/pub/release-113/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna_sm.primary_assembly.fa.gz
 wget https://ftp.ensembl.org/pub/release-113/gtf/homo_sapiens/Homo_sapiens.GRCh38.113.gtf.gz
 ## rRNA: can be download from RNAcentral website
