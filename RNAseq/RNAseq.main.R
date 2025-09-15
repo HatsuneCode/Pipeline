@@ -173,7 +173,10 @@ r = if (thread > 1) future_lapply(seq(samples), run) else lapply(seq(samples), r
 message(Sa('-->', timer(), 'all samples done <--'))
 
 ## 4. combine files
-if (splice) system('mkdir rMATS.TMP; cp */*.rmatsTMP/*.rmats.tmp rMATS.TMP/')
+if (splice) {
+  system('mkdir rMATS.TMP; cp */*.rmatsTMP/*.rmats.tmp rMATS.TMP/; cat */portBAM.txt > rMATS.BAM.txt')
+  message(Sa('-->', timer(), 'combine files done <--'))
+}
 
 ## done ##
 message(Wa('-->', timer(), 'Done:', me, '<--'))
