@@ -11,8 +11,8 @@ checkPath = function(x) normalizePath(x, '/', T)
 ## yml ##
 suppressMessages(library(yaml))
 suppressMessages(library(rlang))
-handlers = list('bool#no'  = function(x) if ( x %in% c('false', 'False', 'FALSE', 'no')  ) FALSE else x, 
-                'bool#yes' = function(x) if ( x %in% c('true',  'True', 'TRUE',  'yes') ) TRUE  else x )
+handlers = list('bool#no'  = function(x) if ( x %in% c('false', 'False', 'FALSE', 'no')  ) F else x, 
+                'bool#yes' = function(x) if ( x %in% c('true',  'True', 'TRUE',  'yes') ) T else x )
 ## args ##
 args  = commandArgs()
 me    = normalizePath(sub('--file=', '', grep('--file=', args, value = T)), '/')
@@ -108,36 +108,59 @@ run = function(i) {
    rn = paste0('echo "--> ', n, ' <--"; echo This work is running... > ../log/', n, '.log'),
    '',
    # s1.fastp
-   if (rn.fp)
-   s1 = if (fastp) 
-     paste0(softwares$fastp, ' -q 20 -u 10 -l ', fastp_LR, ' -w 8 -i ', samples[[i]][1], if (pairEnd) paste0(' -I ', samples[[i]][2]), ' -o ', n, '.r1.fq.gz', if (pairEnd) paste0(' -O ', n, '.r2.fq.gz --detect_adapter_for_pe'), ' -j ', n, '.fastp.json -h ', n, '.fastp.html >> ../log/', n, '.log 2>&1') else
-     paste0('cat ', samples[[i]][1], ' > ', n, '.r1.fq.gz', if (pairEnd) paste0('; cat ', samples[[i]][2], ' > ', n, '.r2.fq.gz')),
+   s1 = paste0(if (!rn.fp) '## ', if (fastp) 
+     paste0(softwares$fastp, ' -q 20 -u 10 -l ', fastp_LR, ' -w 8 -i ', samples[[i]][1], 
+            if (pairEnd) paste0(' -I ', samples[[i]][2]), ' -o ', n, '.r1.fq.gz', 
+            if (pairEnd) paste0(' -O ', n, '.r2.fq.gz --detect_adapter_for_pe'), 
+            ' -j ', n, '.fastp.json -h ', n, '.fastp.html >> ../log/', n, '.log 2>&1') else 
+       paste0('cat ', samples[[i]][1], ' > ', n, '.r1.fq.gz', 
+              if (pairEnd) paste0('; cat ', samples[[i]][2], ' > ', n, '.r2.fq.gz'))),
    dn.fastp = paste0('msg="', fpd, '"; echo $msg; echo $msg >> ../log/', n, '.log'),
    '',
    # s2.bowtie2
-   if (rn.bt)
-   s2 = paste0(softwares$bowtie2, ' -p 8 -x ', references$rRNAref, ' --local ', ifelse(pairEnd, '-1', '-U'), ' ', n, '.r1.fq.gz', if (pairEnd) paste0(' -2 ', n, '.r2.fq.gz'), ' --un', if (pairEnd) '-conc ', n, '.filter.fq -S /dev/null > ', n, '.rRNA.log 2>&1', if (cleanFq) '; rm *r*.fq.gz'),
+   s2 = paste0(if (!rn.bt) '## ', softwares$bowtie2, ' -p 8 -x ', references$rRNAref, 
+               ' --local ', ifelse(pairEnd, '-1', '-U'), ' ', n, '.r1.fq.gz', 
+               if (pairEnd) paste0(' -2 ', n, '.r2.fq.gz'), ' --un', 
+               if (pairEnd) '-conc', ' ', n, '.filter.fq -S /dev/null > ', n, '.rRNA.log 2>&1', 
+               if (cleanFq) '; rm *r*.fq.gz'),
    dn.bt2 = paste0('msg="', btd, '"; echo $msg; echo $msg >> ../log/', n, '.log'),
    '',
    # s3.STAR
-   if (rn.st)
-   s3 = paste0(softwares$STAR, ' --outReadsUnmapped Fastx --runThreadN 6 --genomeDir ', references$STARref, ' --readFilesIn ', n, '.filter', if (pairEnd) '.1', '.fq ', if (pairEnd) paste0(n, '.filter.2.fq '), '--outBAMsortingThreadN 6 --outSAMattributes All --outSAMtype BAM SortedByCoordinate --quantMode TranscriptomeSAM GeneCounts --outFileNamePrefix ', n, '. >> ../log/', n, '.log 2>&1; gzip -1 ', n, '.Unmapped.out.mate*', if (cleanFq) '; rm *filter*fq'),
+   s3 = paste0(if (!rn.st) '## ', softwares$STAR, 
+               ' --outReadsUnmapped Fastx --runThreadN 6 --genomeDir ', references$STARref, 
+               ' --readFilesIn ', n, '.filter', if (pairEnd) '.1', '.fq ', 
+               if (pairEnd) paste0(n, '.filter.2.fq '), 
+               '--outBAMsortingThreadN 6 --outSAMattributes All --outSAMtype BAM SortedByCoordinate --quantMode TranscriptomeSAM GeneCounts --outFileNamePrefix ', 
+               n, '. >> ../log/', n, '.log 2>&1; gzip -1 ', n, '.Unmapped.out.mate*', 
+               if (cleanFq) '; rm *filter*fq'),
    dn.star = paste0('msg="', std, '"; echo $msg; echo $msg >> ../log/', n, '.log'),
    '',
    # s4.RSEM
-   if (rn.rs)
-   s4 = paste0(softwares$RSEM, ' -q --alignments', if (pairEnd) ' --paired-end', ' -p 8 --append-names --no-bam-output ', n, '.Aligned.toTranscriptome.out.bam ', references$RSEM, ' ', n, ' >> ../log/', n, '.log 2>&1', if (cleanBam) '; rm *.bam'),
+   s4 = paste0(if (!rn.rs) '## ', softwares$RSEM, ' -q --alignments', 
+               if (pairEnd) ' --paired-end', ' -p 8 --append-names --no-bam-output ', 
+               n, '.Aligned.toTranscriptome.out.bam ', references$RSEM, ' ', n, 
+               ' >> ../log/', n, '.log 2>&1'),
    dn.rsem = paste0('msg="', rsd, '"; echo $msg; echo $msg >> ../log/', n, '.log'),
    '',
    # s5.Portcullis
-   if (splice & rn.pt)
-   s5 = paste0(softwares$portcullis, ' full -t 8 -b ', references$Genome, ' ', n, '.Aligned.sortedByCoord.out.bam -o ', n, '.port >> ../log/', n, '.log 2>&1'),
+   s5 = paste0(if (!(splice & rn.pt)) '## ', softwares$portcullis, ' full -t 8 -b ', 
+               references$Genome, ' ', n, '.Aligned.sortedByCoord.out.bam -o ', n, 
+               '.port >> ../log/', n, '.log 2>&1'),
    dn.port = paste0('msg="', ptd, '"; echo $msg; echo $msg >> ../log/', n, '.log'),
    '',
    # s6.rMATS-turbo
-   if (splice & rn.rt)
-   s6 = paste0('echo ', n, '.port/portcullis.filtered.bam > portBAM.txt; ', softwares$rmats.py, ' ', softwares$rmats.main, ' -t ', if (pairEnd) 'paired' else 'single', ' --gtf ', references$Gtf, ' --b1 portBAM.txt --readLength ', references$ReadLength, ' --nthread 8 --statoff --od ', n, '.rmats --tmp ', n, '.rmatsTMP >> ../log/', n, '.log 2>&1'),
+   s6 = paste0(if (!(splice & rn.rt)) '## ', 'echo ', n, 
+               '.port/portcullis.filtered.bam > portBAM.txt; ', 
+               softwares$rmats.py, ' ', softwares$rmats.main, ' -t ', 
+               if (pairEnd) 'paired' else 'single', ' --gtf ', references$Gtf, 
+               ' --b1 portBAM.txt --readLength ', references$ReadLength, 
+               ' --nthread 8 --statoff --od ', n, '.rmats --tmp ', n, 
+               '.rmatsTMP >> ../log/', n, '.log 2>&1; mv ', 
+               n, '.rmatsTMP/*.rmats ', n, '.rmatsTMP/', n, '.rmats.tmp'),
    dn.rmats = paste0('msg="', rtd, '"; echo $msg; echo $msg >> ../log/', n, '.log'),
+   '',
+   # s7.cleanBAM
+   s7 = paste0(if (!cleanBam) '## ', 'rm *.bam'),
    '',
    dn = paste0('msg="This work is done."; echo $msg; echo $msg >> ../log/', n, '.log')
   )
@@ -145,10 +168,12 @@ run = function(i) {
   ## qsub
   system(paste0('sh ', n, '/', n, '.RNAseq.sh'))
 }
-
-## run
+## run each
 r = if (thread > 1) future_lapply(seq(samples), run) else lapply(seq(samples), run)
 message(Sa('-->', timer(), 'all samples done <--'))
+
+## 4. combine files
+if (splice) system('mkdir rMATS.TMP; cp */*.rmatsTMP/*.rmats.tmp rMATS.TMP/')
 
 ## done ##
 message(Wa('-->', timer(), 'Done:', me, '<--'))
