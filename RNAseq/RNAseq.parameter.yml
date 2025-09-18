@@ -1,8 +1,9 @@
 ---
 ## Project
 project: Name 
-thread: 2
+thread: 1
 pairEnd: true
+version: 1.0
 
 ## Clean
 cleanFq: true
@@ -31,6 +32,19 @@ steps:
 ## Parameter:
 fastp:
   length_required: 15
+  quality_value: 20
+  unqualified_limit: 10
+  worker_thread: 8
+bowtie2:
+  worker_thread: 8
+STAR:
+  worker_thread: 8
+RSEM:
+  worker_thread: 8
+portcullis:
+  worker_thread: 8
+rmats:
+  worker_thread: 8
 
 ## Reference - main
 references:
@@ -45,7 +59,7 @@ references.splicing:
   ReadLength: 150
 
 ## Outdir
-outdir: /home/tuzhiwei/Project/SLH/Skin_Process
+outdir: ~
 
 ## Samples
 samples:
