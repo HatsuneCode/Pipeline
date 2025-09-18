@@ -21,5 +21,5 @@ Review and modify the `RNAseq.parameter.yaml` file, then run: `Rscript RNAseq.ma
 
 ## Example
 
-`Rscript RNAseq.FastqPath.R . _R[1_2].fq.gz RNAseq.parameter.yml`
+`Rscript RNAseq.FastqPath.R . _R[1_2].fq.gz RNAseq.parameter.yml`  
 `Rscript RNAseq.main.R RNAseq.parameter.yaml`
