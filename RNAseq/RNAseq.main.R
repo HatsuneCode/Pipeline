@@ -1,3 +1,8 @@
+## RNAseq Pipeline -- lhsong, hatsunecode@gmail.com
+## https://github.com/HatsuneCode/Pipeline/blob/main/RNAseq/RNAseq.main.R
+## version v1.0
+version = 1
+
 suppressWarnings(library(crayon, warn.conflicts = F))
 Pa    = crayon::cyan
 Er    = crayon::red$bold
@@ -34,6 +39,8 @@ thread   = as.numeric(parameter$thread %||% 1)
 pairEnd  = parameter$pairEnd  %||% T
 cleanFq  = parameter$cleanFq  %||% T
 cleanBam = parameter$cleanBam %||% T
+versionP = parameter$version  %||% 0
+if (versionP != version) {message(Er('Parameter version', versionP, 'not equal to pipeline version', version, '!')); q('no')}
 
 # check steps
 enforce    = parameter$enforce %||% F
@@ -46,7 +53,21 @@ softwares  = lapply(c(parameter$softwares, if (splice) parameter$softwares.splic
 
 # check para
 fastpPara  = parameter$fastp
-fastp_LR   = fastpPara$length_required %||% 15
+fastp_LR   = fastpPara$length_required   %||% 15
+fastp_Q    = fastpPara$quality_value     %||% 20
+fastp_U    = fastpPara$unqualified_limit %||% 10
+fastp_W    = fastpPara$worker_thread     %||% 8
+bowtiePara = parameter$bowtie2
+bowtie_W   = bowtiePara$worker_thread    %||% 8
+starPara   = parameter$STAR
+star_W     = starPara$worker_thread      %||% 8
+rsemPara   = parameter$RSEM
+rsem_W     = rsemPara$worker_thread      %||% 8
+portPara   = parameter$portcullis
+port_W     = portPara$worker_thread      %||% 8
+rmatsPara  = parameter$rmats
+rmats_W    = rmatsPara$worker_thread     %||% 8
+
 # check reference
 references = c(parameter$references, if (splice) parameter$references.splicing)
 # check sample names and paths
@@ -109,16 +130,16 @@ run = function(i) {
    '',
    # s1.fastp
    s1 = paste0(if (!rn.fp) '## ', if (fastp) 
-     paste0(softwares$fastp, ' -q 20 -u 10 -l ', fastp_LR, ' -w 8 -i ', samples[[i]][1], 
+     paste0(softwares$fastp, ' -q ', fastp_Q, ' -u ', fastp_U, ' -l ', fastp_LR, ' -w ', fastp_W, ' -i ', samples[[i]][1], 
             if (pairEnd) paste0(' -I ', samples[[i]][2]), ' -o ', n, '.r1.fq.gz', 
-            if (pairEnd) paste0(' -O ', n, '.r2.fq.gz --detect_adapter_for_pe'), 
+            if (pairEnd) paste0(' -O ', n, '.r2.fq.gz --detect_adapter_for_pe'),
             ' -j ', n, '.fastp.json -h ', n, '.fastp.html >> ../log/', n, '.log 2>&1') else 
        paste0('cat ', samples[[i]][1], ' > ', n, '.r1.fq.gz', 
               if (pairEnd) paste0('; cat ', samples[[i]][2], ' > ', n, '.r2.fq.gz'))),
    dn.fastp = paste0('msg="', fpd, '"; echo $msg; echo $msg >> ../log/', n, '.log'),
    '',
    # s2.bowtie2
-   s2 = paste0(if (!rn.bt) '## ', softwares$bowtie2, ' -p 8 -x ', references$rRNAref, 
+   s2 = paste0(if (!rn.bt) '## ', softwares$bowtie2, ' -p ', bowtie_W, ' -x ', references$rRNAref, 
                ' --local ', ifelse(pairEnd, '-1', '-U'), ' ', n, '.r1.fq.gz', 
                if (pairEnd) paste0(' -2 ', n, '.r2.fq.gz'), ' --un', 
                if (pairEnd) '-conc', ' ', n, '.filter.fq -S /dev/null > ', n, '.rRNA.log 2>&1', 
@@ -127,23 +148,23 @@ run = function(i) {
    '',
    # s3.STAR
    s3 = paste0(if (!rn.st) '## ', softwares$STAR, 
-               ' --outReadsUnmapped Fastx --runThreadN 6 --genomeDir ', references$STARref, 
+               ' --outReadsUnmapped Fastx --runThreadN ', star_W, ' --genomeDir ', references$STARref, 
                ' --readFilesIn ', n, '.filter', if (pairEnd) '.1', '.fq ', 
                if (pairEnd) paste0(n, '.filter.2.fq '), 
-               '--outBAMsortingThreadN 6 --outSAMattributes All --outSAMtype BAM SortedByCoordinate --quantMode TranscriptomeSAM GeneCounts --outFileNamePrefix ', 
+               '--outBAMsortingThreadN ', star_W, ' --outSAMattributes All --outSAMtype BAM SortedByCoordinate --quantMode TranscriptomeSAM GeneCounts --outFileNamePrefix ', 
                n, '. >> ../log/', n, '.log 2>&1; gzip -1 ', n, '.Unmapped.out.mate*', 
                if (cleanFq) '; rm *filter*fq'),
    dn.star = paste0('msg="', std, '"; echo $msg; echo $msg >> ../log/', n, '.log'),
    '',
    # s4.RSEM
    s4 = paste0(if (!rn.rs) '## ', softwares$RSEM, ' -q --alignments', 
-               if (pairEnd) ' --paired-end', ' -p 8 --append-names --no-bam-output ', 
+               if (pairEnd) ' --paired-end', ' -p ', rsem_W, ' --append-names --no-bam-output ', 
                n, '.Aligned.toTranscriptome.out.bam ', references$RSEM, ' ', n, 
                ' >> ../log/', n, '.log 2>&1'),
    dn.rsem = paste0('msg="', rsd, '"; echo $msg; echo $msg >> ../log/', n, '.log'),
    '',
    # s5.Portcullis
-   s5 = paste0(if (!(splice & rn.pt)) '## ', softwares$portcullis, ' full -t 8 -b ', 
+   s5 = paste0(if (!(splice & rn.pt)) '## ', softwares$portcullis, ' full -t ', port_W, ' -b ', 
                references$Genome, ' ', n, '.Aligned.sortedByCoord.out.bam -o ', n, 
                '.port >> ../log/', n, '.log 2>&1'),
    dn.port = paste0('msg="', ptd, '"; echo $msg; echo $msg >> ../log/', n, '.log'),
@@ -154,7 +175,7 @@ run = function(i) {
                softwares$rmats.py, ' ', softwares$rmats.main, ' -t ', 
                if (pairEnd) 'paired' else 'single', ' --gtf ', references$Gtf, 
                ' --b1 portBAM.txt --readLength ', references$ReadLength, 
-               ' --nthread 8 --statoff --od ', n, '.rmats --tmp ', n, 
+               ' --nthread ', rmats_W, ' --statoff --od ', n, '.rmats --tmp ', n, 
                '.rmatsTMP >> ../log/', n, '.log 2>&1; mv ', 
                n, '.rmatsTMP/*.rmats ', n, '.rmatsTMP/', n, '.rmats.tmp'),
    dn.rmats = paste0('msg="', rtd, '"; echo $msg; echo $msg >> ../log/', n, '.log'),
@@ -180,3 +201,4 @@ if (splice) {
 
 ## done ##
 message(Wa('-->', timer(), 'Done:', me, '<--'))
+
