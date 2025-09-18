@@ -1,3 +1,7 @@
+##Ensure Perl and Env module are installed first:
+#conda install -c conda-forge perl
+#cpan Env
+
 ## Make reference for Mus_musculus
 ## Download Ensembl 111
 wget https://ftp.ensembl.org/pub/release-111/fasta/mus_musculus/dna/Mus_musculus.GRCm39.dna_sm.primary_assembly.fa.gz
@@ -21,6 +25,8 @@ mkdir rsemRef
 rsem-prepare-reference Mus_musculus.GRCm39.dna_sm.primary_assembly.fa --gtf Mus_musculus.GRCm39.111.gtf $RSEMref
 ## Index
 samtools faidx Mus_musculus.GRCm39.dna_sm.primary_assembly.fa
+##Create softlink if samtools fails to find libcrypto.so.1.1：
+#ln -s /your/conda/env/lib/libcrypto.so.1.1 /your/conda/env/lib/libcrypto.so.1.0.0
 ## CDS
 gffread Mus_musculus.GRCm39.111.gtf -g Mus_musculus.GRCm39.dna_sm.primary_assembly.fa -x Mus_musculus.GRCm39.cds.fa -y Mus_musculus.GRCm39.protein.fa
 
