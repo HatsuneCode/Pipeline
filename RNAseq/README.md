@@ -26,5 +26,5 @@ Run `Rscript RNAseq.stat.R RNAseq.parameter.yaml`
 ## Example
 
 `Rscript RNAseq.FastqPath.R . _R[1_2].fq.gz RNAseq.parameter.yml`  
-`Rscript RNAseq.main.R RNAseq.parameter.yaml`
+`Rscript RNAseq.main.R RNAseq.parameter.yaml`  
 `Rscript RNAseq.stat.R RNAseq.parameter.yaml`
