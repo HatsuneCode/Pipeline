@@ -19,7 +19,12 @@ The `RNAseq.FastqPath.R` script generates an `RNAseq.parameter.yaml` file, popul
 
 Review and modify the `RNAseq.parameter.yaml` file, then run: `Rscript RNAseq.main.R RNAseq.parameter.yaml`.  
 
+## Step 4: Start the statistics program
+
+Run `Rscript RNAseq.stat.R RNAseq.parameter.yaml`
+
 ## Example
 
 `Rscript RNAseq.FastqPath.R . _R[1_2].fq.gz RNAseq.parameter.yml`  
 `Rscript RNAseq.main.R RNAseq.parameter.yaml`
+`Rscript RNAseq.stat.R RNAseq.parameter.yaml`
