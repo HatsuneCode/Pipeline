@@ -136,7 +136,7 @@ run = function(i) {
             ' -j ', n, '.fastp.json -h ', n, '.fastp.html >> ../log/', n, '.log 2>&1') else 
        paste0('cat ', samples[[i]][1], ' > ', n, '.r1.fq.gz', 
               if (pairEnd) paste0('; cat ', samples[[i]][2], ' > ', n, '.r2.fq.gz'))),
-   dn.fastp = paste0('msg="', fpd, '"; echo $(date): $msg; echo $msg >> ../log/', n, '.log'),
+   dn.fastp = paste0('msg="', fpd, '"; echo ', n, ' $(date): $msg; echo $msg >> ../log/', n, '.log'),
    '',
    # s2.bowtie2
    s2 = paste0(if (!rn.bt) '## ', softwares$bowtie2, ' -p ', bowtie_W, ' -x ', references$rRNAref, 
@@ -144,7 +144,7 @@ run = function(i) {
                if (pairEnd) paste0(' -2 ', n, '.r2.fq.gz'), ' --un', 
                if (pairEnd) '-conc', ' ', n, '.filter.fq -S /dev/null > ', n, '.rRNA.log 2>&1', 
                if (cleanFq) '; rm *r*.fq.gz'),
-   dn.bt2 = paste0('msg="', btd, '"; echo $(date): $msg; echo $msg >> ../log/', n, '.log'),
+   dn.bt2 = paste0('msg="', btd, '"; echo ', n, ' $(date): $msg; echo $msg >> ../log/', n, '.log'),
    '',
    # s3.STAR
    s3 = paste0(if (!rn.st) '## ', softwares$STAR, 
@@ -154,20 +154,20 @@ run = function(i) {
                '--outBAMsortingThreadN ', star_W, ' --outSAMattributes All --outSAMtype BAM SortedByCoordinate --quantMode TranscriptomeSAM GeneCounts --outFileNamePrefix ', 
                n, '. >> ../log/', n, '.log 2>&1; gzip -1 ', n, '.Unmapped.out.mate*', 
                if (cleanFq) '; rm *filter*fq'),
-   dn.star = paste0('msg="', std, '"; echo $(date): $msg; echo $msg >> ../log/', n, '.log'),
+   dn.star = paste0('msg="', std, '"; echo ', n, ' $(date): $msg; echo $msg >> ../log/', n, '.log'),
    '',
    # s4.RSEM
    s4 = paste0(if (!rn.rs) '## ', softwares$RSEM, ' -q --alignments', 
                if (pairEnd) ' --paired-end', ' -p ', rsem_W, ' --append-names --no-bam-output ', 
                n, '.Aligned.toTranscriptome.out.bam ', references$RSEM, ' ', n, 
                ' >> ../log/', n, '.log 2>&1'),
-   dn.rsem = paste0('msg="', rsd, '"; echo $(date): $msg; echo $msg >> ../log/', n, '.log'),
+   dn.rsem = paste0('msg="', rsd, '"; echo ', n, ' $(date): $msg; echo $msg >> ../log/', n, '.log'),
    '',
    # s5.Portcullis
    s5 = paste0(if (!(splice & rn.pt)) '## ', softwares$portcullis, ' full -t ', port_W, ' -b ', 
                references$Genome, ' ', n, '.Aligned.sortedByCoord.out.bam -o ', n, 
                '.port >> ../log/', n, '.log 2>&1'),
-   dn.port = paste0('msg="', ptd, '"; echo $(date): $msg; echo $msg >> ../log/', n, '.log'),
+   dn.port = paste0('msg="', ptd, '"; echo ', n, '$(date): $msg; echo $msg >> ../log/', n, '.log'),
    '',
    # s6.rMATS-turbo
    s6 = paste0(if (!(splice & rn.rt)) '## ', 'echo ', n, 
@@ -178,12 +178,12 @@ run = function(i) {
                ' --nthread ', rmats_W, ' --statoff --od ', n, '.rmats --tmp ', n, 
                '.rmatsTMP >> ../log/', n, '.log 2>&1; mv ', 
                n, '.rmatsTMP/*.rmats ', n, '.rmatsTMP/', n, '.rmats.tmp'),
-   dn.rmats = paste0('msg="', rtd, '"; echo $(date): $msg; echo $msg >> ../log/', n, '.log'),
+   dn.rmats = paste0('msg="', rtd, '"; echo ', n, ' $(date): $msg; echo $msg >> ../log/', n, '.log'),
    '',
    # s7.cleanBAM
    s7 = paste0(if (!cleanBam) '## ', 'rm *.bam'),
    '',
-   dn = paste0('msg="This work is done."; echo $(date): $msg; echo $msg >> ../log/', n, '.log')
+   dn = paste0('msg="This work is done."; echo ', n, ' $(date): $msg; echo $msg >> ../log/', n, '.log')
   )
   writeLines(sh, paste0(n, '/', n, '.RNAseq.sh'))
   ## qsub
@@ -195,7 +195,7 @@ message(Sa('-->', timer(), 'all samples done <--'))
 
 ## 4. combine files
 if (splice) {
-  system('mkdir rMATS.TMP; cp */*.rmatsTMP/*.rmats.tmp rMATS.TMP/; cat */portBAM.txt > rMATS.BAM.txt')
+  system('mkdir -p rMATS.TMP; cp */*.rmatsTMP/*.rmats.tmp rMATS.TMP/; cat */portBAM.txt > rMATS.BAM.txt')
   message(Sa('-->', timer(), 'combine files done <--'))
 }
 
