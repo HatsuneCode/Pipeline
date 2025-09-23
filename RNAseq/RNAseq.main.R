@@ -27,7 +27,7 @@ message(Wa('-->', timer(), 'Run: ', me, '<--'))
 main = Er(me, '<RNAseq.parameter.yml>')
 file = args[1]
 if (is.na(file)) { message(main); q('no') }
-file = normalizePath(file, '/', T)
+file = checkPath(file)
 
 ## 0. check parameters ##
 message(Sa('-->', timer(), '1. check parameters:', Pa(file), '<--'))
