@@ -16,7 +16,7 @@ checkPath = function(x) normalizePath(x, '/', T)
 ## yml ##
 suppressMessages(library(yaml))
 suppressMessages(library(rlang))
-handlers = list('bool#no'  = function(x) if ( x %in% c('false', 'False', 'FALSE', 'no')  ) F else x, 
+handlers = list('bool#no'  = function(x) if ( x %in% c('false', 'False', 'FALSE', 'no') ) F else x, 
                 'bool#yes' = function(x) if ( x %in% c('true',  'True', 'TRUE',  'yes') ) T else x )
 ## args ##
 args  = commandArgs()
