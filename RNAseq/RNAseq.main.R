@@ -167,7 +167,7 @@ run = function(i) {
    s5 = paste0(if (!(splice & rn.pt)) '## ', softwares$portcullis, ' full -t ', port_W, ' -b ', 
                references$Genome, ' ', n, '.Aligned.sortedByCoord.out.bam -o ', n, 
                '.port >> ../log/', n, '.log 2>&1'),
-   dn.port = paste0('msg="', ptd, '"; echo ', n, '$(date): $msg; echo $msg >> ../log/', n, '.log'),
+   dn.port = paste0('msg="', ptd, '"; echo ', n, ' $(date): $msg; echo $msg >> ../log/', n, '.log'),
    '',
    # s6.rMATS-turbo
    s6 = paste0(if (!(splice & rn.rt)) '## ', 'echo ', n, 
