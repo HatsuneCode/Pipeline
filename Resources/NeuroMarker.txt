@@ -5,4 +5,7 @@ APOE, TREM2, SORL1, ABCA7
 BIN1, CD2AP, FERMT2, CASS4, PTK2B
 
 ## Lipidation of ApoE ##
-ABCA1, 
+ABCA1
+
+## Transports Aβ ##
+LDLR, LRP1
