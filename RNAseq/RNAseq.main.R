@@ -137,7 +137,7 @@ run = function(i) {
    err = 'set -e',
    # s0.cd
    cd = paste0('cd ', if (!wsl) wdir else wsldir, '/', n),
-   rn = paste0('echo "--> ', n, ' <--"; echo This work is running... > ../log/', n, '.log'),
+   rn = paste0('echo "--> ', n, ' <--"; echo This work is running... >> ../log/', n, '.log'),
    '',
    '# s1.fastp',
    s1 = paste0(if (!rn.fp) '## ', if (fastp) 
@@ -217,5 +217,6 @@ if (splice) {
 
 ## done ##
 message(Wa('-->', timer(), 'Done:', me, '<--'))
+
 
 
