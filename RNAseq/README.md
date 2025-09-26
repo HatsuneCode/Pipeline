@@ -4,7 +4,7 @@
 2. Install the following required software: fastp, bowtie2, STAR, RSEM, Rscript. Update your software paths by following the examples in `RNAseq.parameter.yml` (please use absolute paths).  
 3. Refer to the `RNAseq.makeRef.sh` file to build the references required for each software.  
 4. When `splicing: true`, the `rmats.py` and `rmats.main` parameters can be supplied with the specified Python executable and `rmats-turbo-master/rmats.py`. Alternatively, you can provide the `rmats-turbo-master/run_rmats` for one parameter and leave the other blank.  
-5. Should you encounter slow RSEM performance while using **Windows-wsl**, attempt to set the outdir to a directory within the native WSL file system, such as shifting the path from `/mnt/e/outdir` to `~/outdir` or make `windows-wsl: true`.
+5. Should you encounter slow RSEM performance while using **windows-wsl**, attempt to set the outdir to a directory within the native WSL file system, such as shifting the path from `/mnt/e/outdir` to `~/outdir` or make `windows-wsl: true`.
 
 ## Step 2: Automatically identify fastq data
 
