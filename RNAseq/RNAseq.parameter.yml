@@ -1,9 +1,10 @@
 ---
 ## Project
-project: Name 
+project: Name
+wsl: false 
 thread: 1
 pairEnd: true
-version: 1.0
+version: 1.1
 
 ## Clean
 cleanFq: true
@@ -59,19 +60,7 @@ references.splicing:
   ReadLength: 150
 
 ## Outdir
+wsldir: ~/tmp
 outdir: ~
 
 ## Samples
-samples:
-  NOUVB-1:
-  - /home/tuzhiwei/Project/SLH/Skin.Fq/ANNO_XS01KF2023090215_PM-XS01KF2023090215-48_20250730/Cleandata/NOUVB-1/NOUVB-1_R1.fq.gz
-  - /home/tuzhiwei/Project/SLH/Skin.Fq/ANNO_XS01KF2023090215_PM-XS01KF2023090215-48_20250730/Cleandata/NOUVB-1/NOUVB-1_R2.fq.gz
-  NOUVB-2:
-  - /home/tuzhiwei/Project/SLH/Skin.Fq/ANNO_XS01KF2023090215_PM-XS01KF2023090215-48_20250730/Cleandata/NOUVB-2/NOUVB-2_R1.fq.gz
-  - /home/tuzhiwei/Project/SLH/Skin.Fq/ANNO_XS01KF2023090215_PM-XS01KF2023090215-48_20250730/Cleandata/NOUVB-2/NOUVB-2_R2.fq.gz
-  UVB-1:
-  - /home/tuzhiwei/Project/SLH/Skin.Fq/ANNO_XS01KF2023090215_PM-XS01KF2023090215-48_20250730/Cleandata/UVB-1/UVB-1_R1.fq.gz
-  - /home/tuzhiwei/Project/SLH/Skin.Fq/ANNO_XS01KF2023090215_PM-XS01KF2023090215-48_20250730/Cleandata/UVB-1/UVB-1_R2.fq.gz
-  UVB-2:
-  - /home/tuzhiwei/Project/SLH/Skin.Fq/ANNO_XS01KF2023090215_PM-XS01KF2023090215-48_20250730/Cleandata/UVB-2/UVB-2_R1.fq.gz
-  - /home/tuzhiwei/Project/SLH/Skin.Fq/ANNO_XS01KF2023090215_PM-XS01KF2023090215-48_20250730/Cleandata/UVB-2/UVB-2_R2.fq.gz

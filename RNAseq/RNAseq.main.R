@@ -1,7 +1,7 @@
 ## RNAseq Pipeline -- lhsong, hatsunecode@gmail.com
 ## https://github.com/HatsuneCode/Pipeline/blob/main/RNAseq/RNAseq.main.R
-## version v1.0
-version = 1
+## version v1.1
+version = 1.1
 
 suppressWarnings(library(crayon, warn.conflicts = F))
 Pa    = crayon::cyan
@@ -27,7 +27,7 @@ message(Wa('-->', timer(), 'Run: ', me, '<--'))
 main = Er(me, '<RNAseq.parameter.yml>')
 file = args[1]
 if (is.na(file)) { message(main); q('no') }
-file = checkPath(file)
+file = checkPath(file) 
 
 ## 0. check parameters ##
 message(Sa('-->', timer(), '1. check parameters:', Pa(file), '<--'))
@@ -40,6 +40,7 @@ pairEnd  = parameter$pairEnd  %||% T
 cleanFq  = parameter$cleanFq  %||% T
 cleanBam = parameter$cleanBam %||% T
 versionP = parameter$version  %||% 0
+wsl      = parameter$wsl      %||% F
 if (versionP != version) {message(Er('Parameter version', versionP, 'not equal to pipeline version', version, '!')); q('no')}
 
 # check steps
@@ -73,6 +74,7 @@ references = c(parameter$references, if (splice) parameter$references.splicing)
 # check sample names and paths
 samples    = lapply(parameter$samples, checkPath)
 # check outdir
+wsldir     = as.character(parameter$wsldir %||% '~/tmp')
 outdir     = as.character(parameter$outdir %||% '.')
 
 ## 1. set work dir ##
@@ -96,12 +98,21 @@ suppressMessages(library(future.apply))
 if (thread > 1) plan(multicore(workers = function() thread ))
 message(Sa('-->', timer(), 'use Cores:', Pa(thread), 'availableCores:', 
 	   Pa(as.numeric(suppressWarnings(availableCores()))), '<--'))
+if (wsl) {
+  dir.create(wsldir, F, T)
+  setwd(wsldir)
+  wsldir = getwd()
+  message(Sa('--> WSL mode is detected. Each sub-job will be performed within the tmp dir:',
+	     Pa(wsldir), '<--'))
+  dir.create('log', F)
+}
+
 
 run = function(i) {
   n = names(samples)[i]
   message(Sa('-->', timer(), paste0('No.', i, ':'), 'working on', Pa(n), '<--'))
   dir.create(n, F)
-  log = paste0('log/', n, '.log')
+  log = paste0(wdir, '/log/', n, '.log')
   log = if (file.exists(log)) readLines(log)
   
   ## check each steps
@@ -125,10 +136,10 @@ run = function(i) {
   sh = c(
    err = 'set -e',
    # s0.cd
-   cd = paste0('cd ', wdir, '/', n),
+   cd = paste0('cd ', if (!wsl) wdir else wsldir, '/', n),
    rn = paste0('echo "--> ', n, ' <--"; echo This work is running... > ../log/', n, '.log'),
    '',
-   # s1.fastp
+   '# s1.fastp',
    s1 = paste0(if (!rn.fp) '## ', if (fastp) 
      paste0(softwares$fastp, ' -q ', fastp_Q, ' -u ', fastp_U, ' -l ', fastp_LR, ' -w ', fastp_W, ' -i ', samples[[i]][1], 
             if (pairEnd) paste0(' -I ', samples[[i]][2]), ' -o ', n, '.r1.fq.gz', 
@@ -138,7 +149,7 @@ run = function(i) {
               if (pairEnd) paste0('; cat ', samples[[i]][2], ' > ', n, '.r2.fq.gz'))),
    dn.fastp = paste0('msg="', fpd, '"; echo ', n, ' $(date): $msg; echo $msg >> ../log/', n, '.log'),
    '',
-   # s2.bowtie2
+   '# s2.bowtie2',
    s2 = paste0(if (!rn.bt) '## ', softwares$bowtie2, ' -p ', bowtie_W, ' -x ', references$rRNAref, 
                ' --local ', ifelse(pairEnd, '-1', '-U'), ' ', n, '.r1.fq.gz', 
                if (pairEnd) paste0(' -2 ', n, '.r2.fq.gz'), ' --un', 
@@ -146,7 +157,7 @@ run = function(i) {
                if (cleanFq) '; rm *r*.fq.gz'),
    dn.bt2 = paste0('msg="', btd, '"; echo ', n, ' $(date): $msg; echo $msg >> ../log/', n, '.log'),
    '',
-   # s3.STAR
+   '# s3.STAR',
    s3 = paste0(if (!rn.st) '## ', softwares$STAR, 
                ' --outReadsUnmapped Fastx --runThreadN ', star_W, ' --genomeDir ', references$STARref, 
                ' --readFilesIn ', n, '.filter', if (pairEnd) '.1', '.fq ', 
@@ -156,20 +167,20 @@ run = function(i) {
                if (cleanFq) '; rm *filter*fq'),
    dn.star = paste0('msg="', std, '"; echo ', n, ' $(date): $msg; echo $msg >> ../log/', n, '.log'),
    '',
-   # s4.RSEM
+   '# s4.RSEM',
    s4 = paste0(if (!rn.rs) '## ', softwares$RSEM, ' -q --alignments', 
                if (pairEnd) ' --paired-end', ' -p ', rsem_W, ' --append-names --no-bam-output ', 
                n, '.Aligned.toTranscriptome.out.bam ', references$RSEM, ' ', n, 
                ' >> ../log/', n, '.log 2>&1'),
    dn.rsem = paste0('msg="', rsd, '"; echo ', n, ' $(date): $msg; echo $msg >> ../log/', n, '.log'),
    '',
-   # s5.Portcullis
+   '# s5.Portcullis',
    s5 = paste0(if (!(splice & rn.pt)) '## ', softwares$portcullis, ' full -t ', port_W, ' -b ', 
                references$Genome, ' ', n, '.Aligned.sortedByCoord.out.bam -o ', n, 
                '.port >> ../log/', n, '.log 2>&1'),
    dn.port = paste0('msg="', ptd, '"; echo ', n, ' $(date): $msg; echo $msg >> ../log/', n, '.log'),
    '',
-   # s6.rMATS-turbo
+   '# s6.rMATS-turbo',
    s6 = paste0(if (!(splice & rn.rt)) '## ', 'echo ', n, 
                '.port/portcullis.filtered.bam > portBAM.txt; ', 
                softwares$rmats.py, ' ', softwares$rmats.main, ' -t ', 
@@ -180,18 +191,23 @@ run = function(i) {
                n, '.rmatsTMP/*.rmats ', n, '.rmatsTMP/', n, '.rmats.tmp'),
    dn.rmats = paste0('msg="', rtd, '"; echo ', n, ' $(date): $msg; echo $msg >> ../log/', n, '.log'),
    '',
-   # s7.cleanBAM
+   '# s7.cleanBAM',
    s7 = paste0(if (!cleanBam) '## ', 'rm *.bam'),
    '',
-   dn = paste0('msg="This work is done."; echo ', n, ' $(date): $msg; echo $msg >> ../log/', n, '.log')
+   dn = paste0('msg="This work is done."; echo ', n, ' $(date): $msg; echo $msg >> ../log/', n, '.log'),
+   '',
+   '# s8.moveDir',
+   s8 = paste0(if (!wsl) '## ', 'mkdir -p ', wdir, '/', n, '; mv * ', wdir, '/', n, 
+               '; mv ../log/', n, '.log ', wdir, '/log/', n, '.log; rm ../', n, ' -r')
   )
   writeLines(sh, paste0(n, '/', n, '.RNAseq.sh'))
-  ## qsub
+  ## run pipeline
   system(paste0('sh ', n, '/', n, '.RNAseq.sh'))
 }
 ## run each
 r = if (thread > 1) future_lapply(seq(samples), run) else lapply(seq(samples), run)
 message(Sa('-->', timer(), 'all samples done <--'))
+if (wsl) setwd(wdir)
 
 ## 4. combine files
 if (splice) {
