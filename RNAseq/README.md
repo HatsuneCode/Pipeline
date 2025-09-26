@@ -3,6 +3,7 @@
 1. Download the files `RNAseq.FastqPath.R`, `RNAseq.main.R`, and `RNAseq.parameter.yml` to your computer, whether it's Linux or Windows-wsl.  
 2. Install the following required software: fastp, bowtie2, STAR, RSEM, Rscript. Update your software paths by following the examples in `RNAseq.parameter.yml` (please use absolute paths).  
 3. Refer to the `RNAseq.makeRef.sh` file to build the references required for each software.  
+4. When `splicing: true`, the `rmats.py` and `rmats.main` parameters can be supplied with the specified Python executable and `rmats-turbo-master/rmats.py`. Alternatively, you can provide the `rmats-turbo-master/run_rmats` for one parameter and leave the other blank.  
 
 ## Step 2: Automatically identify fastq data
 
