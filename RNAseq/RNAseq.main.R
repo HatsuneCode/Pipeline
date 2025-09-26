@@ -105,9 +105,7 @@ if (wsl) {
   wsldir = getwd()
   message(Sa('--> WSL mode is detected. Each sub-job will be performed within the tmp dir:',
 	     Pa(wsldir), '<--'))
-  dir.create('log', F)
 }
-
 
 run = function(i) {
   n = names(samples)[i]
@@ -139,17 +137,17 @@ run = function(i) {
    err = 'set -e',
    # s0.cd
    cd = paste0('cd ', if (!wsl) wdir else wsldir, '/', n),
-   rn = paste0(if (!rn.rd) '## ', 'echo "--> ', n, ' <--"; echo $(date): This work is running... >> ../log/', n, '.log'),
+   rn = paste0(if (!rn.rd) '## ', 'echo "--> ', n, ' <--"; echo $(date): This work is running... >> ', wdir, '/log/', n, '.log'),
    '',
    '# s1.fastp',
    s1 = paste0(if (!rn.fp) '## ', if (fastp) 
      paste0(softwares$fastp, ' -q ', fastp_Q, ' -u ', fastp_U, ' -l ', fastp_LR, ' -w ', fastp_W, ' -i ', samples[[i]][1], 
             if (pairEnd) paste0(' -I ', samples[[i]][2]), ' -o ', n, '.r1.fq.gz', 
             if (pairEnd) paste0(' -O ', n, '.r2.fq.gz --detect_adapter_for_pe'),
-            ' -j ', n, '.fastp.json -h ', n, '.fastp.html >> ../log/', n, '.log 2>&1') else 
+            ' -j ', n, '.fastp.json -h ', n, '.fastp.html >> ', wdir, '/log/', n, '.log 2>&1') else 
        paste0('cat ', samples[[i]][1], ' > ', n, '.r1.fq.gz', 
               if (pairEnd) paste0('; cat ', samples[[i]][2], ' > ', n, '.r2.fq.gz'))),
-   dn.fastp = paste0(if (!rn.fp) '## ', 'msg="', fpd, '"; echo ', n, ' $(date): $msg; echo $(date): $msg >> ../log/', n, '.log'),
+   dn.fastp = paste0(if (!rn.fp) '## ', 'msg="', fpd, '"; echo ', n, ' $(date): $msg; echo $(date): $msg >> ', wdir, '/log/', n, '.log'),
    '',
    '# s2.bowtie2',
    s2 = paste0(if (!rn.bt) '## ', softwares$bowtie2, ' -p ', bowtie_W, ' -x ', references$rRNAref, 
@@ -157,7 +155,7 @@ run = function(i) {
                if (pairEnd) paste0(' -2 ', n, '.r2.fq.gz'), ' --un', 
                if (pairEnd) '-conc', ' ', n, '.filter.fq -S /dev/null > ', n, '.rRNA.log 2>&1', 
                if (cleanFq) '; rm *r*.fq.gz'),
-   dn.bt2 = paste0(if (!rn.bt) '## ', 'msg="', btd, '"; echo ', n, ' $(date): $msg; echo $(date): $msg >> ../log/', n, '.log'),
+   dn.bt2 = paste0(if (!rn.bt) '## ', 'msg="', btd, '"; echo ', n, ' $(date): $msg; echo $(date): $msg >> ', wdir, '/log/', n, '.log'),
    '',
    '# s3.STAR',
    s3 = paste0(if (!rn.st) '## ', softwares$STAR, 
@@ -165,22 +163,22 @@ run = function(i) {
                ' --readFilesIn ', n, '.filter', if (pairEnd) '.1', '.fq ', 
                if (pairEnd) paste0(n, '.filter.2.fq '), 
                '--outBAMsortingThreadN ', star_W, ' --outSAMattributes All --outSAMtype BAM SortedByCoordinate --quantMode TranscriptomeSAM GeneCounts --outFileNamePrefix ', 
-               n, '. >> ../log/', n, '.log 2>&1; gzip -1 ', n, '.Unmapped.out.mate*', 
+               n, '. >> ', wdir, '/log/', n, '.log 2>&1; gzip -1 ', n, '.Unmapped.out.mate*', 
                if (cleanFq) '; rm *filter*fq'),
-   dn.star = paste0(if (!rn.st) '## ', 'msg="', std, '"; echo ', n, ' $(date): $msg; echo $msg >> ../log/', n, '.log'),
+   dn.star = paste0(if (!rn.st) '## ', 'msg="', std, '"; echo ', n, ' $(date): $msg; echo $msg >> ', wdir, '/log/', n, '.log'),
    '',
    '# s4.RSEM',
    s4 = paste0(if (!rn.rs) '## ', softwares$RSEM, ' -q --alignments', 
                if (pairEnd) ' --paired-end', ' -p ', rsem_W, ' --append-names --no-bam-output ', 
                n, '.Aligned.toTranscriptome.out.bam ', references$RSEM, ' ', n, 
-               ' >> ../log/', n, '.log 2>&1'),
-   dn.rsem = paste0(if (!rn.rs) '## ', 'msg="', rsd, '"; echo ', n, ' $(date): $msg; echo $msg >> ../log/', n, '.log'),
+               ' >> ', wdir, '/log/', n, '.log 2>&1'),
+   dn.rsem = paste0(if (!rn.rs) '## ', 'msg="', rsd, '"; echo ', n, ' $(date): $msg; echo $msg >> ', wdir, '/log/', n, '.log'),
    '',
    '# s5.Portcullis',
    s5 = paste0(if (!(splice & rn.pt)) '## ', softwares$portcullis, ' full -t ', port_W, ' -b ', 
                references$Genome, ' ', n, '.Aligned.sortedByCoord.out.bam -o ', n, 
-               '.port >> ../log/', n, '.log 2>&1'),
-   dn.port = paste0(if (!(splice & rn.pt)) '## ', 'msg="', ptd, '"; echo ', n, ' $(date): $msg; echo $msg >> ../log/', n, '.log'),
+               '.port >> ', wdir, '/log/', n, '.log 2>&1'),
+   dn.port = paste0(if (!(splice & rn.pt)) '## ', 'msg="', ptd, '"; echo ', n, ' $(date): $msg; echo $msg >> ', wdir, '/log/', n, '.log'),
    '',
    '# s6.rMATS-turbo',
    s6 = paste0(if (!(splice & rn.rt)) '## ', 'echo ', n, 
@@ -189,18 +187,17 @@ run = function(i) {
                if (pairEnd) 'paired' else 'single', ' --gtf ', references$Gtf, 
                ' --b1 portBAM.txt --readLength ', references$ReadLength, 
                ' --nthread ', rmats_W, ' --statoff --od ', n, '.rmats --tmp ', n, 
-               '.rmatsTMP >> ../log/', n, '.log 2>&1; mv ', 
+               '.rmatsTMP >> ', wdir, '/log/', n, '.log 2>&1; mv ', 
                n, '.rmatsTMP/*.rmats ', n, '.rmatsTMP/', n, '.rmats.tmp'),
-   dn.rmats = paste0(if (!(splice & rn.rt)) '## ', 'msg="', rtd, '"; echo ', n, ' $(date): $msg; echo $msg >> ../log/', n, '.log'),
+   dn.rmats = paste0(if (!(splice & rn.rt)) '## ', 'msg="', rtd, '"; echo ', n, ' $(date): $msg; echo $msg >> ', wdir, '/log/', n, '.log'),
    '',
    '# s7.cleanBAM',
    s7 = paste0(if (!cleanBam) '## ', 'rm *.bam'),
    '',
-   dn = paste0(if (!rn.rd) '## ', 'msg="', rdd, '"; echo ', n, ' $(date): $msg; echo $msg >> ../log/', n, '.log'),
+   dn = paste0(if (!rn.rd) '## ', 'msg="', rdd, '"; echo ', n, ' $(date): $msg; echo $msg >> ', wdir, '/log/', n, '.log'),
    '',
    '# s8.moveDir for wsl',
-   s8 = paste0(if (!wsl) '## ', 'mkdir -p ', wdir, '/', n, '; mv * ', wdir, '/', n, 
-               '; cat ../log/', n, '.log >> ', wdir, '/log/', n, '.log; rm ../log/', n, '.log ../', n, ' -r')
+   s8 = paste0(if (!wsl) '## ', 'mkdir -p ', wdir, '/', n, '; mv * ', wdir, '/', n, '; rm ../', n, ' -r')
   )
   writeLines(sh, paste0(n, '/', n, '.RNAseq.sh'))
   ## run pipeline
