@@ -196,7 +196,7 @@ run = function(i) {
    '',
    dn = paste0('msg="This work is done."; echo ', n, ' $(date): $msg; echo $msg >> ../log/', n, '.log'),
    '',
-   '# s8.moveDir',
+   '# s8.moveDir for wsl',
    s8 = paste0(if (!wsl) '## ', 'mkdir -p ', wdir, '/', n, '; mv * ', wdir, '/', n, 
                '; mv ../log/', n, '.log ', wdir, '/log/', n, '.log; rm ../', n, ' -r')
   )
@@ -217,4 +217,5 @@ if (splice) {
 
 ## done ##
 message(Wa('-->', timer(), 'Done:', me, '<--'))
+
 
