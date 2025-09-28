@@ -39,6 +39,7 @@ fastp:
 bowtie2:
   worker_thread: 8
 STAR:
+  output_unmap: true
   worker_thread: 8
 RSEM:
   worker_thread: 8
@@ -59,8 +60,10 @@ references.splicing:
   Gtf: /mnt/d/Resources/Reference/Mus.Ensem111/Mus_musculus.GRCm39.111.gtf
   ReadLength: 150
 
-## Outdir
+## wsl tmpdir (when wsl true)
 wsldir: ~/tmp
+
+## project output dir
 outdir: ~
 
 ## Samples

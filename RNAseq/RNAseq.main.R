@@ -62,6 +62,7 @@ bowtiePara = parameter$bowtie2
 bowtie_W   = bowtiePara$worker_thread    %||% 8
 starPara   = parameter$STAR
 star_W     = starPara$worker_thread      %||% 8
+star_Un    = starPara$output_unmap       %||% T
 rsemPara   = parameter$RSEM
 rsem_W     = rsemPara$worker_thread      %||% 8
 portPara   = parameter$portcullis
@@ -158,12 +159,12 @@ run = function(i) {
    dn.bt2 = paste0(if (!rn.bt) '## ', 'echo ', n, ' $(date): ', btd, '; echo $(date): ', btd, ' >> ', wdir, '/log/', n, '.log'),
    '',
    '# s3.STAR',
-   s3 = paste0(if (!rn.st) '## ', softwares$STAR, 
-               ' --outReadsUnmapped Fastx --runThreadN ', star_W, ' --genomeDir ', references$STARref, 
+   s3 = paste0(if (!rn.st) '## ', softwares$STAR, if (star_Un) ' --outReadsUnmapped Fastx', 
+	       ' --runThreadN ', star_W, ' --genomeDir ', references$STARref, 
                ' --readFilesIn ', n, '.filter', if (pairEnd) '.1', '.fq ', 
                if (pairEnd) paste0(n, '.filter.2.fq '), 
                '--outBAMsortingThreadN ', star_W, ' --outSAMattributes All --outSAMtype BAM SortedByCoordinate --quantMode TranscriptomeSAM GeneCounts --outFileNamePrefix ', 
-               n, '. >> ', wdir, '/log/', n, '.log 2>&1; gzip -1 ', n, '.Unmapped.out.mate*', 
+               n, '. >> ', wdir, '/log/', n, '.log 2>&1', if (star_Un) paste0('; gzip -1 ', n, '.Unmapped.out.mate*'),
                if (cleanFq) '; rm *filter*fq'),
    dn.star = paste0(if (!rn.st) '## ', 'echo ', n, ' $(date): ', std, '; echo $(date): ', std, ' >> ', wdir, '/log/', n, '.log'),
    '',
@@ -195,7 +196,7 @@ run = function(i) {
    s7 = paste0(if (!cleanBam) '## ', 'rm *.bam'),
    '',
    '# s8.moveDir for wsl',
-   s8 = paste0(if (!wsl) '## ', 'mkdir -p ', wdir, '/', n, '; mv * ', wdir, '/', n, '; rm ../', n, ' -r'),
+   s8 = paste0(if (!wsl) '## ', 'mkdir -p ', wdir, '/', n, '; cp -ru * ', wdir, '/', n, '; rm ../', n, ' -r'),
    '',
    '# All Done',
    dn = paste0(if (!rn.rd) '## ', 'echo ', n, ' $(date): ', rdd, '; echo $(date): ', rdd, ' >> ', wdir, '/log/', n, '.log')
