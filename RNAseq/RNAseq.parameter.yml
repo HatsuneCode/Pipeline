@@ -25,27 +25,32 @@ softwares.splicing:
   rmats.main: /mnt/d/Linux/software/rmats-turbo-master/rmats.py 
 
 ## Steps:
-enforce: false
 steps:
   fastp: true
   splicing: true
 
 ## Parameter:
 fastp:
+  enforce: false
   length_required: 15
   quality_value: 20
   unqualified_limit: 10
   worker_thread: 8
 bowtie2:
+  enforce: false
   worker_thread: 8
 STAR:
+  enforce: false
   output_unmap: true
   worker_thread: 8
 RSEM:
+  enforce: false
   worker_thread: 8
 portcullis:
+  enforce: false
   worker_thread: 8
 rmats:
+  enforce: false
   worker_thread: 8
 
 ## Reference - main
@@ -58,7 +63,8 @@ references:
 references.splicing:
   Genome: /mnt/d/Resources/Reference/Mus.Ensem111/Mus_musculus.GRCm39.dna_sm.primary_assembly.fa
   Gtf: /mnt/d/Resources/Reference/Mus.Ensem111/Mus_musculus.GRCm39.111.gtf
-  ReadLength: 150
+  # Auto-detect in fastp.html (default 150). If a value provided, enforced.
+  ReadLength: ~
 
 ## wsl tmpdir (when wsl true)
 wsldir: ~/tmp
