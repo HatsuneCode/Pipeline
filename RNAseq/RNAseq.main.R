@@ -44,7 +44,6 @@ wsl      = parameter$wsl      %||% F
 if (versionP != version) {message(Er('Parameter version', versionP, 'not equal to pipeline version', version, '!')); q('no')}
 
 # check steps
-enforce    = parameter$enforce %||% F
 steps      = parameter$steps
 fastp      = steps$fastp       %||% T
 splice     = steps$splicing    %||% T
@@ -52,26 +51,40 @@ splice     = steps$splicing    %||% T
 # check softwre paths
 softwares  = lapply(c(parameter$softwares, if (splice) parameter$softwares.splicing), checkPath)
 
-# check para
+# check software parameter
+# fastp
 fastpPara  = parameter$fastp
+fastp_R    = fastpPara$enforce           %||% F
 fastp_LR   = fastpPara$length_required   %||% 15
 fastp_Q    = fastpPara$quality_value     %||% 20
 fastp_U    = fastpPara$unqualified_limit %||% 10
 fastp_W    = fastpPara$worker_thread     %||% 8
+# bowtie2
 bowtiePara = parameter$bowtie2
+bowtie_R   = bowtiePara$enforce          %||% F
 bowtie_W   = bowtiePara$worker_thread    %||% 8
+# STAR
 starPara   = parameter$STAR
+star_R     = starPara$enforce            %||% F
 star_W     = starPara$worker_thread      %||% 8
 star_Un    = starPara$output_unmap       %||% T
+# RSEM
 rsemPara   = parameter$RSEM
+rsem_R     = rsemPara$enforce            %||% F
 rsem_W     = rsemPara$worker_thread      %||% 8
+# portcullis
 portPara   = parameter$portcullis
+port_R     = portPara$enforce            %||% F
 port_W     = portPara$worker_thread      %||% 8
+# rMATS
 rmatsPara  = parameter$rmats
+rmats_R    = rmatsPara$enforce           %||% F
 rmats_W    = rmatsPara$worker_thread     %||% 8
 
 # check reference
-references = c(parameter$references, if (splice) parameter$references.splicing)
+references = c(parameter$references, parameter$references.splicing)
+spliceBP   = references$ReadLength %||% '$bp'
+
 # check sample names and paths
 samples    = lapply(parameter$samples, checkPath)
 # check outdir
@@ -101,13 +114,13 @@ message(Sa('-->', timer(), '2. RNAseq pipeline running... <--'))
 suppressMessages(library(future.apply))
 if (thread > 1) plan(multicore(workers = function() thread ))
 message(Sa('-->', timer(), 'use Cores:', Pa(thread), 'availableCores:', 
-	   Pa(as.numeric(suppressWarnings(availableCores()))), '<--'))
+           Pa(as.numeric(suppressWarnings(availableCores()))), '<--'))
 if (wsl) {
   dir.create(wsldir, F, T)
   setwd(wsldir)
   wsldir = getwd()
   message(Sa('--> WSL mode is detected. Each sub-job will be performed within the tmp dir:',
-	     Pa(wsldir), '<--'))
+             Pa(wsldir), '<--'))
 }
 
 run = function(i) {
@@ -118,15 +131,15 @@ run = function(i) {
   log = if (file.exists(log)) readLines(log)
   
   ## check each steps
-  rn.fp = !sum(grepl(fpd, log)) | enforce
-  rn.bt = !sum(grepl(btd, log)) | enforce 
-  rn.st = !sum(grepl(std, log)) | enforce
-  rn.rs = !sum(grepl(rsd, log)) | enforce 
-  rn.pt = !sum(grepl(ptd, log)) | enforce
-  rn.rt = !sum(grepl(rtd, log)) | enforce
-  rn.wc = !sum(grepl(wcd, log)) | enforce
-  rn.rd = !sum(grepl(rdd, log)) | enforce
-
+  rn.fp = !sum(grepl(fpd, log)) | fastp_R
+  rn.bt = !sum(grepl(btd, log)) | bowtie_R 
+  rn.st = !sum(grepl(std, log)) | star_R
+  rn.rs = !sum(grepl(rsd, log)) | rsem_R 
+  rn.pt = !sum(grepl(ptd, log)) | port_R
+  rn.rt = !sum(grepl(rtd, log)) | rmats_R
+  rn.wc = !sum(grepl(wcd, log))
+  rn.rd = !sum(grepl(rdd, log))
+  
   message(Sa('--> run fastp:',    Pa(ifelse(rn.fp & fastp, 'need', 'skip')), '<--'))
   message(Sa('--> run bowtie2:',  Pa(ifelse(rn.bt,  'need', 'skip')), '<--'))
   message(Sa('--> run STAR:',     Pa(ifelse(rn.st,  'need', 'skip')), '<--'))
@@ -136,61 +149,65 @@ run = function(i) {
     message(Sa('--> run Splicing - portcullis:', Pa(ifelse(rn.pt, 'need', 'skip')), '<--'))
     message(Sa('--> run Splicing - rMATS:',      Pa(ifelse(rn.rt, 'need', 'skip')), '<--'))
   }
-
+  
   ## sample constants
   toLog  = paste0(' >> ', wdir, '/log/', n, '.log 2>&1')
   toEcho = function(mes, cond) c(paste0(if (!cond) '## ', 'echo ', n, ' $(date): ', mes, '; echo ', n, ' $(date): ', mes, toLog), '')
   
   ## make RNAseq.sh
   sh = c(
-   err = 'set -e',
-   # s0.cd
-   cd = paste0('cd ', if (!wsl) wdir else wsldir, '/', n), toEcho(lea, rn.rd),
-   '# s1.fastp',
-   s1 = paste0(if (!rn.fp) '## ', if (fastp) 
-     paste0(softwares$fastp, ' -q ', fastp_Q, ' -u ', fastp_U, ' -l ', fastp_LR, ' -w ', fastp_W, ' -i ', samples[[i]][1], 
-            if (pairEnd) paste0(' -I ', samples[[i]][2]), ' -o ', n, '.r1.fq.gz', 
-            if (pairEnd) paste0(' -O ', n, '.r2.fq.gz --detect_adapter_for_pe'),
-            ' -j ', n, '.fastp.json -h ', n, '.fastp.html', toLog) else 
-       paste0('cat ', samples[[i]][1], ' > ', n, '.r1.fq.gz', 
-              if (pairEnd) paste0('; cat ', samples[[i]][2], ' > ', n, '.r2.fq.gz'))), toEcho(fpd, rn.fp),
-   '# s2.bowtie2',
-   s2 = paste0(if (!rn.bt) '## ', softwares$bowtie2, ' -p ', bowtie_W, ' -x ', references$rRNAref, 
-               ' --local ', ifelse(pairEnd, '-1', '-U'), ' ', n, '.r1.fq.gz', 
-               if (pairEnd) paste0(' -2 ', n, '.r2.fq.gz'), ' --un', 
-               if (pairEnd) '-conc', ' ', n, '.filter.fq -S /dev/null > ', n, '.rRNA.log 2>&1', 
-               if (cleanFq) '; rm *r*.fq.gz'), toEcho(btd, rn.bt),
-   '# s3.STAR',
-   s3 = paste0(if (!rn.st) '## ', softwares$STAR, if (star_Un) ' --outReadsUnmapped Fastx', 
-	       ' --runThreadN ', star_W, ' --genomeDir ', references$STARref, 
-               ' --readFilesIn ', n, '.filter', if (pairEnd) '.1', '.fq ', 
-               if (pairEnd) paste0(n, '.filter.2.fq '), 
-               '--outBAMsortingThreadN ', star_W, ' --outSAMattributes All --outSAMtype BAM SortedByCoordinate --quantMode TranscriptomeSAM GeneCounts --outFileNamePrefix ', 
-               n, '.', toLog, if (star_Un) paste0('; gzip -1 ', n, '.Unmapped.out.mate*'),
-               if (cleanFq) '; rm *filter*fq'), toEcho(std, rn.st),
-   '# s4.RSEM',
-   s4 = paste0(if (!rn.rs) '## ', softwares$RSEM, ' -q --alignments', 
-               if (pairEnd) ' --paired-end', ' -p ', rsem_W, ' --append-names --no-bam-output ', 
-               n, '.Aligned.toTranscriptome.out.bam ', references$RSEM, ' ', n, toLog), toEcho(rsd, rn.rs),
-   '# s5.Portcullis',
-   s5 = paste0(if (!(splice & rn.pt)) '## ', softwares$portcullis, ' full -t ', port_W, ' -b ', 
-               references$Genome, ' ', n, '.Aligned.sortedByCoord.out.bam -o ', n, '.port', toLog), toEcho(ptd, splice & rn.pt),
-   '# s6.rMATS-turbo',
-   s6 = paste0(if (!(splice & rn.rt)) '## ', 'echo ', n, '.port/portcullis.filtered.bam > portBAM.txt; ', 
-               softwares$rmats.py, ' ', softwares$rmats.main, ' -t ', 
-               if (pairEnd) 'paired' else 'single', ' --gtf ', references$Gtf, 
-               ' --b1 portBAM.txt --readLength ', references$ReadLength, 
-               ' --nthread ', rmats_W, ' --statoff --od ', n, '.rmats --tmp ', n, 
-               '.rmatsTMP', toLog, '; mv ', n, '.rmatsTMP/*.rmats ', n, '.rmatsTMP/', n, '.rmats.tmp'), toEcho(rtd, splice & rn.rt),
-   '# s7.cleanBAM',
-   s7 = paste0(if (!cleanBam) '## ', 'rm *.bam'), 
-   toEcho('BAM clean done', cleanBam),
-   '# s8.moveDir for wsl',
-   s8 = paste0(if (!(wsl & rn.wc)) '## ', 'mkdir -p ', wdir, '/', n, '; cp -ru * ', wdir, '/', n),
-   toEcho(wcd, wsl & rn.wc),
-   s9 = paste0(if (!wsl) '## For WSL-tmpdir clean: ', 'rm -r ../', n), '',
-   '# All Done',
-   toEcho(rdd, rn.rd)
+    err = 'set -e',
+    # s0.cd
+    cd = paste0('cd ', if (!wsl) wdir else wsldir, '/', n), toEcho(lea, rn.rd),
+    '# s1.fastp',
+    s1 = paste0(if (!rn.fp) '## ', if (fastp) 
+      paste0(softwares$fastp, ' -q ', fastp_Q, ' -u ', fastp_U, ' -l ', fastp_LR, ' -w ', fastp_W, ' -i ', samples[[i]][1], 
+             if (pairEnd) paste0(' -I ', samples[[i]][2]), ' -o ', n, '.r1.fq.gz', 
+             if (pairEnd) paste0(' -O ', n, '.r2.fq.gz --detect_adapter_for_pe'),
+             ' -j ', n, '.fastp.json -h ', n, '.fastp.html', toLog) else 
+               paste0('cat ', samples[[i]][1], ' > ', n, '.r1.fq.gz', 
+                      if (pairEnd) paste0('; cat ', samples[[i]][2], ' > ', n, '.r2.fq.gz'))), toEcho(fpd, rn.fp),
+    '# s2.bowtie2',
+    s2 = paste0(if (!rn.bt) '## ', softwares$bowtie2, ' -p ', bowtie_W, ' -x ', references$rRNAref, 
+                ' --local ', ifelse(pairEnd, '-1', '-U'), ' ', n, '.r1.fq.gz', 
+                if (pairEnd) paste0(' -2 ', n, '.r2.fq.gz'), ' --un', 
+                if (pairEnd) '-conc', ' ', n, '.filter.fq -S /dev/null > ', n, '.rRNA.log 2>&1', 
+                if (cleanFq) '; rm *r*.fq.gz'), toEcho(btd, rn.bt),
+    '# s3.STAR',
+    s3 = paste0(if (!rn.st) '## ', softwares$STAR, if (star_Un) ' --outReadsUnmapped Fastx', 
+                ' --runThreadN ', star_W, ' --genomeDir ', references$STARref, 
+                ' --readFilesIn ', n, '.filter', if (pairEnd) '.1', '.fq ', 
+                if (pairEnd) paste0(n, '.filter.2.fq '), 
+                '--outBAMsortingThreadN ', star_W, 
+                ' --outSAMattributes All --outSAMtype BAM SortedByCoordinate --quantMode TranscriptomeSAM GeneCounts --outFileNamePrefix ', 
+                n, '.', toLog, if (star_Un) paste0('; gzip -1 ', n, '.Unmapped.out.mate*'),
+                if (cleanFq) '; rm *filter*fq'), toEcho(std, rn.st),
+    '# s4.RSEM',
+    s4 = paste0(if (!rn.rs) '## ', softwares$RSEM, ' -q --alignments', 
+                if (pairEnd) ' --paired-end', ' -p ', rsem_W, ' --append-names --no-bam-output ', 
+                n, '.Aligned.toTranscriptome.out.bam ', references$RSEM, ' ', n, toLog), toEcho(rsd, rn.rs),
+    '# s5.Portcullis',
+    s5 = paste0(if (!(splice & rn.pt)) '## ', softwares$portcullis, ' full -t ', port_W, ' -b ', 
+                references$Genome, ' ', n, '.Aligned.sortedByCoord.out.bam -o ', n, '.port', toLog), toEcho(ptd, splice & rn.pt),
+    '# s6.rMATS-turbo',
+    bp = paste0(if (!(splice & rn.rt)) '## ', 'touch ', n, 
+                '.fastp.json; bpf=$(grep -oP "total_cycles.: \\K\\d+" ', n, '.fastp.json | tail -n 1); bp=${bpf:-150}'),
+    s6 = paste0(if (!(splice & rn.rt)) '## ', 'echo ', n, '.port/portcullis.filtered.bam > portBAM.txt; echo ',
+                spliceBP, ' read length input to rMATS', toLog, '; ',
+                softwares$rmats.py, ' ', softwares$rmats.main, ' -t ', 
+                if (pairEnd) 'paired' else 'single', ' --gtf ', references$Gtf, 
+                ' --b1 portBAM.txt --readLength ', spliceBP,
+                ' --nthread ', rmats_W, ' --statoff --od ', n, '.rmats --tmp ', n, 
+                '.rmatsTMP', toLog, '; mv ', n, '.rmatsTMP/*.rmats ', n, '.rmatsTMP/', n, '.rmats.tmp'), toEcho(rtd, splice & rn.rt),
+    '# s7.cleanBAM',
+    s7 = paste0(if (!cleanBam) '## ', 'rm *.bam'), 
+    toEcho('BAM clean done', cleanBam),
+    '# s8.moveDir for wsl',
+    s8 = paste0(if (!(wsl & rn.wc)) '## ', 'mkdir -p ', wdir, '/', n, '; cp -ru * ', wdir, '/', n),
+    toEcho(wcd, wsl & rn.wc),
+    s9 = paste0(if (!wsl) '## For WSL-tmpdir clean: ', 'rm -r ../', n), '',
+    '# All Done',
+    toEcho(rdd, rn.rd)
   )
   writeLines(sh, paste0(n, '/', n, '.RNAseq.sh'))
   ## run pipeline
