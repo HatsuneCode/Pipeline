@@ -16,5 +16,5 @@ HSPG
 ## Endosome ##
 Rab5a, Rab5b, Rab5c
 
-## Chloride Channel ##
+## Chloride Channel (lysosomal acidification) ##
 Clcn7
