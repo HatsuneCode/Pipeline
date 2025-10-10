@@ -12,3 +12,6 @@ LDLR, LRP1
 
 ## Influence Aβ oligomerization ##
 HSPG
+
+## Endosome ##
+Rab5a, Rab5b, Rab5c
