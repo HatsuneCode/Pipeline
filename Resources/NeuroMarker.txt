@@ -15,3 +15,6 @@ HSPG
 
 ## Endosome ##
 Rab5a, Rab5b, Rab5c
+
+## Chloride Channel ##
+Clcn7
