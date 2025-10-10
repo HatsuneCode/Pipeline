@@ -14,7 +14,7 @@ LDLR, LRP1
 HSPG
 
 ## Endosome ##
-Rab5a, Rab5b, Rab5c
+RAB5A, RAB5B, RAB5C
 
 ## Chloride Channel (lysosomal acidification) ##
-Clcn7
+CLCN7
