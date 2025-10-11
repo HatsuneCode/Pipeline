@@ -21,3 +21,6 @@ CLCN7
 
 ## Cathepsins ##
 CTS[A-Z]
+
+## Inflamaation ##
+IL1B
