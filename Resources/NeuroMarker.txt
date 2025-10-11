@@ -23,4 +23,4 @@ CLCN7
 CTS[A-Z]
 
 ## Inflamation ##
-IL1B, NLRP3
+IL1B, NLRP3, CASP1
