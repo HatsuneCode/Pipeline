@@ -1,4 +1,5 @@
-Visium.cleanImg = function(obj, images = NULL) {
+# Visium: clean images
+Visium.cleanImg = function(obj, images = names(obj@images)) {
   if (!length(images)) images = names(obj@images)
   ## remove otiose
   obj@images = obj@images[intersect(names(obj@images), images)]

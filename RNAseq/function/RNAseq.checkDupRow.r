@@ -1,3 +1,4 @@
+# RNAseq: check duplicated rownames
 RNAseq.checkDupRow = function(expr, pattern = '^ENS.*?_', method = 'mean', round = T) {
   ## process symbols
   gene  = sub(pattern, '', rownames(expr))

@@ -3,8 +3,10 @@ fGSEA.title = function(x) {
   suppressMessages(library(stringr))
   subT = list(
     'Abc '   = 'ABC ',
+    'Atp '   = 'ATP ',
     'Dna '   = 'DNA ',
     'Rna '   = 'RNA ',
+    'Mrna '  = 'mRNA ',
     ' Tca '  = ' TCA ',
     'Ecm '   = 'ECM ',
     ' Hcm'   = ' HCM',

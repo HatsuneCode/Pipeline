@@ -1,3 +1,4 @@
+# RNAseq: normalize data by DESeq2
 RNAseq.Normalize = function(expr, log2 = T, method = 'DESeq2') {
   if (method == 'DESeq2') {
     suppressMessages(library(DESeq2))

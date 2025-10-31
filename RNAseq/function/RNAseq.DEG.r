@@ -1,7 +1,9 @@
 #### Differential expression analysis ####
 #### DESeq2
-RNAseq.DESeq2 = function(expr, pos = NULL, neg = NULL, name = NULL, exp_cut = 10, cut.method = 'inter', ...) {
+RNAseq.DESeq2 = function(expr, pos = NULL, neg = NULL, name = NULL, exp_cut = 10, 
+                         cut.method = 'inter', shrink.type = 'apeglm', ...) {
   ## cut.method: inter, union
+  ## shrink.type: apeglm, ashr, normal
   suppressMessages(library(DESeq2))
   ## expr split
   exprP = if (length(pos)) expr[, colnames(expr) %in% pos, drop = F] else 
@@ -37,24 +39,32 @@ RNAseq.DESeq2 = function(expr, pos = NULL, neg = NULL, name = NULL, exp_cut = 10
   dds   = DESeqDataSetFromMatrix(countData = expr, colData = meta, design = ~ condition)
   dds.n = estimateSizeFactors(dds)
   ## DESeq2 compare
-  dds = DESeq(dds, ...)
-  dds = data.frame(results(dds), check.names = F)
+  dds.r = DESeq(dds, ...)
+  dds.s = data.frame(lfcShrink(dds.r, coef = 'condition_Pos_vs_Neg', type = shrink.type))
+  dds   = data.frame(results(dds.r), check.names = F)
+  dds$lfcS   = dds.s$log2FoldChange
+  dds$lfcSES = dds.s$lfcSE
+  rm(dds.s, dds.r)
   ## split normalized pos/neg
   expr.n  = counts(dds.n, normalize = T)
   expr.nP = expr.n[, condition == 'Pos', drop = F]
   expr.nN = expr.n[, condition == 'Neg', drop = F]
   ## output
-  data.frame(p_val = dds$pvalue, 
-             avg_log2FC = dds$log2FoldChange, 
-             pct.1 = apply(exprP, 1, function(i) sum(i > 0)/ncol(exprP) ),
-             pct.2 = apply(exprN, 1, function(i) sum(i > 0)/ncol(exprN) ),
-             p_val_adj = dds$padj, 
-             gene = rownames(dds),
+  data.frame(p_val        = dds$pvalue, 
+             avg_log2FC   = dds$log2FoldChange,
+             avg_log2FC.S = dds$lfcS,
+             pct.1        = apply(exprP, 1, function(i) sum(i > 0)/ncol(exprP) ),
+             pct.2        = apply(exprN, 1, function(i) sum(i > 0)/ncol(exprN) ),
+             p_val_adj    = dds$padj, 
+             gene         = rownames(dds),
              ## global
              average.raw  = rowMeans(expr), 
-             average.norm = rowMeans(expr.n),
+             average.norm = dds$baseMean,
              median.raw   = apply(expr,   1, median), 
              median.norm  = apply(expr.n, 1, median), 
+             ## standard error
+             lfcSE        = dds$lfcSE,
+             lfcSE.S      = dds$lfcSES,
              ## average
              posAvg.raw   = rowMeans(exprP), 
              negAvg.raw   = rowMeans(exprN), 
@@ -71,6 +81,7 @@ RNAseq.DESeq2 = function(expr, pos = NULL, neg = NULL, name = NULL, exp_cut = 10
              validNum = nrow(expr.n),
              row.names = NULL )
 }
+
 #### Limma
 RNAseq.Limma = function(expr, pos = NULL, neg = NULL, name = NULL, voom = T) {
   suppressMessages(library(limma))

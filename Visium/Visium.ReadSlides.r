@@ -1,22 +1,22 @@
-Visium.ReadSlides = function(names, dirs = names, name = 'ST', clean = F, cell.cycle = T, SCT = T, force = F) {
+# Visium: read 10x visium slides
+Visium.ReadSlides = function(names, dirs = names, name = 'ST', output = 'Visium.ReadSlides.rds',
+                             clean = T, cell.cycle = T, force = F) {
   suppressMessages(library(Seurat))
   suppressMessages(library(stringr))
-  ## check
-  f = paste0(name, '.ReadSlides.rds')
-  if (file.exists(f) & !force) {
+  ## check output
+  output = normalizePath(output, winslash = '/', mustWork = F)
+  dir.create(dirname(output), F)
+  if (file.exists(output) & !force) {
     message('!!! There is already a file exists. Reading it... !!!')
-    obj = readRDS(f)
-    return(obj) }
-  ## each
+    return(readRDS(output)) }
+  ## process each slides
   names = gsub('_', '.', names)
   objs = setNames(suppressWarnings(lapply(seq(names), function(i) {
     n = names[i]
     d = dirs [i]
     message('--> Read ', n, ' in ', d, ' <--')
     # read h5
-    h5 = paste0(d, '/filtered_feature_bc_matrix.h5')
-    if (!file.exists(h5)) { message('--> No ', h5, ' detected <--'); return() }
-    data = Read10X_h5(h5)
+    data = Read10X_h5(paste0(d, '/filtered_feature_bc_matrix.h5'))
     # remove out image
     out = paste0(d, '/Outs.csv')
     if (file.exists(out) & clean) {
@@ -25,18 +25,18 @@ Visium.ReadSlides = function(names, dirs = names, name = 'ST', clean = F, cell.c
       data = data[, !colnames(data) %in% out]
     } else message('--> No SPOT out <--')
     rm(out)
-    # create obj
+    # create seurat object
     message('--> Create seurat object <--')
     colnames(data) = paste0(n, '_', colnames(data))
     obj            = CreateSeuratObject(data, assay = 'ST', project = n)
     obj$mt.pct     = PercentageFeatureSet(obj, '^mt-|^MT-')
     obj$cc.diff    = 0
     rm(data)
+    # normalize counts
+    message('--> Normalize data <--')
+    obj = NormalizeData(obj, verbose = F)
+    # calculate cell cycle
     if (cell.cycle) {
-      # normalize
-      message('--> Normalize data <--')
-      obj = NormalizeData(obj, verbose = F)
-      # calculate cell cycle
       message('--> Calculate cell cycle <--')
       cc.s   = intersect(c(str_to_title(cc.genes.updated.2019$s.genes), 
                            cc.genes.updated.2019$s.genes), rownames(obj))
@@ -53,31 +53,10 @@ Visium.ReadSlides = function(names, dirs = names, name = 'ST', clean = F, cell.c
     obj[['img']] = img
     names(obj@images) = n
     rm(img)
-    if (SCT) {
-      # SCTransform v2
-      message('--> SCT <--')
-      obj = SCTransform(obj, assay = 'ST', verbose = F, vars.to.regress = c('mt.pct', 'cc.diff', 'nCount_ST'), vst.flavor = 'v2')
-    }
-    # variable features
-    list(obj = obj, feature = VariableFeatures(obj))
+    obj
   })), names)
-  objs = objs[!!sapply(objs, length)]
-  ## merge
-  features = lapply(objs, function(i) i[[2]])
-  objs     = lapply(objs, function(i) i[[1]])
-  if (length(objs) > 1) {
-    message('--> merging ... <--')
-    obj = merge(objs[[1]], objs[-1])
-  } else obj = objs[[1]]
-  names = intersect(names, obj$orig.ident)
-  names(obj@images) = names
-  obj@misc = features
-  rm(features, objs)
-  # slides: names
-  obj$slides = factor(obj$orig.ident, names)
-  ## save
   message('--> saving ... <--')
-  saveRDS(obj, f)
+  saveRDS(objs, output)
   message('--> Done <--')
-  obj
+  objs
 }

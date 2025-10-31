@@ -1,6 +1,6 @@
 ## Need cmd.out equal to getwd() ##
 GSEA.prepare = function(expr.p, expr.n, name.p = 'Pos', name.n = 'Neg', 
-                        set.max = 1e3, set.min = 15, nperm = 1e3,
+                        set.max = 1e3, set.min = 10, nperm = 1e3,
                         cmd.gsea = '/mnt/d/Linux/software/GSEA_Linux_4.3.3/gsea-cli.sh',
                         cmd.out  = '/mnt/e/Project/NDD-Database',
                         cmd.gmt  = '/mnt/d/Resources/GMT/hsa/GOandKEGG.v2024.1.Hs.symbols.gmt') {
