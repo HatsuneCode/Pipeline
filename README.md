@@ -1,4 +1,5 @@
 # Pipeline
+rm Pipeline -rf; git clone https://github.com/HatsuneCode/Pipeline.  
 收集一些常用的函数和知识，以方便调用。<br>
 上传须知：行使不同大类功能的函数请以独立文件的形式上传，推荐上传前发我审核。<br>
 任何的修改在执行后请给我留言，感谢。<br>
