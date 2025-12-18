@@ -1,0 +1,4 @@
+diskpart
+select vdisk file="C:\Users\Administrator\AppData\Local\Packages\CanonicalGroupLimited.Ubuntu_79rhkp1fndgsc\LocalState\ext4.vhdx"
+compact vdisk
+detach vdisk
