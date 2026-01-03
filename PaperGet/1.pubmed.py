@@ -15,7 +15,7 @@ if len(sys.argv) < 2:
 	print("用法示例: python 1.pubmed.py '2026/01/02'")
 	sys.exit()
 
-Entrez.email = "??@qq.com"
+Entrez.email = "???????@qq.com"
 search_date = sys.argv[1]
 
 ## 2. 搜索 IDs ##
@@ -74,7 +74,6 @@ for summary, detail in zip(papers, papers_data):
 	# 如果摘要是 "No Abstract"，则跳过该条文献
 	if detail['Abstract'] == "No Abstract":
 		continue
-
 	row = {
 		'DOI': summary.get('DOI', ''),
 		'Title': summary.get('Title', ''),
@@ -87,7 +86,6 @@ for summary, detail in zip(papers, papers_data):
 		'Abstract': detail['Abstract']
 	}
 	final_list.append(row)
-
 df = pd.DataFrame(final_list)
 
 ## 6. 输出为 TXT (以制表符 \t 分隔)
