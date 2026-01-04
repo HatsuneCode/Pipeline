@@ -30,8 +30,10 @@ search_date = sys.argv[1].replace('/', '-')
 
 ## 2. 执行搜索
 print(f"{now()} 正在从 OpenAlex 调取 {search_date} 的文献...")
+# 筛选 Domain 领域
+query = Works().filter(primary_topic={"domain.id": "1|4"})
 # 使用 filter 筛选出版日期
-query = Works().filter(from_publication_date=search_date, to_publication_date=search_date)
+query = query().filter(from_publication_date=search_date, to_publication_date=search_date)
 results = query.get()
 
 ## 3. 提取信息
