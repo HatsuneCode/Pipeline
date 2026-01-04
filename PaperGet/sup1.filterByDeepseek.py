@@ -32,8 +32,6 @@ def quick_check(title, abstract):
 	except Exception:
 		return "网络错误"
 
-file_path = "pubmed_2026-01-02.top10.txt"
-
 try:
 	df = pd.read_csv(file_path, sep='\t', encoding = 'gbk')
 except:
