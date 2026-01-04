@@ -43,7 +43,7 @@ def fetch_rxiv_data(server, date):
 		total = int(messages[0].get('total', 0))
 		count = int(messages[0].get('count', 0))
 		cursor += count
-		print(f"{now()} 目前已处理文献数目: {cursor}")
+		print(f"{now()} 目前已从 {server} 处理文献数目: {cursor}")
 		if cursor >= total:
 			break
 	return all_papers
