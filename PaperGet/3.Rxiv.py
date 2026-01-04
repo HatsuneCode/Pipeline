@@ -46,7 +46,7 @@ def fetch_rxiv_data(server, date):
 		print(f"{now()} 目前已处理文献数目: {cursor}")
 		if cursor >= total:
 			break
-		return all_papers
+	return all_papers
 
 ## 2. 执行搜索 (同时抓取两个平台)
 servers = ['biorxiv', 'medrxiv']
