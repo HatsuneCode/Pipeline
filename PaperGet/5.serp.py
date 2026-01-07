@@ -28,7 +28,7 @@ while True:
 	params = {
 		"engine": "google_patents",
 		"q": query_str,
-		"api_key": api_key,
+		"api_key": SERPAPI_KEY,
 		"num": 100,      # 每页最大100条
 		"start": start_index
 		}
