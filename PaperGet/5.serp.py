@@ -18,7 +18,7 @@ search_date = sys.argv[1].replace('/', '-')
 
 formatted_date = search_date.replace('-', '')
 cpc_codes = "(cpc:A61K OR cpc:A61P OR cpc:C12N OR cpc:C07K)"
-query_str = f"{cpc_codes} pd:{formatted_date}"
+query_str = f"{cpc_codes}; after:publication:{formatted_date}"
 final_list = []
 start_index = 0
 
