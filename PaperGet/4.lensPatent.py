@@ -29,7 +29,7 @@ def fetch_lens_patents(date):
 
 	# 基础查询：日期
 	must_conditions = [
-		{"range": {"publication_date": {"gte": date, "lte": date}}}
+		{"range": {"date_published": {"gte": date, "lte": date}}}
 	]
 
 	# 加入领域筛选 (IPC 前缀)
