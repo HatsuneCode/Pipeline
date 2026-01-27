@@ -32,15 +32,6 @@ def fetch_lens_patents(date):
 		{"range": {"date_published": {"gte": date, "lte": date}}}
 	]
 
-	# 加入领域筛选 (IPC 前缀)
-	if domains:
-		domain_query = {
-			"bool": {
-			"should": [{"prefix": {"class_ipc.symbol": d}} for d in domains]
-			}
-        	}
-        	must_conditions.append(domain_query)
-
 	# 构建查询：按发布日期筛选
 	# 这里的 query 逻辑是：publication_date 在指定的这一天内
 	query_body = {
